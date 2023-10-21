@@ -45,6 +45,8 @@ export class AuthenticationService {
     localStorage.setItem('email', authResultDecode.email);
     localStorage.setItem('role', authResultDecode.role);
     localStorage.setItem('id_token', authResult.accessToken);
+    localStorage.setItem('username', authResultDecode.username);
+    localStorage.setItem('created_at', authResultDecode.iat);
     localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
   }
 
@@ -53,6 +55,8 @@ export class AuthenticationService {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('email');
     localStorage.removeItem('role');
+    localStorage.removeItem('username');
+    localStorage.removeItem('created_at');
   }
 
   public isLoggedIn() {

@@ -19,12 +19,6 @@ export class LayoutUserComponent implements OnInit {
       role: 'user',
     },
     {
-      title: 'Request LC',
-      icon: 'audit',
-      url: 'request-lc',
-      role: 'user',
-    },
-    {
       title: 'Manage agreements',
       icon: 'database',
       subMenus: [
@@ -35,6 +29,17 @@ export class LayoutUserComponent implements OnInit {
         {
           title: 'Agreements list',
           url: 'agreements',
+        },
+      ],
+      role: 'user',
+    },
+    {
+      title: 'Manage LCs',
+      icon: 'audit',
+      subMenus: [
+        {
+          title: 'LCs list',
+          url: 'LCs',
         },
       ],
       role: 'user',
@@ -61,9 +66,14 @@ export class LayoutUserComponent implements OnInit {
       role: 'user',
     },
     {
-      title: 'New Request LC',
-      icon: 'diff',
-      url: 'bank/list-request-lc',
+      title: 'Manage LCs',
+      icon: 'audit',
+      subMenus: [
+        {
+          title: 'LCs list',
+          url: 'bank/LCs',
+        },
+      ],
       role: 'bank',
     },
   ];
