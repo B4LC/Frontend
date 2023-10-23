@@ -8,10 +8,9 @@ import {
 import { NzFormTooltipIcon } from 'ng-zorro-antd/form';
 import { AuthenticationService } from 'src/app/service/authentication/authentication.service';
 import { NzMessageService } from 'ng-zorro-antd/message';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import getContract from 'src/helper/contract';
 import { ethers } from 'ethers';
-
 
 @Component({
   selector: 'app-signup',
@@ -21,16 +20,17 @@ import { ethers } from 'ethers';
 export class SignupComponent implements OnInit {
   validateForm!: UntypedFormGroup;
   requestRegisterForm = {
-    contractId: '',
+    contractId: 0,
     username: String,
     email: String,
     password: String,
-    role: String,
+    role: '',
   };
   captchaTooltipIcon: NzFormTooltipIcon = {
     type: 'info-circle',
     theme: 'twotone',
   };
+  num: number;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -41,39 +41,47 @@ export class SignupComponent implements OnInit {
 
   async submitForm(): Promise<void> {
     if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
-      if(this.requestRegisterForm.role.toString() == "bank") {
+      this.requestRegisterForm.username = this.validateForm.value.nickname;
+      this.requestRegisterForm.email = this.validateForm.value.email;
+      this.requestRegisterForm.password = this.validateForm.value.password;
+      this.requestRegisterForm.role = this.validateForm.value.role;
+      if (this.requestRegisterForm.role == 'bank') {
+        // console.log('==============1===================');
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         provider.send('eth_requestAccounts', []);
         const signer = provider.getSigner();
         const contract = getContract();
         const bankAddress = signer.getAddress();
         await contract.addBank(this.requestRegisterForm.username, bankAddress);
-        
+
         // this.requestRegisterForm.contractId = parseInt(bankID.value._hex, 16);
-        contract.on("BankAdded", (result) => {
-          // const res = new String(parseInt(result._hex, 16).toString())
-          this.validateForm.value.contractId = parseInt(result._hex, 16).toString();
-          console.log(this.validateForm.value.contractId);
-          
-        })
+        contract.on('BankAdded', (result) => {
+          console.log(parseInt(
+            result._hex,
+            16
+          ));
+          // this.validateForm.patchValue({ contractId: parseInt(result._hex, 16).toString() });
+          // console.log('====1.5=====');
+          this.num = parseInt(
+            result._hex,
+            16
+          );
+          this.requestRegisterForm.contractId = this.num;
+          if (this.requestRegisterForm.contractId != 0) {
+            // console.log('=====2=====');
+            // this.requestRegisterForm.contractId = this.num;
+            this.registerService
+              .register(this.requestRegisterForm)
+              .subscribe((res) => {
+                if (res.message == 'Register successfully') {
+                  this.mess.success('Register successfully!');
+                  this.router.navigate(['/auth/login']);
+                } else this.mess.error('Register unsuccessfully!');
+              });
+          }
+        });
       }
-      this.requestRegisterForm.username = this.validateForm.value.nickname;
-      this.requestRegisterForm.email = this.validateForm.value.email;
-      this.requestRegisterForm.password = this.validateForm.value.password;
-      this.requestRegisterForm.role = this.validateForm.value.role;
-      this.requestRegisterForm.contractId = this.validateForm.value.contractId;
-      console.log(this.requestRegisterForm);
-      if(this.requestRegisterForm.contractId != "") {
-        this.registerService
-          .register(this.requestRegisterForm)
-          .subscribe((res) => {
-            if (res.message == 'Register successfully') {
-              this.mess.success('Register successfully!');
-              this.router.navigate(['/auth/login']);
-            } else this.mess.error('Register unsuccessfully!');
-          });
-      } 
+      // this.requestRegisterForm.contractId = this.validateForm.value.contractId;
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {

@@ -8,6 +8,7 @@ import { format } from 'date-fns';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { AgreementService } from 'src/app/service/agreement-service/agreement.service';
+import { UserService } from 'src/app/service/user-service/user.service';
 
 @Component({
   selector: 'app-new-agreement',
@@ -27,12 +28,21 @@ export class NewAgreementComponent implements OnInit {
     additionalInfo: String,
     deadline: '12/12/2023',
   };
+  listBank = [];
 
   constructor(
     private fb: UntypedFormBuilder,
     private msg: NzMessageService,
+    private userSer: UserService,
     private agreementSer: AgreementService,
   ) {}
+
+  getListBank() {
+    this.userSer.listBank().subscribe((res) => {
+      this.listBank = res;
+      console.log(this.listBank);
+    })
+  }
 
   submitForm(): void {
     if (this.validateNewAgreementForm.valid) {
@@ -106,5 +116,6 @@ export class NewAgreementComponent implements OnInit {
       date: [format(currentDate, 'dd-MM-yyyy')],
       required: false,
     });
+    this.getListBank();
   }
 }
