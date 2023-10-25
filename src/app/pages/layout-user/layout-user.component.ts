@@ -87,6 +87,7 @@ export class LayoutUserComponent implements OnInit {
   ];
 
   breadcrumbs: string[] = [];
+  
   url: string;
 
   constructor(
