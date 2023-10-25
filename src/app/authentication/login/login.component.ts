@@ -35,7 +35,10 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.requestLoginForm).subscribe(
         (res) => {
           console.log(res);
-          this.router.navigateByUrl('/');
+          if (localStorage.getItem('role') == 'user') {
+            this.router.navigateByUrl('/');
+          }
+          else (this.router.navigateByUrl('/agreements'))
         },
         (error) => {
           console.error('Login failed:', error);
