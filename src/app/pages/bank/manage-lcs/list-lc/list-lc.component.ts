@@ -6,5 +6,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./list-lc.component.less']
 })
 export class ListLcComponent {
+  listOfData= []
+
+  
 
 }

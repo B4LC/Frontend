@@ -23,6 +23,13 @@ export class UserService {
     );
   }
 
+  listCustomer(): Observable<any> {
+    return this.http.get(
+      environment.BASE_API_URI.BASE_SERVICE_API + `/user/customers`,
+      this.httpOptions
+    );
+  }
+
   getInfo(): Observable<any> {
     return this.http.get(
       environment.BASE_API_URI.BASE_SERVICE_API + `/user`,

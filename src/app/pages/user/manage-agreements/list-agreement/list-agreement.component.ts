@@ -1,24 +1,32 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { AgreementService } from 'src/app/service/agreement-service/agreement.service';
+import { LcService } from 'src/app/service/lc-service/lc.service';
 
 @Component({
   selector: 'app-list-agreement',
   templateUrl: './list-agreement.component.html',
   styleUrls: ['./list-agreement.component.less'],
 })
-export class ListAgreementComponent {
+export class ListAgreementComponent implements OnInit {
   listOfData = [];
   username = localStorage.getItem('username');
+  role = localStorage.getItem('role');
+  reqCreateLC = {
+    salesContractID: '',
+  };
 
   constructor(
     private route: ActivatedRoute,
     private agreementSer: AgreementService,
+    private lcSer: LcService,
     private msg: NzMessageService,
-    private modal: NzModalService
-  ) {}
+    private modal: NzModalService,
+    private router: Router
+  ) {
+  }
 
   detail(id: number) {
     this.route.params.subscribe((params) => {
@@ -37,9 +45,10 @@ export class ListAgreementComponent {
     console.log('alooooo');
     this.agreementSer.delete(id).subscribe((res) => {
       console.log(res);
-      this.msg.info('res.message');
+      this.msg.success(res.message);
+      this.getList();
     });
-    this.getList();
+
   }
 
   showDeleteConfirm(id: String): void {
@@ -50,7 +59,7 @@ export class ListAgreementComponent {
       nzOkDanger: true,
       nzOnOk: () => this.deleteAgreement(id),
       nzCancelText: 'No',
-      nzOnCancel: () => console.log('Cancel')
+      nzOnCancel: () => console.log('Cancel'),
     });
   }
 

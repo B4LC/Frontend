@@ -49,8 +49,11 @@
                         </nz-form-control>
                         <nz-form-control [nzSpan]="12" nzErrorTip="Please input your beneficiary"
                             *ngIf="isEdit == true">
-                            <input type="text" nz-input formControlName="beneficiary"
-                                placeholder="{{requestForm.beneficiary}}" />
+                            <nz-select style="min-width: 350px;" nzShowSearch nzAllowClear
+                                nzPlaceHolder="{{requestForm.beneficiary}}" [(ngModel)]="requestForm.beneficiary"
+                                formControlName="beneficiary">
+                                <nz-option *ngFor="let item of listCustomer" [nzLabel]="item" [nzValue]="item"></nz-option>
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item nz-col [nzSpan]="12" class="info">
@@ -72,8 +75,11 @@
                         </nz-form-control>
                         <nz-form-control [nzSpan]="12" *ngIf="isEdit == true"
                             nzErrorTip="Please input your Issuing bank">
-                            <input type="text" nz-input formControlName="issuingBank"
-                                placeholder="{{requestForm.issuingBank}}" />
+                            <nz-select style="min-width: 350px;" nzShowSearch nzAllowClear
+                                nzPlaceHolder="{{requestForm.issuingBank}}" [(ngModel)]="requestForm.issuingBank"
+                                formControlName="issuingBank">
+                                <nz-option *ngFor="let item of listBank" [nzLabel]="item" [nzValue]="item"></nz-option>
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item nz-col [nzSpan]="12" class="info">
@@ -95,8 +101,11 @@
                         </nz-form-control>
                         <nz-form-control [nzSpan]="12" *ngIf="isEdit == true"
                             nzErrorTip="Please input your Advising bank">
-                            <input type="text" nz-input formControlName="advisingBank"
-                                placeholder="{{requestForm.advisingBank}}" />
+                            <nz-select style="min-width: 350px;" nzShowSearch nzAllowClear
+                                nzPlaceHolder="{{requestForm.advisingBank}}" formControlName="advisingBank"
+                                [(ngModel)]="requestForm.advisingBank">
+                                <nz-option *ngFor="let item of listBank" [nzLabel]="item" [nzValue]="item"></nz-option>
+                            </nz-select>
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item nz-col [nzSpan]="12" class="info">
@@ -119,7 +128,7 @@
                         <nz-form-control [nzSpan]="12" *ngIf="isEdit == true"
                             nzErrorTip="Please input your commodity name">
                             <input type="text" nz-input formControlName="commodityName"
-                                placeholder="{{requestForm.commodityName}}" />
+                                [(ngModel)]="requestForm.commodityName" placeholder="{{requestForm.commodityName}}" />
                         </nz-form-control>
                     </nz-form-item>
                     <nz-form-item nz-col [nzSpan]="12" class="info">
@@ -132,6 +141,7 @@
                         <nz-form-control [nzSpan]="12" *ngIf="isEdit == true"
                             nzErrorTip="Please input your commodity value">
                             <input type="text" nz-input formControlName="commodityValue"
+                                [(ngModel)]="requestForm.commodityValue"
                                 placeholder="Please input your commodity value" />
                         </nz-form-control>
                     </nz-form-item>
@@ -146,7 +156,7 @@
                         </nz-form-control>
                         <nz-form-control [nzSpan]="12" *ngIf="isEdit == true"
                             nzErrorTip="Please choose your payment method">
-                            <nz-radio-group formControlName="paymentMethod">
+                            <nz-radio-group formControlName="paymentMethod" [(ngModel)]="requestForm.paymentMethod">
                                 <label nz-radio nzValue="Cash">Cash</label>
                                 <label nz-radio nzValue="Digital money">Digital money</label>
                             </nz-radio-group>
@@ -195,18 +205,27 @@
 
             <nz-divider></nz-divider>
 
-            <div class="button-group" *ngIf="requestForm.applicant !== username">
+            <div class="button-group" *ngIf="requestForm.applicant !== username && isAccepted == false && role == 'user'">
                 <button nz-button nzType="primary" (click)="showConfirm()">Accept this agreement</button>
+            </div>
+            <div class="button-group"
+                *ngIf="requestForm.applicant == username && isAccepted == true && isEdit == false">
+                <button nz-button nzType="primary" (click)="showConfirmRequestLC()">Request LC to Issuing Bank</button>
+                <!-- <button nz-button nzType="primary" nzDanger (click)="showModalRefuse()">Return with reason</button> -->
+            </div>
+            <div class="button-group"
+                *ngIf="requestForm.issuingBank == username && role == 'bank'">
+                <button nz-button nzType="primary" (click)="showConfirmAcceptLC()">Accept</button>
                 <button nz-button nzType="primary" nzDanger (click)="showModalRefuse()">Return with reason</button>
             </div>
         </nz-card>
     </div>
 </div>
 
-<nz-modal [(nzVisible)]="isVisible" nzTitle="Do you want to refuse this agreement?" (nzOnCancel)="handleCancelRefuse()"
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Do you want to return this agreement?" (nzOnCancel)="handleCancelRefuse()"
     (nzOnOk)="handleOkRefuse()" [nzOkDanger]="true">
     <ng-container *nzModalContent>
-        <form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+        <form nz-form [formGroup]="validateRefuseForm" (ngSubmit)="submitForm()">
             <nz-form-item>
                 <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Reason</nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid!">

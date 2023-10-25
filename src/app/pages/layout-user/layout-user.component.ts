@@ -10,6 +10,7 @@ import { AuthenticationService } from 'src/app/service/authentication/authentica
 })
 export class LayoutUserComponent implements OnInit {
   role: any = localStorage.getItem('role');
+  username = localStorage.getItem('username');
   isCollapsed = false;
   menus: any[] = [
     {
@@ -22,10 +23,6 @@ export class LayoutUserComponent implements OnInit {
       title: 'Manage agreements',
       icon: 'database',
       subMenus: [
-        // {
-        //   title: 'New request list',
-        //   url: 'agreements/list-new-request',
-        // },
         {
           title: 'Agreements list',
           url: 'agreements',
@@ -72,6 +69,17 @@ export class LayoutUserComponent implements OnInit {
         {
           title: 'LCs list',
           url: 'bank/LCs',
+        },
+      ],
+      role: 'bank',
+    },
+    {
+      title: 'Manage agreements',
+      icon: 'database',
+      subMenus: [
+        {
+          title: 'Agreements list',
+          url: 'agreements',
         },
       ],
       role: 'bank',
