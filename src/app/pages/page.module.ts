@@ -38,10 +38,25 @@ import { NzMessageModule } from 'ng-zorro-antd/message';
 import { ListAgreementComponent } from './user/manage-agreements/list-agreement/list-agreement.component';
 import { ListLCsComponent } from './user/manage-lcs/list-lcs/list-lcs.component';
 import { ListLcComponent } from './bank/manage-lcs/list-lc/list-lc.component';
-
+import { DetailLcComponent } from './user/manage-lcs/detail-lc/detail-lc.component';
+import { UploadDocumentComponent } from './user/manage-documents/upload-document/upload-document.component';
 
 @NgModule({
-  declarations: [LoginComponent, LayoutUserComponent, NewAgreementComponent, RequestLCComponent, Option1Component, ManageTransactionsComponent, ListNewRequestComponent, DetailAgreementComponent, ListAgreementComponent, ListLCsComponent, ListLcComponent],
+  declarations: [
+    LoginComponent,
+    LayoutUserComponent,
+    NewAgreementComponent,
+    RequestLCComponent,
+    Option1Component,
+    ManageTransactionsComponent,
+    ListNewRequestComponent,
+    DetailAgreementComponent,
+    ListAgreementComponent,
+    ListLCsComponent,
+    ListLcComponent,
+    DetailLcComponent,
+    UploadDocumentComponent,
+  ],
   imports: [
     NzUploadModule,
     NzRadioModule,
@@ -71,7 +86,7 @@ import { ListLcComponent } from './bank/manage-lcs/list-lc/list-lc.component';
     NzSelectModule,
     NzDatePickerModule,
     NzModalModule,
-    NzMessageModule
+    NzMessageModule,
   ],
 })
 export class PagesModule {}

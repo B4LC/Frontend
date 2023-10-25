@@ -33,14 +33,14 @@
         <div class="header-user">
           <div class="user-menu">
             <span style="font-size: 16px" [routerLink]="'user-infomation'">
-              <strong>abc</strong>
+              <strong>{{username}}</strong>
             </span>
             <span (click)="showConfirm()">
               <span style="font-size: 16px; color: #007bc3" nz-icon nzType="logout" nzTheme="outline"></span>
               <span style="margin-left: 0.5em; font-size: 16px">Log out</span>
             </span>
           </div>
-          <span class="avartar-img" [routerLink]="'user-infomation'"><strong>anc</strong></span>
+          <span class="avartar-img" [routerLink]="'user-infomation'"><strong>{{username[0].toUpperCase()}}</strong></span>
         </div>
       </div>
     </nz-header>

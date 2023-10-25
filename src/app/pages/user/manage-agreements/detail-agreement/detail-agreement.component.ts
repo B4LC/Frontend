@@ -15,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 import { format } from 'date-fns';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { LcService } from 'src/app/service/lc-service/lc.service';
+import { UserService } from 'src/app/service/user-service/user.service';
 
 @Component({
   selector: 'app-detail-agreement',
@@ -43,7 +45,9 @@ export class DetailAgreementComponent {
   confirmModal?: NzModalRef;
   isVisible = false;
   validateForm!: UntypedFormGroup;
+  validateRefuseForm!: UntypedFormGroup;
   username = localStorage.getItem('username');
+  role = localStorage.getItem('role');
   isEdit = false;
   updateAgreement = {
     importer: String,
@@ -56,19 +60,29 @@ export class DetailAgreementComponent {
     additionalInfo: String,
     deadline: '12/12/2023',
   };
+  isAccepted: boolean;
+  salescontract_id: string;
+  listBank = [];
+  listCustomer = [];
+
+  reqCreateLC = {
+    salesContractID: '',
+  };
 
   constructor(
     private modal: NzModalService,
     private fb: UntypedFormBuilder,
     private agreementSer: AgreementService,
     private msg: NzMessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private lcSer: LcService,
+    private userSer: UserService
   ) {
     const currentDate = new Date();
     this.validateForm = this.fb.group({
       agreementID: '#demo',
-      applicant: 'dang',
-      applicantLegalName: 'dang',
+      applicant: this.username,
+      applicantLegalName: '',
       beneficiary: ['', [Validators.required]],
       issuingBank: ['', [Validators.required]],
       issuingBankCode: '',
@@ -81,6 +95,22 @@ export class DetailAgreementComponent {
       additionalInformation: '',
       date: [format(currentDate, 'dd-MM-yyyy')],
     });
+
+    this.validateRefuseForm = this.fb.group({
+      reason: ['', [Validators.required]],
+    });
+  }
+
+  getListBank() {
+    this.userSer.listBank().subscribe((res) => {
+      this.listBank = res;
+    });
+  }
+
+  getListCustomer() {
+    this.userSer.listCustomer().subscribe((res) => {
+      this.listCustomer = res;
+    });
   }
 
   showConfirm(): void {
@@ -89,23 +119,47 @@ export class DetailAgreementComponent {
       nzCancelText: 'Cancel',
       nzOnOk: () => {
         this.agreementSer.approve(this.salescontract_id).subscribe((res) => {
-          console.log(res);
+          this.msg.success(res.message);
+          this.isAccepted = true;
+          this.getDetail();
         });
       },
     });
   }
+
+  showConfirmRequestLC(): void {
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to request LC to Issuing Bank?',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => {
+        console.log('ok');
+      },
+    });
+  }
+
+  showConfirmAcceptLC(): void {
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to create LC?',
+      nzCancelText: 'Cancel',
+      nzOnOk: () => {
+        this.reqCreateLC.salesContractID = this.salescontract_id;
+        this.lcSer.create(this.reqCreateLC).subscribe((res) =>{
+          console.log(res);
+        })
+      }
+    });
+  }
+
 
   showModalRefuse(): void {
     this.isVisible = true;
   }
 
   handleOkRefuse(): void {
-    console.log('Button ok clicked!');
-    if (this.validateForm.valid) {
-      console.log('submit', this.validateForm.value);
+    if (this.validateRefuseForm.valid) {
       this.isVisible = false;
     } else {
-      Object.values(this.validateForm.controls).forEach((control) => {
+      Object.values(this.validateRefuseForm.controls).forEach((control) => {
         if (control.invalid) {
           control.markAsDirty();
           control.updateValueAndValidity({ onlySelf: true });
@@ -115,24 +169,32 @@ export class DetailAgreementComponent {
   }
 
   handleCancelRefuse(): void {
-    console.log('Button cancel clicked!');
     this.isVisible = false;
   }
 
-  salescontract_id: string;
   getDetail() {
     this.salescontract_id = this.route.snapshot.paramMap.get('id');
     this.agreementSer.detail(this.salescontract_id).subscribe((res) => {
-      this.requestForm.advisingBank = res.advisingBank;
+      this.validateForm.value.advisingBank = this.requestForm.advisingBank =
+        res.advisingBank;
       this.requestForm.date = res.deadlineInDate;
       this.requestForm.applicant = res.importer;
-      this.requestForm.beneficiary = res.exporter;
-      this.requestForm.commodityValue = res.price;
-      this.requestForm.commodityName = res.commodity;
-      this.requestForm.issuingBank = res.issuingBank;
-      this.requestForm.paymentMethod = res.paymentMethod;
+      this.validateForm.value.beneficiary = this.requestForm.beneficiary =
+        res.exporter;
+      this.validateForm.value.commodityValue = this.requestForm.commodityValue =
+        res.price;
+      this.validateForm.value.commodity = this.requestForm.commodityName =
+        res.commodity;
+      this.validateForm.value.issuingBank = this.requestForm.issuingBank =
+        res.issuingBank;
+      this.validateForm.value.paymentMethod = this.requestForm.paymentMethod =
+        res.paymentMethod;
+      this.validateForm.value.additionalInformation =
+        this.requestForm.additionalInformation = res.additionalInfo;
       this.requestForm.status = res.status;
-      console.log(res);
+      if (res.status == 'created') {
+        this.isAccepted = false;
+      } else this.isAccepted = true;
     });
   }
 
@@ -164,14 +226,13 @@ export class DetailAgreementComponent {
       // this.updateAgreement.deadline = this.validateForm.value.date.toString();
       this.updateAgreement.additionalInfo =
         this.validateForm.value.additionalInformation;
-      console.log(this.updateAgreement);
       this.isEdit = false;
       this.agreementSer
         .update(this.updateAgreement, this.salescontract_id)
         .subscribe((res) => {
           this.msg.success(res.message);
+          this.getDetail();
         });
-        this.getDetail();
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -181,11 +242,11 @@ export class DetailAgreementComponent {
       });
     }
   }
-  ngOnInit(): void {
-    // console.log(this.isEdit);
 
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
+
+  ngOnInit(): void {
     this.getDetail();
+    this.getListBank();
+    this.getListCustomer();
   }
 }

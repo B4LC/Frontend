@@ -4,6 +4,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { format } from 'date-fns';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
@@ -29,18 +30,27 @@ export class NewAgreementComponent implements OnInit {
     deadline: '12/12/2023',
   };
   listBank = [];
+  listCustomer = [];
 
   constructor(
     private fb: UntypedFormBuilder,
     private msg: NzMessageService,
     private userSer: UserService,
     private agreementSer: AgreementService,
+    private route: Router,
   ) {}
 
   getListBank() {
     this.userSer.listBank().subscribe((res) => {
       this.listBank = res;
       console.log(this.listBank);
+    })
+  }
+
+  getListCustomer() {
+    this.userSer.listCustomer().subscribe((res) => {
+      this.listCustomer = res;
+      console.log(this.listCustomer);
     })
   }
 
@@ -55,10 +65,12 @@ export class NewAgreementComponent implements OnInit {
       this.newAgreement.paymentMethod = this.validateNewAgreementForm.value.paymentMethod;
       // this.newAgreement.deadline = this.validateNewAgreementForm.value.date.toString();
       this.newAgreement.additionalInfo = this.validateNewAgreementForm.value.additionalInformation;
-      console.log(this.newAgreement);
+      // console.log(this.newAgreement);
       this.agreementSer.create(this.newAgreement).subscribe((res) => {
+        console.log(res);
         if (res.message == 'Create salescontract successfully') {
           this.msg.success('Create salescontract successfully');
+          this.route.navigate(['/agreements', res.salescontract_id]);
         } else this.msg.error('Create salescontract unsuccessfully')
       });
     } else {      
@@ -101,8 +113,8 @@ export class NewAgreementComponent implements OnInit {
     const currentDate = new Date();
     this.validateNewAgreementForm = this.fb.group({
       agreementID: '#demo',
-      applicant: 'dang',
-      applicantLegalName: 'dang',
+      applicant: localStorage.getItem('username'),
+      applicantLegalName: '',
       beneficiary: ['', [Validators.required]],
       issuingBank: ['', [Validators.required]],
       issuingBankCode: '',
@@ -117,5 +129,6 @@ export class NewAgreementComponent implements OnInit {
       required: false,
     });
     this.getListBank();
+    this.getListCustomer()
   }
 }
