@@ -9,6 +9,7 @@ import { DetailAgreementComponent } from './user/manage-agreements/detail-agreem
 import { ListAgreementComponent } from './user/manage-agreements/list-agreement/list-agreement.component';
 import { ListLCsComponent } from './user/manage-lcs/list-lcs/list-lcs.component';
 import { ListLcComponent } from './bank/manage-lcs/list-lc/list-lc.component';
+import { DetailLcComponent } from './user/manage-lcs/detail-lc/detail-lc.component';
 
 const routes: Routes = [
   {
@@ -38,11 +39,15 @@ const routes: Routes = [
     ],
   },
   {
-    path: '',
+    path: 'LCs',
     children: [
       {
-        path: 'LCs',
+        path: '',
         component: ListLCsComponent,
+      },
+      {
+        path: ':id',
+        component: DetailLcComponent,
       },
     ],
   },

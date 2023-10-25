@@ -16,10 +16,10 @@ export class LcService {
 
   constructor(private http: HttpClient) {}
 
-  create(salescontract_id: String, body: any): Observable<any> {
+  create(body: any): Observable<any> {
     return this.http.post(
       environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API +
-        `/${salescontract_id}`,
+        `/create`,
       body,
       this.httpOptions
     );
@@ -27,7 +27,7 @@ export class LcService {
 
   list(): Observable<any> {
     return this.http.get(
-      environment.BASE_API_URI.BASE_SERVICE_API + `/bank/letterofcredits`,
+      environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API,
       this.httpOptions
     );
   }
