@@ -50,6 +50,10 @@ export class DetailLcComponent {
     }
   }
 
+  getFileName(name: String): String {
+    return name.split('\\').pop().split('/').pop();
+  }
+
   getDetailLC() {
     this.lc_id = this.route.snapshot.paramMap.get('id');
     this.lcSer.detail(this.lc_id).subscribe((res) => {
@@ -63,26 +67,14 @@ export class DetailLcComponent {
       else this.progress = 4;
 
       if (this.lcDetail.billOfLading) {
-        this.bill_of_lading = this.lcDetail.billOfLading.file
-          .split('\\')
-          .pop()
-          .split('/')
-          .pop();
+        this.bill_of_lading = this.lcDetail.billOfLading;
         console.log(this.bill_of_lading);
       }
       if (this.lcDetail.billOfExchange) {
-        this.bill_of_exchange = this.lcDetail.billOfExchange.file
-          .split('\\')
-          .pop()
-          .split('/')
-          .pop();
+        this.bill_of_exchange = this.lcDetail.billOfExchange
       }
       if (this.lcDetail.invoice) {
-        this.invoice = this.lcDetail.invoice.file
-          .split('\\')
-          .pop()
-          .split('/')
-          .pop();
+        this.invoice = this.lcDetail.invoice
       }
     });
   }
