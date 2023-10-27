@@ -37,7 +37,7 @@
               [routerLink]="['/agreements', data.salescontract_id]"></span></a>
         </td>
         <td>
-          <span *ngIf="username == data.importer && role == 'user'" style="color: #ff4d4f; cursor: pointer;"
+          <span *ngIf="username == data.importer && role == 'user' && data.status == 'created'" style="color: #ff4d4f; cursor: pointer;"
             (click)="showDeleteConfirm(data.salescontract_id)" nz-icon nzType="delete" nzTheme="outline"></span>
         </td>
       </tr>

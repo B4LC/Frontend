@@ -2,14 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NewAgreementComponent } from './user/manage-agreements/new-agreement/new-agreement.component';
 import { RequestLCComponent } from './user/manage-lcs/request-lc/request-lc.component';
-import { Option1Component } from './user/option1/option1.component';
-import { ManageTransactionsComponent } from './user/manage-transactions/manage-transactions.component';
 import { ListNewRequestComponent } from './user/manage-agreements/list-new-request/list-new-request.component';
 import { DetailAgreementComponent } from './user/manage-agreements/detail-agreement/detail-agreement.component';
 import { ListAgreementComponent } from './user/manage-agreements/list-agreement/list-agreement.component';
 import { ListLCsComponent } from './user/manage-lcs/list-lcs/list-lcs.component';
-import { ListLcComponent } from './bank/manage-lcs/list-lc/list-lc.component';
 import { DetailLcComponent } from './user/manage-lcs/detail-lc/detail-lc.component';
+import { UploadDocumentComponent } from './user/manage-documents/upload-document/upload-document.component';
+import { ListDocumentsComponent } from './user/manage-documents/list-documents/list-documents.component';
 
 const routes: Routes = [
   {
@@ -17,8 +16,8 @@ const routes: Routes = [
     component: NewAgreementComponent,
   },
   {
-    path:'request-lc/:id',
-    component: RequestLCComponent
+    path: 'request-lc/:id',
+    component: RequestLCComponent,
   },
   {
     path: 'agreements',
@@ -52,15 +51,24 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'manage-transactions',
-    component: ManageTransactionsComponent,
+    path: 'documents',
+    children: [
+      {
+        path: '',
+        component: ListDocumentsComponent,
+      },
+      {
+        path: ':id',
+        component: UploadDocumentComponent,
+      },
+    ],
   },
   {
     path: 'bank',
     children: [
       {
         path: 'LCs', // Đường dẫn trống để đảm bảo đây là trang mặc định của layout chung
-        component: ListLcComponent
+        component: ListLCsComponent,
       },
       // Thêm các route con cho trang layout chung ở đây
     ],

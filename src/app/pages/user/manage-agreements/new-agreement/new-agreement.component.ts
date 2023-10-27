@@ -65,7 +65,7 @@ export class NewAgreementComponent implements OnInit {
       this.newAgreement.paymentMethod = this.validateNewAgreementForm.value.paymentMethod;
       // this.newAgreement.deadline = this.validateNewAgreementForm.value.date.toString();
       this.newAgreement.additionalInfo = this.validateNewAgreementForm.value.additionalInformation;
-      // console.log(this.newAgreement);
+      console.log(this.newAgreement);
       this.agreementSer.create(this.newAgreement).subscribe((res) => {
         console.log(res);
         if (res.message == 'Create salescontract successfully') {

@@ -144,6 +144,8 @@ export class DetailAgreementComponent {
       nzOnOk: () => {
         this.reqCreateLC.salesContractID = this.salescontract_id;
         this.lcSer.create(this.reqCreateLC).subscribe((res) =>{
+          this.msg.success(res.message)
+          this.getDetail();
           console.log(res);
         })
       }

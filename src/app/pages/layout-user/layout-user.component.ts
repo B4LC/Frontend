@@ -46,20 +46,10 @@ export class LayoutUserComponent implements OnInit {
       icon: 'file-done',
       subMenus: [
         {
-          title: 'option1',
-          url: `option1`,
-        },
-        {
-          title: 'option2',
-          url: `#`,
+          title: 'Documents list',
+          url: `documents`,
         },
       ],
-      role: 'user',
-    },
-    {
-      title: 'Manage transactions',
-      icon: 'euro',
-      url: 'manage-transactions',
       role: 'user',
     },
     {
