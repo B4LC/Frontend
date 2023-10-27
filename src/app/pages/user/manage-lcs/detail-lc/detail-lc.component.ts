@@ -55,7 +55,10 @@ export class DetailLcComponent {
   }
 
   getFileName(name: String): String {
+    if (name) {
     return name.split('\\').pop().split('/').pop();
+    }
+    return null;
   }
 
   getDetailLC() {
