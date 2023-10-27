@@ -182,18 +182,18 @@
                                 <p>{{lcDetail.billOfExchange.status || 'Seller/Buyer not uploaded yet'}}</p>
                             </nz-form-control>
                         </nz-form-item>
-                        <div *ngIf="bill_of_exchange"  nz-col [nzSpan]="12">
+                        <div *ngIf="bill_of_exchange.file"  nz-col [nzSpan]="12">
                             <nz-form-label nzFor="additionalInformation">
                                 <strong>File</strong>
                             </nz-form-label>
                             <div class="file-upload" style="color: #1890ff;">
-                                <div *ngIf="bill_of_exchange">
+                                <div *ngIf="bill_of_exchange.file">
                                     <div>
                                         <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
                                         {{getFileName(bill_of_exchange.file)}}
                                     </div>
                                 </div>
-                                <span *ngIf="!bill_of_exchange" style="color: #555;">
+                                <span *ngIf="!bill_of_exchange.file" style="color: #555;">
                                     Seller/Buyer hasn't uploaded yet!</span>
                             </div>
                         </div>
@@ -212,16 +212,16 @@
                                 <p>{{lcDetail.billOfLading.status || 'Seller/Buyer not uploaded yet'}}</p>
                             </nz-form-control>
                         </nz-form-item>
-                        <div *ngIf="bill_of_lading"  nz-col [nzSpan]="12">
+                        <div *ngIf="bill_of_lading.file"  nz-col [nzSpan]="12">
                             <nz-form-label nzFor="additionalInformation">
                                 <strong>File</strong>
                             </nz-form-label>
                             <div class="file-upload" style="color: #1890ff;">
-                                <div *ngIf="bill_of_lading">
+                                <div *ngIf="bill_of_lading.file">
                                     <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
                                     {{getFileName(bill_of_lading.file)}}
                                 </div>
-                                <span *ngIf="!bill_of_lading" style="color: #555;">Seller/Buyer hasn't uploaded
+                                <span *ngIf="!bill_of_lading.file" style="color: #555;">Seller/Buyer hasn't uploaded
                                     yet!</span>
                             </div>
                         </div>
@@ -241,7 +241,7 @@
                                 <p>{{lcDetail.invoice.status || 'Seller/Buyer not uploaded yet'}}</p>
                             </nz-form-control>
                         </nz-form-item>
-                        <div *ngIf="invoice" nz-col [nzSpan]="12">
+                        <div *ngIf="invoice.file" nz-col [nzSpan]="12">
                             <nz-form-label nzFor="additionalInformation">
                                 <strong>File</strong>
                             </nz-form-label>
@@ -250,7 +250,7 @@
                                     <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
                                     {{getFileName(invoice.file)}}
                                 </div>
-                                <span *ngIf="!invoice" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
+                                <span *ngIf="!invoice.file" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
                             </div>
                         </div>
                     </div>
