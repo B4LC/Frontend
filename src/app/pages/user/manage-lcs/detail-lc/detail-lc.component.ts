@@ -132,15 +132,45 @@ export class DetailLcComponent {
     // this.msg.info('click cancel');
   }
 
+  acceptDocumentINVOICE(): void {
+    this.invoiceSer.approve(this.lc_id, {}).subscribe((res) =>{
+      this.msg.success(res.message);
+      this.getDetailLC();
+    })
+  }
+
+  rejectDocumentINVOICE(): void {
+    this.invoiceSer.reject(this.lc_id, {}).subscribe((res) =>{
+      this.msg.success(res.message);
+      this.getDetailLC();
+    })
+  }
+
+  acceptDocumentBOL(): void {
+    this.bOLSer.approve(this.lc_id, {}).subscribe((res) =>{
+      this.msg.success(res.message);
+      this.getDetailLC();
+    })
+  }
+
+  rejectDocumentBOL(): void {
+    this.bOLSer.reject(this.lc_id, {}).subscribe((res) =>{
+      this.msg.success(res.message);
+      this.getDetailLC();
+    })
+  }
+
   acceptDocumentBOE(): void {
     this.bOESer.approve(this.lc_id, {}).subscribe((res) =>{
       this.msg.success(res.message);
+      this.getDetailLC();
     })
   }
 
   rejectDocumentBOE(): void {
     this.bOESer.reject(this.lc_id, {}).subscribe((res) =>{
       this.msg.success(res.message);
+      this.getDetailLC();
     })
   }
 

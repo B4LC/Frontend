@@ -173,54 +173,85 @@
             <nz-card nzTitle="Bill Of Exchange" style="margin-bottom: 16px;" [nzExtra]="extraTemplateBOE"
                 id="billOfExchangePart">
                 <div style="padding: 0 24px;">
-                    <div nz-row [nzGutter]="24">
-                        <div class="file-upload" style="color: #1890ff;">
-                            <div *ngIf="bill_of_exchange">
-                                <div>
-                                    <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                    {{bill_of_exchange}}
+                    <div *ngIf="bill_of_exchange" nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>Status</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.billOfExchange.status}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>File</strong>
+                            </nz-form-label>
+                            <div class="file-upload" style="color: #1890ff;">
+                                <div *ngIf="bill_of_exchange">
+                                    <div>
+                                        <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                        {{bill_of_exchange}}
+                                    </div>
                                 </div>
+                                <span *ngIf="!bill_of_exchange" style="color: #555;">Seller/Buyer hasn't uploaded
+                                    yet!</span>
                             </div>
-                            <span *ngIf="!bill_of_exchange" style="color: #555;">Seller/Buyer hasn't uploaded
-                                yet!</span>
                         </div>
                     </div>
                 </div>
             </nz-card>
 
-            <ng-template #extraTemplateBOE>
-                <nz-button-group>
-                    <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" 
-                    nzOkText="Yes" nzCancelText="Cancel"
-                        nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentBOE()" (nzOnCancel)="cancel()">Reject</button>
-                    <button nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="Are you sure APPROVE this task?"
-                        nzPopconfirmPlacement="top" (nzOnConfirm)="acceptDocumentBOE()" (nzOnCancel)="cancel()">Approve</button>
-                </nz-button-group>
-            </ng-template>
-
-            <nz-card nzTitle="Bill Of Lading" style="margin-bottom: 16px;" id="billOfLadinglPart">
+            <nz-card nzTitle="Bill Of Lading" style="margin-bottom: 16px;" id="billOfLadinglPart" [nzExtra]="extraTemplateBOL">
                 <div style="padding: 0 24px;">
-                    <div nz-row [nzGutter]="24">
-                        <div class="file-upload" style="color: #1890ff;">
-                            <div *ngIf="bill_of_lading">
-                                <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                {{bill_of_lading}}
+                    <div *ngIf="bill_of_lading" nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>Status</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.billOfLading.status}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>File</strong>
+                            </nz-form-label>
+                            <div class="file-upload" style="color: #1890ff;">
+                                <div *ngIf="bill_of_lading">
+                                    <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                    {{bill_of_lading}}
+                                </div>
+                                <span *ngIf="!bill_of_lading" style="color: #555;">Seller/Buyer hasn't uploaded
+                                    yet!</span>
                             </div>
-                            <span *ngIf="!bill_of_lading" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
                         </div>
                     </div>
+
                 </div>
             </nz-card>
 
-            <nz-card nzTitle="Invoice" style="margin-bottom: 16px;" id="invoicelPart">
+            <nz-card nzTitle="Invoice" style="margin-bottom: 16px;" id="invoicelPart" [nzExtra]="extraTemplateINVOICE">
                 <div style="padding: 0 24px;">
-                    <div nz-row [nzGutter]="24">
-                        <div class="file-upload" style="color: #1890ff;">
-                            <div *ngIf="invoice">
-                                <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                {{invoice}}
+                    <div *ngIf="invoice" nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>Status</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.invoice.status}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <div nz-col [nzSpan]="12">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>File</strong>
+                            </nz-form-label>
+                            <div class="file-upload" style="color: #1890ff;">
+                                <div *ngIf="invoice">
+                                    <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                    {{invoice}}
+                                </div>
+                                <span *ngIf="!invoice" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
                             </div>
-                            <span *ngIf="!invoice" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
                         </div>
                     </div>
                 </div>
@@ -276,3 +307,36 @@
         </form>
     </ng-container>
 </nz-modal>
+
+<ng-template #extraTemplateBOE>
+    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfExchange.status == 'user_uploaded'">
+        <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" nzOkText="Yes"
+            nzCancelText="Cancel" nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentBOE()"
+            (nzOnCancel)="cancel()">Reject</button>
+        <button nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="Are you sure APPROVE this task?"
+            nzPopconfirmPlacement="top" (nzOnConfirm)="acceptDocumentBOE()"
+            (nzOnCancel)="cancel()">Approve</button>
+    </nz-button-group>
+</ng-template>
+
+<ng-template #extraTemplateBOL>
+    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfExchange.status == 'user_uploaded'">
+        <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" nzOkText="Yes"
+            nzCancelText="Cancel" nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentBOL()"
+            (nzOnCancel)="cancel()">Reject</button>
+        <button nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="Are you sure APPROVE this task?"
+            nzPopconfirmPlacement="top" (nzOnConfirm)="acceptDocumentBOL()"
+            (nzOnCancel)="cancel()">Approve</button>
+    </nz-button-group>
+</ng-template>
+
+<ng-template #extraTemplateINVOICE>
+    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfExchange.status == 'user_uploaded'">
+        <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" nzOkText="Yes"
+            nzCancelText="Cancel" nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentINVOICE()"
+            (nzOnCancel)="cancel()">Reject</button>
+        <button nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="Are you sure APPROVE this task?"
+            nzPopconfirmPlacement="top" (nzOnConfirm)="acceptDocumentINVOICE()"
+            (nzOnCancel)="cancel()">Approve</button>
+    </nz-button-group>
+</ng-template>
