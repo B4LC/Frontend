@@ -1,5 +1,9 @@
 import { Component, ElementRef } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import {
+  UntypedFormBuilder,
+  UntypedFormGroup,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
@@ -7,7 +11,6 @@ import { InvoiceService } from 'src/app/service/invoice-service/invoice.service'
 import { LcService } from 'src/app/service/lc-service/lc.service';
 import { BoeUploadService } from 'src/app/service/upload-service/BoE/boe-upload.service';
 import { BolUploadService } from 'src/app/service/upload-service/BoL/bol-upload.service';
-
 
 @Component({
   selector: 'app-detail-lc',
@@ -26,6 +29,7 @@ export class DetailLcComponent {
   bill_of_exchange: any;
   bill_of_lading: any;
   invoice: any;
+  isAllApprove = false;
 
   constructor(
     private lcSer: LcService,
@@ -36,7 +40,7 @@ export class DetailLcComponent {
     private modal: NzModalService,
     private bOLSer: BolUploadService,
     private bOESer: BoeUploadService,
-    private invoiceSer: InvoiceService,
+    private invoiceSer: InvoiceService
   ) {
     this.validateRefuseForm = this.fb.group({
       reason: ['', [Validators.required]],
@@ -60,25 +64,52 @@ export class DetailLcComponent {
       console.log(res);
       this.lcDetail = res;
 
-      if(this.lcDetail.letterOfCredit.status == 'created') this.progress = 1;
-      else if (this.lcDetail.letterOfCredit.status == 'advising_bank_approved') this.progress = 2;
-      else if (this.lcDetail.letterOfCredit.status == 'Buyer/Seller upload document') this.progress = 3;
-      else if (this.lcDetail.letterOfCredit.status == 'advising_bank_rejected') this.progress = 5;
-      else this.progress = 4;
+      if (this.lcDetail.letterOfCredit.status == 'created') this.progress = 1;
+      else if (this.lcDetail.letterOfCredit.status == 'advising_bank_approved')
+        this.progress = 2;
+      else if (
+        this.lcDetail.letterOfCredit.status == 'Buyer/Seller upload document'
+      )
+        this.progress = 3;
+      else if (this.lcDetail.letterOfCredit.status == 'advising_bank_rejected')
+        this.progress = 5;
+      else if (this.lcDetail.letterOfCredit.status == 'document_approved')
+        this.progress = 4;
+      else this.progress = 6;
 
       if (this.lcDetail.billOfLading) {
         this.bill_of_lading = this.lcDetail.billOfLading;
         console.log(this.bill_of_lading);
       }
       if (this.lcDetail.billOfExchange) {
-        this.bill_of_exchange = this.lcDetail.billOfExchange
+        this.bill_of_exchange = this.lcDetail.billOfExchange;
       }
       if (this.lcDetail.invoice) {
-        this.invoice = this.lcDetail.invoice
+        this.invoice = this.lcDetail.invoice;
+      }
+
+      if (
+        this.bill_of_exchange.status == 'approved' &&
+        this.bill_of_lading.status == 'approved' &&
+        this.invoice.status == 'approved' &&
+        this.role == 'bank'
+      ) {
+        this.isAllApprove = true;
       }
     });
   }
 
+  updateStatus() {
+    if (this.isAllApprove) {
+      const body = {
+        status: 'document_approved',
+      };
+      this.lcSer.updateStatus(this.lc_id, body).subscribe((res) => {
+        this.msg.success('Update Success');
+        this.getDetailLC();
+      });
+    }
+  }
 
   approveLC(): void {
     this.confirmModal = this.modal.confirm({
@@ -100,11 +131,13 @@ export class DetailLcComponent {
 
   handleOkRefuse(): void {
     if (this.validateRefuseForm.valid) {
-      this.lcSer.return(this.lc_id, this.validateRefuseForm.value).subscribe((res) => {
-        console.log(res);
-        this.msg.success(res.message);
-        this.getDetailLC();
-      });
+      this.lcSer
+        .return(this.lc_id, this.validateRefuseForm.value)
+        .subscribe((res) => {
+          console.log(res);
+          this.msg.success(res.message);
+          this.getDetailLC();
+        });
       this.isVisible = false;
     } else {
       Object.values(this.validateRefuseForm.controls).forEach((control) => {
@@ -125,50 +158,50 @@ export class DetailLcComponent {
   }
 
   acceptDocumentINVOICE(): void {
-    this.invoiceSer.approve(this.lc_id, {}).subscribe((res) =>{
+    this.invoiceSer.approve(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    })
+    });
   }
 
   rejectDocumentINVOICE(): void {
-    this.invoiceSer.reject(this.lc_id, {}).subscribe((res) =>{
+    this.invoiceSer.reject(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    })
+    });
   }
 
   acceptDocumentBOL(): void {
-    this.bOLSer.approve(this.lc_id, {}).subscribe((res) =>{
+    this.bOLSer.approve(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    })
+    });
   }
 
   rejectDocumentBOL(): void {
-    this.bOLSer.reject(this.lc_id, {}).subscribe((res) =>{
+    this.bOLSer.reject(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    })
+    });
   }
 
   acceptDocumentBOE(): void {
-    this.bOESer.approve(this.lc_id, {}).subscribe((res) =>{
+    this.bOESer.approve(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    })
+    });
   }
 
   rejectDocumentBOE(): void {
-    this.bOESer.reject(this.lc_id, {}).subscribe((res) =>{
+    this.bOESer.reject(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    })
+    });
   }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    this.getDetailLC();    
+    this.getDetailLC();
   }
 }
