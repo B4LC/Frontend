@@ -18,8 +18,7 @@ export class LcService {
 
   create(body: any): Observable<any> {
     return this.http.post(
-      environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API +
-        `/create`,
+      environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API + `/create`,
       body,
       this.httpOptions
     );
@@ -50,6 +49,25 @@ export class LcService {
   approve(id: String, body: any): Observable<any> {
     return this.http.patch(
       environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API + `/${id}/approve`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  return(id: String, body: any): Observable<any> {
+    return this.http.patch(
+      environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API + `/${id}/reject`,
+      body,
+      this.httpOptions
+    );
+  }
+
+  updateStatus(id: String): Observable<any> {
+    const body = {
+      status: 'document_uploaded',
+    };
+    return this.http.patch(
+      environment.BASE_API_URI.BASE_LETTER_OF_CREDIT_API + `/${id}/status`,
       body,
       this.httpOptions
     );

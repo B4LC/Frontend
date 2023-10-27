@@ -24,8 +24,6 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { NewAgreementComponent } from './user/manage-agreements/new-agreement/new-agreement.component';
 import { RequestLCComponent } from './user/manage-lcs/request-lc/request-lc.component';
 import { NzBreadCrumbModule } from 'ng-zorro-antd/breadcrumb';
-import { Option1Component } from './user/option1/option1.component';
-import { ManageTransactionsComponent } from './user/manage-transactions/manage-transactions.component';
 import { NzRadioModule } from 'ng-zorro-antd/radio';
 import { NzUploadModule } from 'ng-zorro-antd/upload';
 import { NzCheckboxModule } from 'ng-zorro-antd/checkbox';
@@ -37,9 +35,13 @@ import { NzModalModule } from 'ng-zorro-antd/modal';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { ListAgreementComponent } from './user/manage-agreements/list-agreement/list-agreement.component';
 import { ListLCsComponent } from './user/manage-lcs/list-lcs/list-lcs.component';
-import { ListLcComponent } from './bank/manage-lcs/list-lc/list-lc.component';
 import { DetailLcComponent } from './user/manage-lcs/detail-lc/detail-lc.component';
 import { UploadDocumentComponent } from './user/manage-documents/upload-document/upload-document.component';
+import { NzStepsModule } from 'ng-zorro-antd/steps';
+import { ListDocumentsComponent } from './user/manage-documents/list-documents/list-documents.component';
+import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+
+
 
 @NgModule({
   declarations: [
@@ -47,15 +49,13 @@ import { UploadDocumentComponent } from './user/manage-documents/upload-document
     LayoutUserComponent,
     NewAgreementComponent,
     RequestLCComponent,
-    Option1Component,
-    ManageTransactionsComponent,
     ListNewRequestComponent,
     DetailAgreementComponent,
     ListAgreementComponent,
     ListLCsComponent,
-    ListLcComponent,
     DetailLcComponent,
     UploadDocumentComponent,
+    ListDocumentsComponent,
   ],
   imports: [
     NzUploadModule,
@@ -87,6 +87,8 @@ import { UploadDocumentComponent } from './user/manage-documents/upload-document
     NzDatePickerModule,
     NzModalModule,
     NzMessageModule,
+    NzStepsModule,
+    NzPopconfirmModule
   ],
 })
 export class PagesModule {}

@@ -1,17 +1,15 @@
 <div class="data-table">
   <div class="content-main">
-    <h5 style="text-align: center;">List LCs</h5>
+    <h5 style="text-align: center;">List documents</h5>
   </div>
 
   <nz-table #basicTable [nzData]="listOfData">
     <thead>
       <tr>
         <th>STT</th>
-        <th>Sale contract</th>
-        <th>Start date</th>
+        <th>Letter of credit</th>
         <th>Status</th>
-        <th>Detail</th>
-        <th *ngIf="role=='user'">Upload document</th>
+        <th>Upload document</th>
       </tr>
     </thead>
     <tbody>
@@ -20,9 +18,7 @@
         <td><a style="color: #2F54EB;" [routerLink]="['/agreements', data.salesContract]">{{ data.salesContract }}</a>
         </td>
         <td>{{ data.startDate }}</td>
-        <td [ngStyle]="{'color': getColorByStatus(data.status)}">{{ data.status }}
-          <span *ngIf="data.status == 'advising_bank_rejected'" style="color: #f81d22;"> 
-          <br> reason: {{data.rejectedReason}}</span></td>
+        <td>{{ data.status }}</td>
         <td>
           <a><span style="color: #2F54EB;" nz-icon nzType="eye" nzTheme="outline"
               [routerLink]="['/LCs', data.LCID]"></span></a>

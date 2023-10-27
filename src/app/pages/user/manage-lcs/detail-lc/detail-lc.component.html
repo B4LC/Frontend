@@ -1,151 +1,278 @@
-<!-- <div nz-row [nzGutter]="24">
-    <div nz-col [nzSpan]="24">
-        <nz-card nzTitle="Content (status: {{requestForm.status}})" style="margin-bottom: 16px;">
-            <div style="padding: 0 24px;" class="formAgreement" [formGroup]="validateForm" (ngSubmit)="updateForm()">
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="date">
-                            <strong>Agreement commencement time (DD--MM--YYYY)</strong>
-                        </nz-form-label>
-                        <nz-form-control [nzSpan]="8">
-                            <p>{{requestForm.date}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="agreementID">
-                            <strong>Agreement ID</strong>
-                        </nz-form-label>
-                        <nz-form-control [nzSpan]="8">
-                            <p>{{requestForm.agreementID}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
+<div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="17">
+        <div class="formAgreement">
+            <nz-card nzTitle="Letter of Credit" style="margin-bottom: 16px;" id="letterOfCreditPart">
+                <div style="padding: 0 24px;">
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="date">
+                                <strong>Start Date</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.letterOfCredit.startDate}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="agreementID">
+                                <strong>Status</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.letterOfCredit.status}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24" *ngIf="lcDetail.letterOfCredit.rejectedReason">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="date">
+                                <strong>Return reason</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.letterOfCredit.rejectedReason}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                 </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="applicant">
-                            <strong>Applicant</strong>
-                        </nz-form-label>
-                        <nz-form-control [nzSpan]="8">
-                            <p>{{requestForm.applicant}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="applicantLegalName">
-                            <strong>Applicant legal name</strong>
-                        </nz-form-label>
-                        <nz-form-control [nzSpan]="8">
-                            <p>{{requestForm.applicantLegalName}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="beneficiary">
-                            <strong>Beneficiary</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.beneficiary}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="date">
-                            <strong>Beneficiary legal name</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.beneficiaryLegalName}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="issuingBank">
-                            <strong>Issuing bank</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.issuingBank}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="issuingBankCode">
-                            <strong>Issuing Bank SWIFT/BIC code</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.issuingBankCode}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="advisingBank">
-                            <strong>Advising bank</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.advisingBank}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="advisingBankCode">
-                            <strong>Advising Bank SWIFT/BIC code</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.advisingBankCode}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="commodityName">
-                            <strong>Commodity name</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.commodityName}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                    <nz-form-item nz-col [nzSpan]="12" class="info">
-                        <nz-form-label nzFor="commodityValue">
-                            <strong>Commodity value</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.commodityValue}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="24" class="info">
-                        <nz-form-label nzFor="paymentMethod">
-                            <strong>Payment method</strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.paymentMethod}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
-                </div>
+            </nz-card>
 
-                <hr style="margin-top: 40px;">
+            <nz-card nzTitle="Sale Contract" style="margin-bottom: 16px;" id="saleContractDetailPart">
+                <div style="padding: 0 24px;">
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="date">
+                                <strong>Agreement end time (DD--MM--YYYY)</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.salseContract.deadlineInDate}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="agreementID">
+                                <strong>Status</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.salseContract.status}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="applicant">
+                                <strong>Applicant</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.salseContract.importer}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="applicantLegalName">
+                                <strong>Applicant legal name</strong>
+                            </nz-form-label>
+                            <nz-form-control [nzSpan]="8">
+                                <p>{{lcDetail.salseContract.applicantLegalName}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="beneficiary">
+                                <strong>Beneficiary</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.exporter}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="date">
+                                <strong>Beneficiary legal name</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.beneficiaryLegalName}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="issuingBank">
+                                <strong>Issuing bank</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.issuingBank}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="issuingBankCode">
+                                <strong>Issuing Bank SWIFT/BIC code</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.issuingBankCode}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="advisingBank">
+                                <strong>Advising bank</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.advisingBank}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="advisingBankCode">
+                                <strong>Advising Bank SWIFT/BIC code</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.advisingBankCode}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="commodityName">
+                                <strong>Commodity name</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.commodity}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                        <nz-form-item nz-col [nzSpan]="12" class="info">
+                            <nz-form-label nzFor="commodityValue">
+                                <strong>Commodity value</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.price}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="24" class="info">
+                            <nz-form-label nzFor="paymentMethod">
+                                <strong>Payment method</strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.paymentMethod}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
 
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="24" class="info">
-                        <nz-form-label nzFor="additionalInformation">
-                            <strong>Additional information <em>(optional)</em></strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            <p>{{requestForm.additionalInformation}}</p>
-                        </nz-form-control>
-                    </nz-form-item>
+                    <hr style="margin-top: 40px;">
+
+                    <div nz-row [nzGutter]="24">
+                        <nz-form-item nz-col [nzSpan]="24" class="info">
+                            <nz-form-label nzFor="additionalInformation">
+                                <strong>Additional information <em>(optional)</em></strong>
+                            </nz-form-label>
+                            <nz-form-control>
+                                <p>{{lcDetail.salseContract.additionalInfo}}</p>
+                            </nz-form-control>
+                        </nz-form-item>
+                    </div>
                 </div>
-                <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="24" class="info">
-                        <nz-form-label nzFor="additionalInformation">
-                            <strong>Additional files <em>(optional)</em></strong>
-                        </nz-form-label>
-                        <nz-form-control>
-                            something
-                        </nz-form-control>
-                    </nz-form-item>
+            </nz-card>
+
+            <nz-card nzTitle="Bill Of Exchange" style="margin-bottom: 16px;" [nzExtra]="extraTemplateBOE"
+                id="billOfExchangePart">
+                <div style="padding: 0 24px;">
+                    <div nz-row [nzGutter]="24">
+                        <div class="file-upload" style="color: #1890ff;">
+                            <div *ngIf="bill_of_exchange">
+                                <div>
+                                    <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                    {{bill_of_exchange}}
+                                </div>
+                            </div>
+                            <span *ngIf="!bill_of_exchange" style="color: #555;">Seller/Buyer hasn't uploaded
+                                yet!</span>
+                        </div>
+                    </div>
+                </div>
+            </nz-card>
+
+            <ng-template #extraTemplateBOE>
+                <nz-button-group>
+                    <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" 
+                    nzOkText="Yes" nzCancelText="Cancel"
+                        nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentBOE()" (nzOnCancel)="cancel()">Reject</button>
+                    <button nz-button nzType="primary" nz-popconfirm nzPopconfirmTitle="Are you sure APPROVE this task?"
+                        nzPopconfirmPlacement="top" (nzOnConfirm)="acceptDocumentBOE()" (nzOnCancel)="cancel()">Approve</button>
+                </nz-button-group>
+            </ng-template>
+
+            <nz-card nzTitle="Bill Of Lading" style="margin-bottom: 16px;" id="billOfLadinglPart">
+                <div style="padding: 0 24px;">
+                    <div nz-row [nzGutter]="24">
+                        <div class="file-upload" style="color: #1890ff;">
+                            <div *ngIf="bill_of_lading">
+                                <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                {{bill_of_lading}}
+                            </div>
+                            <span *ngIf="!bill_of_lading" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
+                        </div>
+                    </div>
+                </div>
+            </nz-card>
+
+            <nz-card nzTitle="Invoice" style="margin-bottom: 16px;" id="invoicelPart">
+                <div style="padding: 0 24px;">
+                    <div nz-row [nzGutter]="24">
+                        <div class="file-upload" style="color: #1890ff;">
+                            <div *ngIf="invoice">
+                                <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                {{invoice}}
+                            </div>
+                            <span *ngIf="!invoice" style="color: #555;">Seller/Buyer hasn't uploaded yet!</span>
+                        </div>
+                    </div>
+                </div>
+            </nz-card>
+        </div>
+    </div>
+
+    <div nz-col [nzSpan]="7">
+        <nz-card style="width:100%;" nzTitle="Content">
+            <nz-steps *ngIf="progress <= 4" [nzCurrent]=progress nzDirection="vertical" nzSize="small">
+                <nz-step nzTitle="LC created"></nz-step>
+                <nz-step nzTitle="Advising Bank accepted"></nz-step>
+                <nz-step nzTitle="Buyer/Seller upload document"></nz-step>
+                <nz-step nzTitle="Document accepted"></nz-step>
+            </nz-steps>
+            <nz-steps *ngIf="progress > 4" [nzCurrent]=progress nzDirection="vertical" nzSize="small">
+                <nz-step nzTitle="LC created"></nz-step>
+                <nz-step nzStatus="error" nzTitle="Advising Bank rejected"></nz-step>
+            </nz-steps>
+            <ul nz-menu nzMode="inline">
+                <li nz-menu-item (click)="scrollToTarget('letterOfCreditPart')"><span>Letter of Credit</span></li>
+                <li nz-menu-item (click)="scrollToTarget('saleContractDetailPart')" nzOpen><span>Sale Contract</span>
+                </li>
+                <li nz-menu-item (click)="scrollToTarget('billOfExchangePart')"><span>Bill Of Exchange</span></li>
+                <li nz-menu-item (click)="scrollToTarget('billOfLadinglPart')"><span>Bill Of Lading</span></li>
+                <li nz-menu-item (click)="scrollToTarget('invoicelPart')"><span>Invoice</span></li>
+            </ul>
+            <div *ngIf="lcDetail.salseContract.advisingBank == username && lcDetail.letterOfCredit.status == 'created'"
+                class="button-group">
+                <div>
+                    <button nz-button nzType="primary" (click)="approveLC()">Approve</button>
+                </div>
+                <div>
+                    <button nz-button nzType="primary" nzDanger (click)="showModalRefuse()">
+                        Return
+                    </button>
                 </div>
             </div>
-
-            <nz-divider></nz-divider>
         </nz-card>
     </div>
-</div> -->
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Do you want to return this agreement?" (nzOnCancel)="handleCancelRefuse()"
+    (nzOnOk)="handleOkRefuse()" [nzOkDanger]="true">
+    <ng-container *nzModalContent>
+        <form nz-form [formGroup]="validateRefuseForm" (ngSubmit)="submitForm()">
+            <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="email">Reason</nz-form-label>
+                <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid!">
+                    <input nz-input formControlName="reason" id="reason" />
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </ng-container>
+</nz-modal>
