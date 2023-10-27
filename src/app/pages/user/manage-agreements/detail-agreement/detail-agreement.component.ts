@@ -69,6 +69,8 @@ export class DetailAgreementComponent {
     salesContractID: '',
   };
 
+  isLoading = false;
+
   constructor(
     private modal: NzModalService,
     private fb: UntypedFormBuilder,
@@ -141,14 +143,24 @@ export class DetailAgreementComponent {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to create LC?',
       nzCancelText: 'Cancel',
-      nzOnOk: () => {
+      nzOnOk: () => 
+      // {
+      //   this.reqCreateLC.salesContractID = this.salescontract_id;
+      //   this.lcSer.create(this.reqCreateLC).subscribe((res) =>{
+      //     this.msg.success(res.message)
+      //     this.getDetail();
+      //     console.log(res);
+      //   })
+      // }
+      new Promise((resolve, reject) => {
         this.reqCreateLC.salesContractID = this.salescontract_id;
-        this.lcSer.create(this.reqCreateLC).subscribe((res) =>{
+        this.lcSer.create(this.reqCreateLC).subscribe((res) => {
           this.msg.success(res.message)
           this.getDetail();
           console.log(res);
-        })
-      }
+          reject("Oops, there's a result!");
+        });
+      }).catch((error) => console.log(error))
     });
   }
 
