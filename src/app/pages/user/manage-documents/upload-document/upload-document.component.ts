@@ -123,7 +123,7 @@ export class UploadDocumentComponent {
     const missingFiles = filesNotUploaded.join(', ');
 
     this.confirmModal = this.modal.confirm({
-      nzTitle: 'Do you Want to accept this agreement?',
+      nzTitle: 'Do you Want to upload these file?',
       nzCancelText: 'Cancel',
       nzOnOk: () => {
         if (this.bill_of_exchange) {
@@ -144,6 +144,7 @@ export class UploadDocumentComponent {
           });
         }
         this.changeStatusUpload();
+        this.getDetailLC(this.id_lc);
       },
     });
   }
