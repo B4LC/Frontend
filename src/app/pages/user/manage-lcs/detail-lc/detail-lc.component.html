@@ -1,7 +1,7 @@
 <div nz-row [nzGutter]="24">
     <div nz-col [nzSpan]="17">
         <div class="formAgreement">
-            <nz-card nzTitle="Letter of Credit" style="margin-bottom: 16px;" id="letterOfCreditPart">
+            <nz-card nzTitle="Letter of Credit" style="margin-bottom: 16px;" id="letterOfCreditPart" [nzExtra]="extraTemplateLOC">
                 <div style="padding: 0 24px;">
                     <div nz-row [nzGutter]="24">
                         <nz-form-item nz-col [nzSpan]="12" class="info">
@@ -339,4 +339,10 @@
             nzPopconfirmPlacement="top" (nzOnConfirm)="acceptDocumentINVOICE()"
             (nzOnCancel)="cancel()">Approve</button>
     </nz-button-group>
+</ng-template>
+
+<ng-template #extraTemplateLOC>
+        <button nz-button *ngIf="role == 'bank' && isAllApprove == true" nzType="primary" (click)="updateStatus()" >
+            <span nz-icon nzType="sync" nzTheme="outline"></span> Update Status LC
+        </button>
 </ng-template>
