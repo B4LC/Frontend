@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalService } from 'ng-zorro-antd/modal';
 import { AuthenticationService } from 'src/app/service/authentication/authentication.service';
 
@@ -41,16 +42,27 @@ export class LayoutUserComponent implements OnInit {
       ],
       role: 'user',
     },
+    // {
+    //   title: 'Manage documents',
+    //   icon: 'file-done',
+    //   subMenus: [
+    //     {
+    //       title: 'Documents list',
+    //       url: `documents`,
+    //     },
+    //   ],
+    //   role: 'user',
+    // },
     {
-      title: 'Manage documents',
-      icon: 'file-done',
+      title: 'Manage agreements',
+      icon: 'database',
       subMenus: [
         {
-          title: 'Documents list',
-          url: `documents`,
+          title: 'Agreements list',
+          url: 'agreements',
         },
       ],
-      role: 'user',
+      role: 'bank',
     },
     {
       title: 'Manage LCs',
@@ -59,17 +71,6 @@ export class LayoutUserComponent implements OnInit {
         {
           title: 'LCs list',
           url: 'bank/LCs',
-        },
-      ],
-      role: 'bank',
-    },
-    {
-      title: 'Manage agreements',
-      icon: 'database',
-      subMenus: [
-        {
-          title: 'Agreements list',
-          url: 'agreements',
         },
       ],
       role: 'bank',
@@ -84,7 +85,8 @@ export class LayoutUserComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modal: NzModalService,
-    private authenSer: AuthenticationService
+    private authenSer: AuthenticationService,
+    private msg: NzMessageService
   ) {
     // Theo dõi sự kiện thay đổi URL
     this.router.events.subscribe((event) => {
@@ -133,8 +135,15 @@ export class LayoutUserComponent implements OnInit {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to log out?</i>',
       nzOnOk: () => {
-        this.authenSer.logout();
-        this.router.navigate(['/auth/login']);
+        this.authenSer.logout().subscribe((res) => {
+          console.log(res);
+          this.msg.success(res.message);
+          localStorage.clear();
+          this.router.navigate(['/auth/login']);
+          window.location.reload();
+        }, (error) => {
+          this.msg.error('Logout unsuccessfully');
+        });
       },
     });
   }

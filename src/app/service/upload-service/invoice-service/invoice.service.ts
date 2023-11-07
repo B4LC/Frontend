@@ -16,7 +16,7 @@ export class InvoiceService {
 
   constructor(private http: HttpClient) {}
 
-  create(body: any): Observable<any> {
+  upload(body: any): Observable<any> {
     return this.http.post(
       environment.BASE_API_URI.BASE_INVOICE_API + `/create`,
       body,
@@ -24,8 +24,11 @@ export class InvoiceService {
     );
   }
 
-  detail(id: String): Observable<any> {
-    return this.http.get(environment.BASE_API_URI.BASE_INVOICE_API + `/${id}`);
+  get(id: String): Observable<any> {
+    return this.http.get(
+      environment.BASE_API_URI.BASE_INVOICE_API + `/${id}`,
+      this.httpOptions
+    );
   }
 
   approve(id: String, body: any): Observable<any> {
@@ -43,6 +46,4 @@ export class InvoiceService {
       this.httpOptions
     );
   }
-
-  
 }

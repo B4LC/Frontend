@@ -6,6 +6,7 @@ import {
 } from '@angular/forms';
 import { AuthenticationService } from 'src/app/service/authentication/authentication.service';
 import { Router } from '@angular/router';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -18,11 +19,13 @@ export class LoginComponent implements OnInit {
     email: String,
     password: String,
   };
+  isLoginFailed: boolean;
 
   constructor(
     private fb: UntypedFormBuilder,
     private loginService: AuthenticationService,
-    public router: Router
+    public router: Router,
+    private msg: NzMessageService
   ) {}
 
   submitForm(): void {
@@ -35,6 +38,7 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.requestLoginForm).subscribe(
         (res) => {
           console.log(res);
+            this.msg.success('Login successfully!')
           if (localStorage.getItem('role') == 'user') {
             this.router.navigateByUrl('/');
           }
@@ -42,6 +46,7 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           console.error('Login failed:', error);
+          this.isLoginFailed = true;
           // Xử lý lỗi nếu cần thiết
         }
       );

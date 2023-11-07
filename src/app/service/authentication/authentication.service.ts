@@ -13,10 +13,12 @@ import jwt_decode from 'jwt-decode';
 export class AuthenticationService {
   constructor(private http: HttpClient) {}
 
+  private httpOptions: any;
+
   getDecodedAccessToken(token: string): any {
     try {
       return jwt_decode(token);
-    } catch(Error) {
+    } catch (Error) {
       return null;
     }
   }
@@ -39,24 +41,34 @@ export class AuthenticationService {
 
   private setSession(authResult) {
     const authResultDecode = this.getDecodedAccessToken(authResult.accessToken);
+    const refreshTokenDecode = this.getDecodedAccessToken(
+      authResult.refreshToken
+    );
+    console.log(authResultDecode);
+    console.log(refreshTokenDecode);
 
     const expiresAt = moment().add(authResultDecode.exp, 'second');
 
     localStorage.setItem('email', authResultDecode.email);
     localStorage.setItem('role', authResultDecode.role);
     localStorage.setItem('id_token', authResult.accessToken);
+    localStorage.setItem('refresh_token', authResult.refreshToken);
     localStorage.setItem('username', authResultDecode.username);
-    localStorage.setItem('created_at', authResultDecode.iat);
-    localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+    // localStorage.setItem('created_at', authResultDecode.iat);
+    // localStorage.setItem('expires_at', JSON.stringify(expiresAt.valueOf()));
+
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${localStorage.getItem('id_token')}`,
+      }),
+    };
   }
 
-  logout() {
-    localStorage.removeItem('id_token');
-    localStorage.removeItem('expires_at');
-    localStorage.removeItem('email');
-    localStorage.removeItem('role');
-    localStorage.removeItem('username');
-    localStorage.removeItem('created_at');
+  logout(): Observable<any> {
+    return this.http.post(
+      environment.BASE_API_URI.BASE_SERVICE_API + '/auth/logout/',
+      { refreshToken: localStorage.getItem('refresh_token') }
+    );
   }
 
   public isLoggedIn() {
@@ -71,5 +83,17 @@ export class AuthenticationService {
     const expiration = localStorage.getItem('expires_at');
     const expiresAt = JSON.parse(expiration);
     return moment(expiresAt);
+  }
+
+  refresh() {
+    let body = {
+      accessToken: localStorage.getItem('id_token'),
+      refreshToken: localStorage.getItem('refresh_token'),
+    };
+    return this.http.post(
+      environment.BASE_API_URI.BASE_SERVICE_API + '/auth/refresh',
+      body,
+      this.httpOptions
+    );
   }
 }
