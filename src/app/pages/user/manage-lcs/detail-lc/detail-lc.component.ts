@@ -7,7 +7,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { InvoiceService } from 'src/app/service/invoice-service/invoice.service';
+import { InvoiceService } from 'src/app/service/upload-service/invoice-service/invoice.service';
 import { LcService } from 'src/app/service/lc-service/lc.service';
 import { BoeUploadService } from 'src/app/service/upload-service/BoE/boe-upload.service';
 import { BolUploadService } from 'src/app/service/upload-service/BoL/bol-upload.service';
@@ -30,6 +30,14 @@ export class DetailLcComponent {
   bill_of_lading: any;
   invoice: any;
   isAllApprove = false;
+  eventContract = {
+    LcCreatedEvent: '',
+    LcApprovedEvent: '',
+    docUploadedEvent: '',
+    LcRejectedEvent: '',
+    LcStatusChangedEvent: ''
+  };
+  isLoadingPage = true;
 
   constructor(
     private lcSer: LcService,
@@ -56,7 +64,7 @@ export class DetailLcComponent {
 
   getFileName(name: String): String {
     if (name) {
-    return name.split('\\').pop().split('/').pop();
+      return name.split('\\').pop().split('/').pop();
     }
     return null;
   }
@@ -66,7 +74,6 @@ export class DetailLcComponent {
     this.lcSer.detail(this.lc_id).subscribe((res) => {
       console.log(res);
       this.lcDetail = res;
-
       if (this.lcDetail.letterOfCredit.status == 'created') this.progress = 1;
       else if (this.lcDetail.letterOfCredit.status == 'advising_bank_approved')
         this.progress = 2;
@@ -99,7 +106,8 @@ export class DetailLcComponent {
       ) {
         this.isAllApprove = true;
       }
-    });
+      this.isLoadingPage = false
+    }, (e) => {this.msg.error('Something is wrong!')});
   }
 
   updateStatus() {
@@ -164,47 +172,65 @@ export class DetailLcComponent {
     this.invoiceSer.approve(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    });
+    }, (e) => this.msg.error('Something is wrong!'));
   }
 
   rejectDocumentINVOICE(): void {
     this.invoiceSer.reject(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    });
+    }, (e) => this.msg.error('Something is wrong!'));
   }
 
   acceptDocumentBOL(): void {
     this.bOLSer.approve(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    });
+    }, (e) => this.msg.error('Something is wrong!'));
   }
 
   rejectDocumentBOL(): void {
     this.bOLSer.reject(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    });
+    }, (e) => this.msg.error('Something is wrong!'));
   }
 
   acceptDocumentBOE(): void {
     this.bOESer.approve(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    });
+    }, (e) => this.msg.error('Something is wrong!'));
   }
 
   rejectDocumentBOE(): void {
     this.bOESer.reject(this.lc_id, {}).subscribe((res) => {
       this.msg.success(res.message);
       this.getDetailLC();
-    });
+    }, (e) => this.msg.error('Something is wrong!'));
+  }
+
+  getEventContract() {
+    this.lcSer.getContractEvent(this.lc_id).subscribe(
+      (res) => {
+        console.log(res);
+        this.eventContract.LcApprovedEvent = res.LcApprovedEvent.length>0?res.LcApprovedEvent[0].transactionHash:null;
+        this.eventContract.LcCreatedEvent = res.LcCreatedEvent.length>0?res.LcCreatedEvent[0].transactionHash:null;
+        this.eventContract.LcRejectedEvent = res.LcRejectedEvent.length>0?res.LcRejectedEvent[0].transactionHash:null;
+        this.eventContract.LcStatusChangedEvent = res.LcStatusChangedEvent.length>0?res.LcStatusChangedEvent[0].transactionHash:null;
+        this.eventContract.docUploadedEvent = res.docUploadedEvent.length>0?res.docUploadedEvent[0].transactionHash:null;
+        console.log(this.eventContract)
+      },
+      (e) => {
+        this.msg.error('Something is wrong!');
+      }
+    );
   }
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     this.getDetailLC();
+    this.getEventContract();
   }
 }

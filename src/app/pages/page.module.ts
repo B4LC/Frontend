@@ -40,6 +40,8 @@ import { UploadDocumentComponent } from './user/manage-documents/upload-document
 import { NzStepsModule } from 'ng-zorro-antd/steps';
 import { ListDocumentsComponent } from './user/manage-documents/list-documents/list-documents.component';
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
+import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
+import { NzSpinModule } from 'ng-zorro-antd/spin';
 
 
 
@@ -59,6 +61,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
   ],
   imports: [
     NzUploadModule,
+    NzSpinModule,
     NzRadioModule,
     NzBreadCrumbModule,
     NzMenuModule,
@@ -75,6 +78,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
     NzButtonModule,
     NzIconModule,
     HttpClientModule,
+    NzToolTipModule,
     NzInputModule,
     NzFormModule,
     ReactiveFormsModule,

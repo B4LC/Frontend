@@ -27,7 +27,7 @@ export class BoeUploadService {
   get(id: String): Observable<any> {
     return this.http.get(
       environment.BASE_API_URI.BASE_SERVICE_API + `/billofexchanges/${id}`,
-      { headers: this.httpOptions.headers, responseType: 'arraybuffer' }
+      this.httpOptions
     );
   }
 

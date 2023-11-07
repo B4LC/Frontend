@@ -22,6 +22,8 @@ import { NzTableModule } from 'ng-zorro-antd/table';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzModalModule } from 'ng-zorro-antd/modal';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthGuard } from './_guards/authGuard';
+import { authInterceptorProviders } from './_guards/authInterceptor';
 
 
 registerLocaleData(vi);
@@ -46,7 +48,7 @@ registerLocaleData(vi);
     NzModalModule,
     ReactiveFormsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: vi_VN }],
+  providers: [{ provide: NZ_I18N, useValue: vi_VN }, AuthGuard, authInterceptorProviders],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

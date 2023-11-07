@@ -69,4 +69,11 @@ export class LcService {
       this.httpOptions
     );
   }
+
+  getContractEvent(id: String): Observable<any> {
+    return this.http.get(
+      environment.BASE_API_URI.BASE_SERVICE_API + `/contractevents/${id}`,
+      this.httpOptions
+    );
+  }
 }

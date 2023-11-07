@@ -6,6 +6,7 @@ import {
   FormGroup,
   NonNullableFormBuilder,
   UntypedFormBuilder,
+  UntypedFormControl,
   UntypedFormGroup,
   ValidatorFn,
   Validators,
@@ -40,7 +41,8 @@ export class DetailAgreementComponent {
     commodityValue: '',
     paymentMethod: '',
     additionalInformation: '',
-    date: '',
+    date: null,
+    currencyUnit: ''
   };
   confirmModal?: NzModalRef;
   isVisible = false;
@@ -58,7 +60,7 @@ export class DetailAgreementComponent {
     price: Number,
     paymentMethod: String,
     additionalInfo: String,
-    deadline: '12/12/2023',
+    deadline: null,
   };
   isAccepted: boolean;
   salescontract_id: string;
@@ -70,6 +72,7 @@ export class DetailAgreementComponent {
   };
 
   isLoading = false;
+  currencyUnitList = ['VND', 'USD', 'EUR'];
 
   constructor(
     private modal: NzModalService,
@@ -84,24 +87,39 @@ export class DetailAgreementComponent {
     this.validateForm = this.fb.group({
       agreementID: '#demo',
       applicant: this.username,
-      applicantLegalName: '',
-      beneficiary: ['', [Validators.required]],
-      issuingBank: ['', [Validators.required]],
-      issuingBankCode: '',
-      beneficiaryLegalName: '',
-      advisingBank: ['', [Validators.required]],
-      advisingBankCode: '',
-      commodityName: ['', [Validators.required]],
-      commodityValue: [0, [Validators.required]],
-      paymentMethod: ['', [Validators.required]],
-      additionalInformation: '',
-      date: [format(currentDate, 'dd-MM-yyyy')],
+      applicantLegalName: String,
+      beneficiary: [String, [Validators.required]],
+      issuingBank: [String, [Validators.required]],
+      issuingBankCode: String,
+      beneficiaryLegalName: String,
+      advisingBank: ['', [Validators.required, this.confirmationValidator]],
+      advisingBankCode: String,
+      commodityName: [String, [Validators.required]],
+      commodityValue: [Number, [Validators.required]],
+      paymentMethod: [String, [Validators.required]],
+      deadline: [null, [Validators.required]],
+      currencyUnit: [String, [Validators.required]],
+      additionalInformation: String,
+      // date: [format(currentDate, 'dd-MM-yyyy')],
     });
 
     this.validateRefuseForm = this.fb.group({
-      reason: ['', [Validators.required]],
+      reason: [String, [Validators.required]],
     });
   }
+
+  confirmationValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (
+      control.value == this.validateForm.controls['issuingBank'].value
+    ) {
+      return { confirm: true, error: true };
+    }
+    return {};
+  };
 
   getListBank() {
     this.userSer.listBank().subscribe((res) => {
@@ -111,6 +129,8 @@ export class DetailAgreementComponent {
 
   getListCustomer() {
     this.userSer.listCustomer().subscribe((res) => {
+      let index = res.indexOf(localStorage.getItem('username'));
+      res.splice(index, 1);
       this.listCustomer = res;
     });
   }
@@ -120,11 +140,16 @@ export class DetailAgreementComponent {
       nzTitle: 'Do you Want to accept this agreement?',
       nzCancelText: 'Cancel',
       nzOnOk: () => {
-        this.agreementSer.approve(this.salescontract_id).subscribe((res) => {
-          this.msg.success(res.message);
-          this.isAccepted = true;
-          this.getDetail();
-        });
+        this.agreementSer.approve(this.salescontract_id).subscribe(
+          (res) => {
+            this.msg.success(res.message);
+            this.isAccepted = true;
+            this.getDetail();
+          },
+          (e) => {
+            this.msg.error('Approve unsuccessfully!');
+          }
+        );
       },
     });
   }
@@ -143,27 +168,21 @@ export class DetailAgreementComponent {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to create LC?',
       nzCancelText: 'Cancel',
-      nzOnOk: () => 
-      // {
-      //   this.reqCreateLC.salesContractID = this.salescontract_id;
-      //   this.lcSer.create(this.reqCreateLC).subscribe((res) =>{
-      //     this.msg.success(res.message)
-      //     this.getDetail();
-      //     console.log(res);
-      //   })
-      // }
-      new Promise((resolve, reject) => {
-        this.reqCreateLC.salesContractID = this.salescontract_id;
-        this.lcSer.create(this.reqCreateLC).subscribe((res) => {
-          this.msg.success(res.message)
-          this.getDetail();
-          console.log(res);
-          reject("Oops, there's a result!");
-        });
-      }).catch((error) => console.log(error))
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.reqCreateLC.salesContractID = this.salescontract_id;
+          this.lcSer.create(this.reqCreateLC).subscribe(
+            (res) => {
+              this.msg.success(res.message);
+              this.getDetail();
+              console.log(res);
+              reject("Oops, there's a result!");
+            },
+            (e) => this.msg.error('Create unsuccessfully!')
+          );
+        }).catch((error) => console.log(error)),
     });
   }
-
 
   showModalRefuse(): void {
     this.isVisible = true;
@@ -188,28 +207,32 @@ export class DetailAgreementComponent {
 
   getDetail() {
     this.salescontract_id = this.route.snapshot.paramMap.get('id');
-    this.agreementSer.detail(this.salescontract_id).subscribe((res) => {
-      this.validateForm.value.advisingBank = this.requestForm.advisingBank =
-        res.advisingBank;
-      this.requestForm.date = res.deadlineInDate;
-      this.requestForm.applicant = res.importer;
-      this.validateForm.value.beneficiary = this.requestForm.beneficiary =
-        res.exporter;
-      this.validateForm.value.commodityValue = this.requestForm.commodityValue =
-        res.price;
-      this.validateForm.value.commodity = this.requestForm.commodityName =
-        res.commodity;
-      this.validateForm.value.issuingBank = this.requestForm.issuingBank =
-        res.issuingBank;
-      this.validateForm.value.paymentMethod = this.requestForm.paymentMethod =
-        res.paymentMethod;
-      this.validateForm.value.additionalInformation =
-        this.requestForm.additionalInformation = res.additionalInfo;
-      this.requestForm.status = res.status;
-      if (res.status == 'created') {
-        this.isAccepted = false;
-      } else this.isAccepted = true;
-    });
+    this.agreementSer.detail(this.salescontract_id).subscribe(
+      (res) => {
+        this.validateForm.value.advisingBank = this.requestForm.advisingBank =
+          res.advisingBank;
+        this.requestForm.date = new Date(res.deadlineInDate);
+        this.requestForm.applicant = res.importer;
+        this.validateForm.value.beneficiary = this.requestForm.beneficiary =
+          res.exporter;
+        this.validateForm.value.commodityValue = res.price;
+        this.requestForm.commodityValue = res.price.split(' ')[0];
+        this.requestForm.currencyUnit = res.price.split(' ')[1];
+        this.validateForm.value.commodity = this.requestForm.commodityName =
+          res.commodity;
+        this.validateForm.value.issuingBank = this.requestForm.issuingBank =
+          res.issuingBank;
+        this.validateForm.value.paymentMethod = this.requestForm.paymentMethod =
+          res.paymentMethod;
+        this.validateForm.value.additionalInformation =
+          this.requestForm.additionalInformation = res.additionalInfo;
+        this.requestForm.status = res.status;
+        if (res.status == 'created') {
+          this.isAccepted = false;
+        } else this.isAccepted = true;
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   handleChange(info: NzUploadChangeParam): void {
@@ -234,19 +257,28 @@ export class DetailAgreementComponent {
       this.updateAgreement.issuingBank = this.validateForm.value.issuingBank;
       this.updateAgreement.advisingBank = this.validateForm.value.advisingBank;
       this.updateAgreement.commodity = this.validateForm.value.commodityName;
-      this.updateAgreement.price = this.validateForm.value.commodityValue;
+      this.updateAgreement.price =
+        this.validateForm.value.commodityValue +
+        new String(' ') +
+        this.validateForm.value.currencyUnit;
       this.updateAgreement.paymentMethod =
         this.validateForm.value.paymentMethod;
-      // this.updateAgreement.deadline = this.validateForm.value.date.toString();
+      this.updateAgreement.deadline = this.validateForm.value.deadline;
       this.updateAgreement.additionalInfo =
         this.validateForm.value.additionalInformation;
       this.isEdit = false;
       this.agreementSer
         .update(this.updateAgreement, this.salescontract_id)
-        .subscribe((res) => {
-          this.msg.success(res.message);
-          this.getDetail();
-        });
+        .subscribe(
+          (res) => {
+            this.msg.success(res.message);
+            this.getDetail();
+          },
+          (e) => {
+            this.msg.error('Edit unsuccessfully!');
+            this.getDetail();
+          }
+        );
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -256,7 +288,6 @@ export class DetailAgreementComponent {
       });
     }
   }
-
 
   ngOnInit(): void {
     this.getDetail();

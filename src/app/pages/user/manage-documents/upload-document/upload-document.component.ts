@@ -9,9 +9,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
-import { NzUploadChangeParam } from 'ng-zorro-antd/upload';
+import { NzUploadChangeParam, NzUploadFile } from 'ng-zorro-antd/upload';
 import { Subscription } from 'rxjs';
-import { InvoiceService } from 'src/app/service/invoice-service/invoice.service';
+import { InvoiceService } from 'src/app/service/upload-service/invoice-service/invoice.service';
 import { LcService } from 'src/app/service/lc-service/lc.service';
 import { BoeUploadService } from 'src/app/service/upload-service/BoE/boe-upload.service';
 import { BolUploadService } from 'src/app/service/upload-service/BoL/bol-upload.service';
@@ -27,14 +27,32 @@ export class UploadDocumentComponent {
   formData_bill_of_lading = new FormData();
   formData_invoice = new FormData();
   id_lc = '';
-  bill_of_exchange: any;
-  bill_of_lading: any;
-  invoice: any;
-  uploadProgress: number;
-  uploadSub: Subscription;
+  bill_of_lading = {
+    id: '',
+    name: '',
+    url: '',
+    status: '',
+  };
+  bill_of_exchange = {
+    id: '',
+    name: '',
+    url: '',
+    status: '',
+  };
+  invoice = {
+    id: '',
+    name: '',
+    url: '',
+    status: '',
+  };
+  uploadProgress = 0;
+  // uploadSub: Subscription;
   confirmModal?: NzModalRef;
   isFinish = false;
   lcDetail: any;
+  bill_of_lading_new = false;
+  bill_of_exchange_new = false;
+  invoice_new = false;
 
   constructor(
     private modal: NzModalService,
@@ -50,65 +68,92 @@ export class UploadDocumentComponent {
   onFileSelectedBillOfExchange(event) {
     const file: File = event.target.files[0];
     if (file) {
-      this.bill_of_exchange = file.name;
+      this.bill_of_exchange.name = file.name;
       this.formData_bill_of_exchange.append('bill_of_exchange', file);
       this.formData_bill_of_exchange.append('LCID', this.id_lc);
+      this.bill_of_exchange_new = true;
     }
   }
 
   onFileSelectedInvoice(event) {
     const file: File = event.target.files[0];
     if (file) {
-      this.invoice = file.name;
+      this.invoice.name = file.name;
       this.formData_invoice.append('invoice', file);
       this.formData_invoice.append('LCID', this.id_lc);
+      this.invoice_new = true;
     }
   }
 
   onFileSelectedBillOfLading(event) {
     const file: File = event.target.files[0];
     if (file) {
-      this.bill_of_lading = file.name;
+      this.bill_of_lading.name = file.name;
       this.formData_bill_of_lading.append('bill_of_lading', file);
       this.formData_bill_of_lading.append('LCID', this.id_lc);
+      this.bill_of_lading_new = true;
     }
   }
 
   getDetailLC(id: String) {
+    this.formData_bill_of_exchange =
+      this.formData_bill_of_lading =
+      this.formData_invoice =
+        new FormData();
+    this.bill_of_lading_new = false;
+    this.bill_of_exchange_new = false;
+    this.invoice_new = false;
+
+    console.log(this.formData_bill_of_exchange);
+
     this.lcSer.detail(id).subscribe((res) => {
       this.lcDetail = res;
       console.log(res);
-      if (this.lcDetail.billOfLading) {
-        this.bill_of_lading = this.lcDetail.billOfLading.file
-          .split('\\')
-          .pop()
-          .split('/')
-          .pop();
+      if (this.lcDetail.letterOfCredit.status == 'document_approved') {
+        this.isFinish = true;
+      }
+      if (this.lcDetail.billOfLading.id) {
+        this.bill_of_lading.id = this.lcDetail.billOfLading.id;
+        this.bOLSer.get(this.bill_of_lading.id).subscribe((res) => {
+          console.log(res);
+          this.bill_of_lading.name = this.lcDetail.billOfLading.file
+            .split('\\')
+            .pop()
+            .split('/')
+            .pop();
+          this.bill_of_lading.url = this.lcDetail.billOfLading.file;
+          this.bill_of_lading.status = this.lcDetail.billOfLading.status;
+        });
         console.log(this.bill_of_lading);
       }
-      if (this.lcDetail.billOfExchange) {
-        this.bill_of_exchange = this.lcDetail.billOfExchange.file
-          .split('\\')
-          .pop()
-          .split('/')
-          .pop();
+      if (this.lcDetail.billOfExchange.id) {
+        this.bill_of_exchange.id = this.lcDetail.billOfExchange.id;
+        this.bOESer.get(this.bill_of_exchange.id).subscribe((res) => {
+          console.log(res);
+          this.bill_of_exchange.name = this.lcDetail.billOfExchange.file
+            .split('\\')
+            .pop()
+            .split('/')
+            .pop();
+          this.bill_of_exchange.url = this.lcDetail.billOfExchange.file;
+          this.bill_of_exchange.status = this.lcDetail.billOfExchange.status;
+        });
       }
-      if (this.lcDetail.invoice) {
-        this.invoice = this.lcDetail.invoice.file
-          .split('\\')
-          .pop()
-          .split('/')
-          .pop();
+      if (this.lcDetail.invoice.id) {
+        this.invoice.id = this.lcDetail.invoice.id;
+        this.invoiceSer.get(this.invoice.id).subscribe((res) => {
+          console.log(res);
+          this.invoice.name = this.lcDetail.invoice.file
+            .split('\\')
+            .pop()
+            .split('/')
+            .pop();
+          this.invoice.url = this.lcDetail.invoice.file;
+          this.invoice.status = this.lcDetail.invoice.status;
+        });
       }
-      this.changeStatusUpload();
     });
   }
-
-  changeStatusUpload() {
-    if (this.bill_of_exchange && this.bill_of_lading && this.invoice)
-      this.isFinish = true;
-  }
-
   uploadConfirm(): void {
     const filesNotUploaded: string[] = [];
     if (!this.bill_of_exchange) {
@@ -126,63 +171,36 @@ export class UploadDocumentComponent {
       nzTitle: 'Do you Want to upload these file?',
       nzCancelText: 'Cancel',
       nzOnOk: () => {
-        if (this.bill_of_exchange) {
-          this.bOESer
-            .upload(this.formData_bill_of_exchange)
-            .subscribe((res) => {
+        if (this.bill_of_exchange_new) {
+          this.bOESer.upload(this.formData_bill_of_exchange).subscribe(
+            (res) => {
+              console.log(res);
               this.msg.success(res.message);
-            });
+            },
+            (e) => this.msg.error('Upload BILL OF EXCHANGE unsuccessfully')
+          );
         }
-        if (this.bill_of_lading) {
-          this.bOLSer.upload(this.formData_bill_of_lading).subscribe((res) => {
-            this.msg.success(res.message);
-          });
+        if (this.bill_of_lading_new) {
+          this.bOLSer.upload(this.formData_bill_of_lading).subscribe(
+            (res) => {
+              console.log(res);
+              this.msg.success(res.message);
+            },
+            (e) => this.msg.error('Upload BILL OF LANDING unsuccessfully')
+          );
         }
-        if (this.invoice) {
-          this.invoiceSer.create(this.formData_invoice).subscribe((res) => {
-            this.msg.success(res.message);
-          });
+        if (this.invoice_new) {
+          this.invoiceSer.upload(this.formData_invoice).subscribe(
+            (res) => {
+              console.log(res);
+              this.msg.success(res.message);
+            },
+            (e) => this.msg.error('Upload INVOICE unsuccessfully')
+          );
         }
-        this.changeStatusUpload();
         this.getDetailLC(this.id_lc);
       },
     });
-  }
-
-  cancelUpload() {
-    this.uploadSub.unsubscribe();
-    this.reset();
-  }
-
-  reset() {
-    this.uploadProgress = null;
-    this.uploadSub = null;
-  }
-
-  downloadFile() {
-    // Make an HTTP request to the server endpoint that serves the file
-    this.http;
-    this.bOLSer.get(this.lcDetail.billOfLading.id).subscribe(
-      (response: any) => {        
-        var blob = new Blob([response], { type: 'application/pdf' });
-        var url = window.URL.createObjectURL(blob);
-        console.log(url);
-
-        var a = document.createElement('a');
-        a.href = url;
-        a.download = '2022A_FE_PM_Answer.pdf';
-        document.body.appendChild(a);
-        console.log(a);
-        a.click();
-
-        window.URL.revokeObjectURL(url);
-
-        document.body.removeChild(a);
-      },
-      (error: any) => {
-        console.error('Failed to download the file: ' + error);
-      }
-    );
   }
 
   ngOnInit(): void {

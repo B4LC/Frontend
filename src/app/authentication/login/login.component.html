@@ -18,19 +18,20 @@
         </nz-form-control>
       </nz-form-item>
       <div nz-row class="login-form-margin">
-        <div nz-col [nzSpan]="12" style="display: flex;">
-          <!-- <label nz-checkbox formControlName="remember">
+        <div nz-col [nzSpan]="12">
+          <label nz-checkbox formControlName="remember">
             <span>Remember me</span>
-          </label> -->
-          <input type="checkbox" nz-checkbox formControlName="remember" />
-          <span>Remember me</span> <!-- Sử dụng input checkbox -->
+          </label>
         </div>
         <div nz-col [nzSpan]="12">
           <a class="login-form-forgot" [routerLink]="'#'">Forgot password?</a>
         </div>
       </div>
+      <p *ngIf="isLoginFailed" style="color: #ff4d4f;">Password or Username is wrong! Login Failed!</p>
       <button nz-button class="login-form-button login-form-margin" [nzType]="'primary'">Log in</button>
-      Or
-      <a [routerLink]="'/auth/signup'">register now!</a>
+      <div style="text-align: center;">
+        Or <br>
+      <a [routerLink]="'/auth/signup'">Register now!</a>
+      </div>
     </div>
   </form>

@@ -10,20 +10,21 @@
                                 <strong>Bill of exchange</strong>
                             </nz-form-label>
                             <div>
-                                <div *ngIf="isFinish == false && !bill_of_exchange && !bill_of_exchange">
+                                <div *ngIf="isFinish == false">
                                     <button nz-button class="file-input" (click)="fileUploadBillOfExchange.click()">
                                         <span nz-icon nzType="upload"></span>
                                         Click to Upload File
                                     </button>
+                                    <!-- <nz-upload [nzFileList]="bill_of_exchange_list"></nz-upload> -->
                                     <input style="display: none;" type="file" class="file-input"
                                         (change)="onFileSelectedBillOfExchange($event)" #fileUploadBillOfExchange>
                                 </div>
                                 <div class="file-upload" style="color: #1890ff;">
-                                    <div *ngIf="bill_of_exchange">
+                                    <div *ngIf="bill_of_exchange.name">
                                         <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                        {{bill_of_exchange}}
+                                        {{bill_of_exchange.name}}
                                     </div>
-                                    <span *ngIf="!bill_of_exchange" style="color: #555;">No file uploaded yet.</span>
+                                    <span *ngIf="!bill_of_exchange.name" style="color: #555;">No file uploaded yet.</span>
                                 </div>
                             </div>
                         </nz-form-item>
@@ -38,7 +39,7 @@
                                 <strong>Bill of landing</strong>
                             </nz-form-label>
                             <div>
-                                <div *ngIf="isFinish == false && !bill_of_lading">
+                                <div *ngIf="isFinish == false">
                                     <button nz-button class="file-input" (click)="fileUploadBillOfLading.click()">
                                         <span nz-icon nzType="upload"></span>
                                         Click to Upload File
@@ -47,11 +48,11 @@
                                         (change)="onFileSelectedBillOfLading($event)" #fileUploadBillOfLading>
                                 </div>
                                 <div class="file-upload" style="color: #1890ff;">
-                                    <div *ngIf="bill_of_lading">
+                                    <div *ngIf="bill_of_lading.name">
                                         <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                        {{bill_of_lading}}
+                                        {{bill_of_lading.name}}
                                     </div>
-                                    <span *ngIf="!bill_of_lading" style="color: #555;">No file uploaded yet.</span>
+                                    <span *ngIf="!bill_of_lading.name" style="color: #555;">No file uploaded yet.</span>
                                 </div>
                             </div>
                         </nz-form-item>
@@ -65,7 +66,7 @@
                                 <strong>Invoice</strong>
                             </nz-form-label>
                             <div>
-                                <div *ngIf="isFinish == false && !invoice">
+                                <div *ngIf="isFinish == false">
                                     <button nz-button class="file-input" (click)="fileUploadInvoice.click()">
                                         <span nz-icon nzType="upload"></span>
                                         Click to Upload File
@@ -74,11 +75,11 @@
                                         (change)="onFileSelectedInvoice($event)" #fileUploadInvoice>
                                 </div>
                                 <div class="file-upload" style="color: #1890ff;">
-                                    <div *ngIf="invoice">
+                                    <div *ngIf="invoice.name">
                                         <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                        {{invoice}}
+                                        {{invoice.name}}
                                     </div>
-                                    <span *ngIf="!invoice" style="color: #555;">No file uploaded yet.</span>
+                                    <span *ngIf="!invoice.name" style="color: #555;">No file uploaded yet.</span>
                                 </div>
                             </div>
                         </nz-form-item>
@@ -99,5 +100,3 @@
         </form>
     </div>
 </div>
-
-<a (click)="downloadFile()">Download File</a>

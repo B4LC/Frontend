@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {
   UntypedFormBuilder,
+  UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
@@ -24,56 +25,67 @@ export class NewAgreementComponent implements OnInit {
     issuingBank: String,
     advisingBank: String,
     commodity: String,
-    price: Number,
+    price: String,
     paymentMethod: String,
     additionalInfo: String,
-    deadline: '12/12/2023',
+    deadline: null,
   };
   listBank = [];
   listCustomer = [];
+  currencyUnitList = ['VND', 'USD', 'EUR'];
 
   constructor(
     private fb: UntypedFormBuilder,
     private msg: NzMessageService,
     private userSer: UserService,
     private agreementSer: AgreementService,
-    private route: Router,
+    private route: Router
   ) {}
 
   getListBank() {
     this.userSer.listBank().subscribe((res) => {
       this.listBank = res;
-      console.log(this.listBank);
-    })
+    });
   }
 
   getListCustomer() {
     this.userSer.listCustomer().subscribe((res) => {
+      let index = res.indexOf(localStorage.getItem('username'));
+      res.splice(index, 1);
       this.listCustomer = res;
-      console.log(this.listCustomer);
-    })
+    });
   }
 
   submitForm(): void {
     if (this.validateNewAgreementForm.valid) {
-      this.newAgreement.importer = this.validateNewAgreementForm.value.applicant;
-      this.newAgreement.exporter = this.validateNewAgreementForm.value.beneficiary;
-      this.newAgreement.issuingBank = this.validateNewAgreementForm.value.issuingBank;
-      this.newAgreement.advisingBank = this.validateNewAgreementForm.value.advisingBank;
-      this.newAgreement.commodity = this.validateNewAgreementForm.value.commodityName;
-      this.newAgreement.price = this.validateNewAgreementForm.value.commodityValue;
-      this.newAgreement.paymentMethod = this.validateNewAgreementForm.value.paymentMethod;
-      // this.newAgreement.deadline = this.validateNewAgreementForm.value.date.toString();
-      this.newAgreement.additionalInfo = this.validateNewAgreementForm.value.additionalInformation;
+      this.newAgreement.importer =
+        this.validateNewAgreementForm.value.applicant;
+      this.newAgreement.exporter =
+        this.validateNewAgreementForm.value.beneficiary;
+      this.newAgreement.issuingBank =
+        this.validateNewAgreementForm.value.issuingBank;
+      this.newAgreement.advisingBank =
+        this.validateNewAgreementForm.value.advisingBank;
+      this.newAgreement.commodity =
+        this.validateNewAgreementForm.value.commodityName;
+      this.newAgreement.price =
+        this.validateNewAgreementForm.value.amount + new String(' ') + 
+        this.validateNewAgreementForm.value.currencyUnit;
+      this.newAgreement.paymentMethod =
+        this.validateNewAgreementForm.value.paymentMethod;
+      this.newAgreement.deadline =
+        this.validateNewAgreementForm.value.deadline.toLocaleDateString();
+      this.newAgreement.additionalInfo =
+        this.validateNewAgreementForm.value.additionalInformation;
       console.log(this.newAgreement);
-      this.agreementSer.create(this.newAgreement).subscribe((res) => {
-        console.log(res);
-        if (res.message == 'Create salescontract successfully') {
-          this.msg.success('Create salescontract successfully');
+      this.agreementSer.create(this.newAgreement).subscribe(
+        (res) => {
+          this.msg.success(res.message);
           this.route.navigate(['/agreements', res.salescontract_id]);
-        } else this.msg.error('Create salescontract unsuccessfully')
-      });
-    } else {      
+        },
+        (e) => this.msg.error('Create salescontract unsuccessfully')
+      );
+    } else {
       Object.values(this.validateNewAgreementForm.controls).forEach(
         (control) => {
           if (control.invalid) {
@@ -98,16 +110,16 @@ export class NewAgreementComponent implements OnInit {
     this.validateNewAgreementForm.get('nickname')!.updateValueAndValidity();
   }
 
-  handleChange(info: NzUploadChangeParam): void {
-    if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
+  confirmationValidator = (
+    control: UntypedFormControl
+  ): { [s: string]: boolean } => {
+    if (!control.value) {
+      return { required: true };
+    } else if (control.value == this.validateNewAgreementForm.controls['issuingBank'].value) {
+      return { confirm: true, error: true };
     }
-    if (info.file.status === 'done') {
-      this.msg.success(`${info.file.name} file uploaded successfully`);
-    } else if (info.file.status === 'error') {
-      this.msg.error(`${info.file.name} file upload failed.`);
-    }
-  }
+    return {};
+  };
 
   ngOnInit(): void {
     const currentDate = new Date();
@@ -119,16 +131,20 @@ export class NewAgreementComponent implements OnInit {
       issuingBank: ['', [Validators.required]],
       issuingBankCode: '',
       beneficiaryLegalName: '',
-      advisingBank: ['', [Validators.required]],
+      advisingBank: ['', [Validators.required, this.confirmationValidator]],
       advisingBankCode: '',
       commodityName: ['', [Validators.required]],
-      commodityValue: [0, [Validators.required]],
       paymentMethod: ['', [Validators.required]],
+      deadline: [null, [Validators.required]],
+      currencyUnit: [this.currencyUnitList[0], [Validators.required]],
+      amount: [Number, [Validators.required]],
       additionalInformation: '',
       date: [format(currentDate, 'dd-MM-yyyy')],
       required: false,
     });
+    console.log(this.validateNewAgreementForm);
+
     this.getListBank();
-    this.getListCustomer()
+    this.getListCustomer();
   }
 }
