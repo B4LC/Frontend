@@ -42,7 +42,7 @@ import { ListDocumentsComponent } from './user/manage-documents/list-documents/l
 import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-
+import { NzBadgeModule } from 'ng-zorro-antd/badge';
 
 
 @NgModule({
@@ -61,6 +61,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
   ],
   imports: [
     NzUploadModule,
+    NzBadgeModule,
     NzSpinModule,
     NzRadioModule,
     NzBreadCrumbModule,

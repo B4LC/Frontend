@@ -135,13 +135,17 @@ export class DetailLcComponent {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to approve this LC?',
       nzCancelText: 'Cancel',
-      nzOnOk: () => {
-        this.lcSer.approve(this.lc_id, {}).subscribe((res) => {
+      nzOnOk: () => 
+      new Promise((resolve, reject) => {
+          this.lcSer.approve(this.lc_id, {}).subscribe((res) => {
           console.log(res);
           this.msg.success(res.message);
           this.getDetailLC();
-        });
-      },
+          reject("Oops, there's a result!");
+        },
+          (e) => this.msg.error('Create unsuccessfully!')
+        );
+      }).catch((error) => console.log(error)),
     });
   }
 

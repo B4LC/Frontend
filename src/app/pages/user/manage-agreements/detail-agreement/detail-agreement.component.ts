@@ -42,7 +42,7 @@ export class DetailAgreementComponent {
     paymentMethod: '',
     additionalInformation: '',
     date: null,
-    currencyUnit: ''
+    currencyUnit: '',
   };
   confirmModal?: NzModalRef;
   isVisible = false;
@@ -140,18 +140,20 @@ export class DetailAgreementComponent {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to accept this agreement?',
       nzCancelText: 'Cancel',
-      nzOnOk: () => {
-        this.agreementSer.approve(this.salescontract_id).subscribe(
-          (res) => {
-            this.msg.success(res.message);
-            this.isAccepted = true;
-            this.getDetail();
-          },
-          (e) => {
-            this.msg.error('Approve unsuccessfully!');
-          }
-        );
-      },
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.agreementSer.approve(this.salescontract_id).subscribe(
+            (res) => {
+              this.msg.success(res.message);
+              this.isAccepted = true;
+              this.getDetail();
+              reject("Oops, there's a result!");
+            },
+            (e) => {
+              this.msg.error('Approve unsuccessfully!');
+            }
+          );
+        }).catch((error) => console.log(error)),
     });
   }
 
