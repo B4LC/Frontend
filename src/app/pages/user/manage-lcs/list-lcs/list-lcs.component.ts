@@ -4,12 +4,13 @@ import { LcService } from 'src/app/service/lc-service/lc.service';
 @Component({
   selector: 'app-list-lcs',
   templateUrl: './list-lcs.component.html',
-  styleUrls: ['./list-lcs.component.less']
+  styleUrls: ['./list-lcs.component.less'],
 })
 export class ListLCsComponent {
   username = localStorage.getItem('username');
   role = localStorage.getItem('role');
-  listOfData = []
+  listOfData = [];
+  isLoading = true;
 
   constructor(private lcSer: LcService) {}
 
@@ -27,7 +28,8 @@ export class ListLCsComponent {
     this.lcSer.list().subscribe((res) => {
       console.log(res);
       this.listOfData = res;
-    })
+      this.isLoading = false;
+    });
   }
 
   ngOnInit(): void {
@@ -35,5 +37,4 @@ export class ListLCsComponent {
     //Add 'implements OnInit' to the class.
     this.getList();
   }
-
 }

@@ -73,6 +73,7 @@ export class DetailAgreementComponent {
 
   isLoading = false;
   currencyUnitList = ['VND', 'USD', 'EUR'];
+  isLoadingPage = true;
 
   constructor(
     private modal: NzModalService,
@@ -227,6 +228,7 @@ export class DetailAgreementComponent {
         this.validateForm.value.additionalInformation =
           this.requestForm.additionalInformation = res.additionalInfo;
         this.requestForm.status = res.status;
+        this.isLoadingPage = false;
         if (res.status == 'created') {
           this.isAccepted = false;
         } else this.isAccepted = true;

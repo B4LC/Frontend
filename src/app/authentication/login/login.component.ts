@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
     password: String,
   };
   isLoginFailed: boolean;
+  isLoading = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit {
   ) {}
 
   submitForm(): void {
+    this.isLoading = true;
     if (this.validateFormLogin.valid) {
       console.log('submit', this.validateFormLogin.value);
       this.requestLoginForm.email = this.validateFormLogin.value.username;
@@ -38,15 +40,17 @@ export class LoginComponent implements OnInit {
       this.loginService.login(this.requestLoginForm).subscribe(
         (res) => {
           console.log(res);
-            this.msg.success('Login successfully!')
+          this.msg.success('Login successfully!');
+          this.isLoading = false;
           if (localStorage.getItem('role') == 'user') {
             this.router.navigateByUrl('/');
-          }
-          else (this.router.navigateByUrl('/agreements'))
+          } else this.router.navigateByUrl('/agreements');
         },
         (error) => {
           console.error('Login failed:', error);
+          this.msg.error('Login failed!')
           this.isLoginFailed = true;
+          this.isLoading = false;
           // Xử lý lỗi nếu cần thiết
         }
       );

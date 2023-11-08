@@ -33,6 +33,7 @@ export class NewAgreementComponent implements OnInit {
   listBank = [];
   listCustomer = [];
   currencyUnitList = ['VND', 'USD', 'EUR'];
+  isLoading = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -58,6 +59,7 @@ export class NewAgreementComponent implements OnInit {
 
   submitForm(): void {
     if (this.validateNewAgreementForm.valid) {
+      this.isLoading = true;
       this.newAgreement.importer =
         this.validateNewAgreementForm.value.applicant;
       this.newAgreement.exporter =
@@ -69,7 +71,8 @@ export class NewAgreementComponent implements OnInit {
       this.newAgreement.commodity =
         this.validateNewAgreementForm.value.commodityName;
       this.newAgreement.price =
-        this.validateNewAgreementForm.value.amount + new String(' ') + 
+        this.validateNewAgreementForm.value.amount +
+        new String(' ') +
         this.validateNewAgreementForm.value.currencyUnit;
       this.newAgreement.paymentMethod =
         this.validateNewAgreementForm.value.paymentMethod;
@@ -81,9 +84,13 @@ export class NewAgreementComponent implements OnInit {
       this.agreementSer.create(this.newAgreement).subscribe(
         (res) => {
           this.msg.success(res.message);
+          this.isLoading = false;
           this.route.navigate(['/agreements', res.salescontract_id]);
         },
-        (e) => this.msg.error('Create salescontract unsuccessfully')
+        (e) => {
+          this.msg.error('Create salescontract unsuccessfully');
+          this.isLoading = false;
+        }
       );
     } else {
       Object.values(this.validateNewAgreementForm.controls).forEach(
@@ -115,7 +122,10 @@ export class NewAgreementComponent implements OnInit {
   ): { [s: string]: boolean } => {
     if (!control.value) {
       return { required: true };
-    } else if (control.value == this.validateNewAgreementForm.controls['issuingBank'].value) {
+    } else if (
+      control.value ==
+      this.validateNewAgreementForm.controls['issuingBank'].value
+    ) {
       return { confirm: true, error: true };
     }
     return {};
