@@ -17,14 +17,13 @@ export class ListAgreementComponent implements OnInit {
   reqCreateLC = {
     salesContractID: '',
   };
+  isLoading = true;
 
   constructor(
     private route: ActivatedRoute,
     private agreementSer: AgreementService,
-    private lcSer: LcService,
     private msg: NzMessageService,
     private modal: NzModalService,
-    private router: Router
   ) {
   }
 
@@ -38,11 +37,11 @@ export class ListAgreementComponent implements OnInit {
     this.agreementSer.list().subscribe((res) => {
       console.log(res);
       this.listOfData = res;
+      this.isLoading = false;
     });
   }
 
   deleteAgreement(id: String) {
-    console.log('alooooo');
     this.agreementSer.delete(id).subscribe((res) => {
       console.log(res);
       this.msg.success(res.message);

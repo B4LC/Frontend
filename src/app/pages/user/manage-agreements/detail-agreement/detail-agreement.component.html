@@ -1,4 +1,4 @@
-<div nz-row [nzGutter]="24">
+<div nz-row [nzGutter]="24" *ngIf="isLoadingPage==false">
     <div nz-col [nzSpan]="24">
         <nz-card nzTitle="Content" style="margin-bottom: 16px;" [nzExtra]="extraTemplate">
             <div style="padding: 0 24px;" class="formAgreement" [formGroup]="validateForm" (ngSubmit)="updateForm()">
@@ -243,3 +243,9 @@
         </button>
     </div>
 </ng-template>
+
+<div *ngIf="isLoadingPage">
+    <div class="example">
+        <nz-spin nzSimple nzTip="Loading..."></nz-spin>
+    </div>
+</div>

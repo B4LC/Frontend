@@ -166,8 +166,7 @@
                     <strong>Additional information <em>(optional)</em></strong>
                 </nz-form-label>
                 <br>
-                <nz-form-control style="min-width: 500px;"
-                    nzErrorTip="Please choose your payment method">
+                <nz-form-control style="min-width: 500px;" nzErrorTip="Please choose your payment method">
                     <textarea nz-input formControlName="additionalInformation"
                         placeholder="Lorem Ipsum is simply dummy text of the printing and "
                         [nzAutosize]="{ minRows: 3, maxRows: 3 }"></textarea>
@@ -178,7 +177,11 @@
 
         <nz-form-item style="display: flex; justify-content: center; ">
             <nz-form-control [nzSpan]="8" [nzOffset]="4">
-                <button nz-button nzType="primary">Send to seller</button>
+                <button *ngIf="isLoading == false" nz-button nzType="primary"><span nz-icon nzType="send" nzTheme="outline">
+                    </span> Send to seller</button>
+                <button *ngIf="isLoading" nz-button nzType="primary" nzLoading>
+                    Send to seller
+                </button>
             </nz-form-control>
         </nz-form-item>
     </form>

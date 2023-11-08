@@ -35,7 +35,7 @@ export class DetailLcComponent {
     LcApprovedEvent: '',
     docUploadedEvent: '',
     LcRejectedEvent: '',
-    LcStatusChangedEvent: ''
+    LcStatusChangedEvent: '',
   };
   isLoadingPage = true;
 
@@ -71,43 +71,52 @@ export class DetailLcComponent {
 
   getDetailLC() {
     this.lc_id = this.route.snapshot.paramMap.get('id');
-    this.lcSer.detail(this.lc_id).subscribe((res) => {
-      console.log(res);
-      this.lcDetail = res;
-      if (this.lcDetail.letterOfCredit.status == 'created') this.progress = 1;
-      else if (this.lcDetail.letterOfCredit.status == 'advising_bank_approved')
-        this.progress = 2;
-      else if (
-        this.lcDetail.letterOfCredit.status == 'Buyer/Seller upload document'
-      )
-        this.progress = 3;
-      else if (this.lcDetail.letterOfCredit.status == 'advising_bank_rejected')
-        this.progress = 5;
-      else if (this.lcDetail.letterOfCredit.status == 'document_approved')
-        this.progress = 4;
-      else this.progress = 6;
+    this.lcSer.detail(this.lc_id).subscribe(
+      (res) => {
+        console.log(res);
+        this.lcDetail = res;
+        if (this.lcDetail.letterOfCredit.status == 'created') this.progress = 1;
+        else if (
+          this.lcDetail.letterOfCredit.status == 'advising_bank_approved'
+        )
+          this.progress = 2;
+        else if (
+          this.lcDetail.letterOfCredit.status == 'Buyer/Seller upload document'
+        )
+          this.progress = 3;
+        else if (
+          this.lcDetail.letterOfCredit.status == 'advising_bank_rejected'
+        )
+          this.progress = 5;
+        else if (this.lcDetail.letterOfCredit.status == 'document_approved')
+          this.progress = 4;
+        else this.progress = 6;
 
-      if (this.lcDetail.billOfLading) {
-        this.bill_of_lading = this.lcDetail.billOfLading;
-        console.log(this.bill_of_lading);
-      }
-      if (this.lcDetail.billOfExchange) {
-        this.bill_of_exchange = this.lcDetail.billOfExchange;
-      }
-      if (this.lcDetail.invoice) {
-        this.invoice = this.lcDetail.invoice;
-      }
+        if (this.lcDetail.billOfLading) {
+          this.bill_of_lading = this.lcDetail.billOfLading;
+          console.log(this.bill_of_lading);
+        }
+        if (this.lcDetail.billOfExchange) {
+          this.bill_of_exchange = this.lcDetail.billOfExchange;
+        }
+        if (this.lcDetail.invoice) {
+          this.invoice = this.lcDetail.invoice;
+        }
 
-      if (
-        this.bill_of_exchange.status == 'approved' &&
-        this.bill_of_lading.status == 'approved' &&
-        this.invoice.status == 'approved' &&
-        this.role == 'bank'
-      ) {
-        this.isAllApprove = true;
+        if (
+          this.bill_of_exchange.status == 'approved' &&
+          this.bill_of_lading.status == 'approved' &&
+          this.invoice.status == 'approved' &&
+          this.role == 'bank'
+        ) {
+          this.isAllApprove = true;
+        }
+        this.isLoadingPage = false;
+      },
+      (e) => {
+        this.msg.error('Something is wrong!');
       }
-      this.isLoadingPage = false
-    }, (e) => {this.msg.error('Something is wrong!')});
+    );
   }
 
   updateStatus() {
@@ -169,57 +178,90 @@ export class DetailLcComponent {
   }
 
   acceptDocumentINVOICE(): void {
-    this.invoiceSer.approve(this.lc_id, {}).subscribe((res) => {
-      this.msg.success(res.message);
-      this.getDetailLC();
-    }, (e) => this.msg.error('Something is wrong!'));
+    this.invoiceSer.approve(this.lc_id, {}).subscribe(
+      (res) => {
+        this.msg.success(res.message);
+        this.getDetailLC();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   rejectDocumentINVOICE(): void {
-    this.invoiceSer.reject(this.lc_id, {}).subscribe((res) => {
-      this.msg.success(res.message);
-      this.getDetailLC();
-    }, (e) => this.msg.error('Something is wrong!'));
+    this.invoiceSer.reject(this.lc_id, {}).subscribe(
+      (res) => {
+        this.msg.success(res.message);
+        this.getDetailLC();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   acceptDocumentBOL(): void {
-    this.bOLSer.approve(this.lc_id, {}).subscribe((res) => {
-      this.msg.success(res.message);
-      this.getDetailLC();
-    }, (e) => this.msg.error('Something is wrong!'));
+    this.bOLSer.approve(this.lc_id, {}).subscribe(
+      (res) => {
+        this.msg.success(res.message);
+        this.getDetailLC();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   rejectDocumentBOL(): void {
-    this.bOLSer.reject(this.lc_id, {}).subscribe((res) => {
-      this.msg.success(res.message);
-      this.getDetailLC();
-    }, (e) => this.msg.error('Something is wrong!'));
+    this.bOLSer.reject(this.lc_id, {}).subscribe(
+      (res) => {
+        this.msg.success(res.message);
+        this.getDetailLC();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   acceptDocumentBOE(): void {
-    this.bOESer.approve(this.lc_id, {}).subscribe((res) => {
-      this.msg.success(res.message);
-      this.getDetailLC();
-    }, (e) => this.msg.error('Something is wrong!'));
+    this.bOESer.approve(this.lc_id, {}).subscribe(
+      (res) => {
+        this.msg.success(res.message);
+        this.getDetailLC();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   rejectDocumentBOE(): void {
-    this.bOESer.reject(this.lc_id, {}).subscribe((res) => {
-      this.msg.success(res.message);
-      this.getDetailLC();
-    }, (e) => this.msg.error('Something is wrong!'));
+    this.bOESer.reject(this.lc_id, {}).subscribe(
+      (res) => {
+        this.msg.success(res.message);
+        this.getDetailLC();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   getEventContract() {
     this.lcSer.getContractEvent(this.lc_id).subscribe(
       (res) => {
         console.log(res);
-        this.eventContract.LcApprovedEvent = res.LcApprovedEvent.length>0?res.LcApprovedEvent[0].transactionHash:null;
-        this.eventContract.LcCreatedEvent = res.LcCreatedEvent.length>0?res.LcCreatedEvent[0].transactionHash:null;
-        this.eventContract.LcRejectedEvent = res.LcRejectedEvent.length>0?res.LcRejectedEvent[0].transactionHash:null;
-        this.eventContract.LcStatusChangedEvent = res.LcStatusChangedEvent.length>0?res.LcStatusChangedEvent[0].transactionHash:null;
-        this.eventContract.docUploadedEvent = res.docUploadedEvent.length>0?res.docUploadedEvent[0].transactionHash:null;
-        console.log(this.eventContract)
+        this.eventContract.LcApprovedEvent =
+          res.LcApprovedEvent.length > 0
+            ? res.LcApprovedEvent[0].transactionHash
+            : null;
+        this.eventContract.LcCreatedEvent =
+          res.LcCreatedEvent.length > 0
+            ? res.LcCreatedEvent[0].transactionHash
+            : null;
+        this.eventContract.LcRejectedEvent =
+          res.LcRejectedEvent.length > 0
+            ? res.LcRejectedEvent[0].transactionHash
+            : null;
+        this.eventContract.LcStatusChangedEvent =
+          res.LcStatusChangedEvent.length > 0
+            ? res.LcStatusChangedEvent[0].transactionHash
+            : null;
+        this.eventContract.docUploadedEvent =
+          res.docUploadedEvent.length > 0
+            ? res.docUploadedEvent[0].transactionHash
+            : null;
+        console.log(this.eventContract);
       },
       (e) => {
         this.msg.error('Something is wrong!');
