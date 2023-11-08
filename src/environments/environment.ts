@@ -9,7 +9,7 @@ export const environment = {
     BASE_INVOICE_API: 'https://b4lc-testv1.onrender.com/invoices',
     BASE_SERVICE_API: 'https://b4lc-testv1.onrender.com',
   }, 
-  production: false,
+  production: true,
 };
 
 /*
