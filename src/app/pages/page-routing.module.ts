@@ -9,6 +9,7 @@ import { ListLCsComponent } from './user/manage-lcs/list-lcs/list-lcs.component'
 import { DetailLcComponent } from './user/manage-lcs/detail-lc/detail-lc.component';
 import { UploadDocumentComponent } from './user/manage-documents/upload-document/upload-document.component';
 import { ListDocumentsComponent } from './user/manage-documents/list-documents/list-documents.component';
+import { EventContractComponent } from './user/event-contract/event-contract.component';
 
 const routes: Routes = [
   {
@@ -48,6 +49,14 @@ const routes: Routes = [
         path: ':id',
         component: DetailLcComponent,
       },
+      {
+        path: 'upload/:id',
+        component: UploadDocumentComponent,
+      },
+      {
+       path: 'event-contract/:id',
+       component: EventContractComponent 
+      }
     ],
   },
   {

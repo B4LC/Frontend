@@ -23,7 +23,9 @@ export class DetailLcComponent {
   lcDetail: any;
   lc_id = '';
   isVisible = false;
+  isVisibleStatus = false;
   validateRefuseForm!: UntypedFormGroup;
+  validateChangeStatus!: UntypedFormGroup;
   confirmModal?: NzModalRef;
   progress: number;
   bill_of_exchange: any;
@@ -38,6 +40,7 @@ export class DetailLcComponent {
     LcStatusChangedEvent: '',
   };
   isLoadingPage = true;
+  isConfirmLoading = false;
 
   constructor(
     private lcSer: LcService,
@@ -52,6 +55,9 @@ export class DetailLcComponent {
   ) {
     this.validateRefuseForm = this.fb.group({
       reason: ['', [Validators.required]],
+    });
+    this.validateChangeStatus = this.fb.group({
+      status: ['', [Validators.required]],
     });
   }
 
@@ -84,12 +90,12 @@ export class DetailLcComponent {
           this.lcDetail.letterOfCredit.status == 'Buyer/Seller upload document'
         )
           this.progress = 3;
+        else if (this.lcDetail.letterOfCredit.status == 'document_approved')
+          this.progress = 4;
         else if (
           this.lcDetail.letterOfCredit.status == 'advising_bank_rejected'
         )
           this.progress = 5;
-        else if (this.lcDetail.letterOfCredit.status == 'document_approved')
-          this.progress = 4;
         else this.progress = 6;
 
         if (this.lcDetail.billOfLading) {
@@ -118,39 +124,33 @@ export class DetailLcComponent {
       }
     );
   }
-
-  updateStatus() {
-    if (this.isAllApprove) {
-      const body = {
-        status: 'document_approved',
-      };
-      this.lcSer.updateStatus(this.lc_id, body).subscribe((res) => {
-        this.msg.success('Update Success');
-        this.getDetailLC();
-      });
-    }
-  }
-
   approveLC(): void {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to approve this LC?',
       nzCancelText: 'Cancel',
-      nzOnOk: () => 
-      new Promise((resolve, reject) => {
-          this.lcSer.approve(this.lc_id, {}).subscribe((res) => {
-          console.log(res);
-          this.msg.success(res.message);
-          this.getDetailLC();
-          reject("Oops, there's a result!");
-        },
-          (e) => this.msg.error('Create unsuccessfully!')
-        );
-      }).catch((error) => console.log(error)),
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.lcSer.approve(this.lc_id, {}).subscribe(
+            (res) => {
+              console.log(res);
+              this.msg.success(res.message);
+              this.getDetailLC();
+              reject("Oops, there's a result!");
+            },
+            (e) => this.msg.error('Create unsuccessfully!')
+          );
+        }).catch((error) => console.log(error)),
     });
   }
 
   showModalRefuse(): void {
     this.isVisible = true;
+    this.validateRefuseForm.reset();
+  }
+
+  showModalChangeStatus(): void {
+    this.isVisibleStatus = true;
+    this.validateChangeStatus.reset();
   }
 
   handleOkRefuse(): void {
@@ -173,12 +173,41 @@ export class DetailLcComponent {
     }
   }
 
+  handleOkChangeStatus(): void {
+    if (this.validateChangeStatus.valid) {
+      this.isConfirmLoading = true;
+      console.log(this.validateChangeStatus.value);
+      this.lcSer
+        .updateStatus(this.lc_id, this.validateChangeStatus.value)
+        .subscribe(
+          (res) => {
+            this.msg.success('Update Success');
+            this.getDetailLC();
+            this.isConfirmLoading = false;
+            this.isVisibleStatus = false;
+          },
+          (e) => {
+            this.msg.error('Update status unsuccessfully!');
+            this.isConfirmLoading = false;
+            this.isVisibleStatus = false;
+          }
+        );
+    } else {
+      Object.values(this.validateChangeStatus.controls).forEach((control) => {
+        if (control.invalid) {
+          control.markAsDirty();
+          control.updateValueAndValidity({ onlySelf: true });
+        }
+      });
+    }
+  }
+
   handleCancelRefuse(): void {
     this.isVisible = false;
   }
 
-  cancel(): void {
-    // this.msg.info('click cancel');
+  handleCancelChangeStatus(): void {
+    this.isVisibleStatus = false;
   }
 
   acceptDocumentINVOICE(): void {

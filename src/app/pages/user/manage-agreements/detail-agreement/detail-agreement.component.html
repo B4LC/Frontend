@@ -5,7 +5,7 @@
                 <div nz-row [nzGutter]="24">
                     <nz-form-item nz-col [nzSpan]="12" class="info">
                         <nz-form-label nzFor="date">
-                            <strong>Agreement end time (DD--MM--YYYY)</strong>
+                            <strong>Agreement end time (MM/DD/YYYY)</strong>
                         </nz-form-label>
                         <nz-form-control *ngIf="isEdit == false" [nzSpan]="8">
                             <p>{{requestForm.date?requestForm.date.toLocaleDateString():null}}</p>
@@ -190,7 +190,7 @@
                             <strong>Additional information <em>(optional)</em></strong>
                         </nz-form-label>
                         <nz-form-control *ngIf="isEdit == false">
-                            <p>{{requestForm.additionalInformation}}</p>
+                            <p>{{requestForm.additionalInformation || 'none'}}</p>
                         </nz-form-control>
                         <nz-form-control [nzSpan]="12" *ngIf="isEdit == true"
                             style="margin: 24px 0 24px 0; min-width: 500px;"
