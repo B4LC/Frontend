@@ -43,6 +43,7 @@ import { NzPopconfirmModule } from 'ng-zorro-antd/popconfirm';
 import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
+import { EventContractComponent } from './user/event-contract/event-contract.component';
 
 
 @NgModule({
@@ -58,6 +59,7 @@ import { NzBadgeModule } from 'ng-zorro-antd/badge';
     DetailLcComponent,
     UploadDocumentComponent,
     ListDocumentsComponent,
+    EventContractComponent,
   ],
   imports: [
     NzUploadModule,

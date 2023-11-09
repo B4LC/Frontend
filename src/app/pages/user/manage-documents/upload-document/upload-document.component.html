@@ -1,9 +1,10 @@
 <div nz-row [nzGutter]="24">
     <div nz-col [nzSpan]="24">
         <form nz-form class="formAgreement">
-            <nz-card nzTitle="Document details" style="margin-bottom: 16px;" id="documentPart">
-                <nz-divider nzText="Document required" [nzPlain]="false" nzOrientation="left"></nz-divider>
+            <nz-card nzTitle="Document details" style="margin-bottom: 16px;" id="documentPart"
+                [nzExtra]="extraTemplate">
                 <div style="padding: 0 24px;">
+                    <nz-divider nzText="Document required" [nzPlain]="false" nzOrientation="left"></nz-divider>
                     <div>
                         <nz-form-item class="document-style" nz-row [nzGutter]="24">
                             <nz-form-label nzRequired nzFor="additionalInformation" nz-col [nzSpan]="4">
@@ -21,10 +22,12 @@
                                 </div>
                                 <div class="file-upload" style="color: #1890ff;">
                                     <div *ngIf="bill_of_exchange.name">
-                                        <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                        {{bill_of_exchange.name}}
+                                        <a style="color: #1890ff" href="{{bill_of_exchange.url}}"
+                                            target="_blank"><span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                            {{bill_of_exchange.name}}</a>
                                     </div>
-                                    <span *ngIf="!bill_of_exchange.name" style="color: #555;">No file uploaded yet.</span>
+                                    <span *ngIf="!bill_of_exchange.name" style="color: #555;">
+                                        No file uploaded yet.</span>
                                 </div>
                             </div>
                         </nz-form-item>
@@ -36,7 +39,7 @@
                     <div>
                         <nz-form-item class="document-style" nz-row [nzGutter]="24">
                             <nz-form-label nzRequired nzFor="additionalInformation" nz-col [nzSpan]="4">
-                                <strong>Bill of landing</strong>
+                                <strong>Bill of lading</strong>
                             </nz-form-label>
                             <div>
                                 <div *ngIf="isFinish == false">
@@ -49,8 +52,9 @@
                                 </div>
                                 <div class="file-upload" style="color: #1890ff;">
                                     <div *ngIf="bill_of_lading.name">
-                                        <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                        {{bill_of_lading.name}}
+                                        <a style="color: #1890ff" href="{{bill_of_lading.url}}"
+                                        target="_blank"><span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                        {{bill_of_lading.name}}</a>
                                     </div>
                                     <span *ngIf="!bill_of_lading.name" style="color: #555;">No file uploaded yet.</span>
                                 </div>
@@ -76,8 +80,10 @@
                                 </div>
                                 <div class="file-upload" style="color: #1890ff;">
                                     <div *ngIf="invoice.name">
-                                        <span nz-icon nzType="paper-clip" nzTheme="outline"></span>
-                                        {{invoice.name}}
+                                        <a style="color: #1890ff" href="{{invoice.url}}"
+                                        target="_blank"><span nz-icon nzType="paper-clip" nzTheme="outline"></span>
+                                        {{invoice.name}}</a>
+                                        
                                     </div>
                                     <span *ngIf="!invoice.name" style="color: #555;">No file uploaded yet.</span>
                                 </div>
@@ -100,3 +106,10 @@
         </form>
     </div>
 </div>
+
+<ng-template #extraTemplate>
+    <div style="color: #f81d22;">
+        <nz-badge nzDot><span style="color: #f81d22;" nz-icon nzType="notification"></span></nz-badge>
+        <span> Only accept PDF file</span>
+    </div>
+</ng-template>

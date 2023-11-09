@@ -12,6 +12,7 @@
         <th>Status</th>
         <th>Detail</th>
         <th *ngIf="role=='user'">Upload document</th>
+        <th>Event Contract</th>
       </tr>
     </thead>
     <tbody>
@@ -30,11 +31,17 @@
         </td>
         <td *ngIf="role=='user'">
           <a>
-            <span nz-tooltip nzTooltipTitle="Waiting for aprroving" *ngIf="data.status !== 'advising_bank_approved'" [style.color]="'#595959'"
-              [ngStyle]="{'cursor': 'default'}" [routerLink]="null" nz-icon nzType="diff" nzTheme="outline"></span>
+            <span nz-tooltip nzTooltipTitle="Waiting for aprroving" *ngIf="data.status !== 'advising_bank_approved'"
+              [style.color]="'#595959'" [ngStyle]="{'cursor': 'default'}" [routerLink]="null" nz-icon nzType="diff"
+              nzTheme="outline"></span>
             <span *ngIf="data.status === 'advising_bank_approved'" [style.color]="'#2F54EB'"
-              [ngStyle]="{'cursor': 'pointer'}" [routerLink]="['/documents', data.LCID]" nz-icon nzType="diff" nzTheme="outline"></span>
+              [ngStyle]="{'cursor': 'pointer'}" [routerLink]="['/LCs/upload', data.LCID]" nz-icon nzType="diff"
+              nzTheme="outline"></span>
           </a>
+        </td>
+        <td>
+          <a><span style="color: #2F54EB;" nz-icon nzType="eye" nzTheme="outline"
+              [routerLink]="['/LCs/event-contract', data.LCID]"></span></a>
         </td>
       </tr>
     </tbody>

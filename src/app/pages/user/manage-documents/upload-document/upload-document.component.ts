@@ -68,9 +68,11 @@ export class UploadDocumentComponent {
   onFileSelectedBillOfExchange(event) {
     const file: File = event.target.files[0];
     if (file) {
+      console.log(file);
       this.bill_of_exchange.name = file.name;
       this.formData_bill_of_exchange.append('bill_of_exchange', file);
       this.formData_bill_of_exchange.append('LCID', this.id_lc);
+      console.log(this.formData_bill_of_exchange);
       this.bill_of_exchange_new = true;
     }
   }
@@ -96,10 +98,6 @@ export class UploadDocumentComponent {
   }
 
   getDetailLC(id: String) {
-    this.formData_bill_of_exchange =
-      this.formData_bill_of_lading =
-      this.formData_invoice =
-        new FormData();
     this.bill_of_lading_new = false;
     this.bill_of_exchange_new = false;
     this.invoice_new = false;
@@ -177,7 +175,8 @@ export class UploadDocumentComponent {
               console.log(res);
               this.msg.success(res.message);
             },
-            (e) => this.msg.error('Upload BILL OF EXCHANGE unsuccessfully')
+            (e) => {this.msg.error('Upload BILL OF EXCHANGE unsuccessfully'); console.log(e);
+            }
           );
         }
         if (this.bill_of_lading_new) {
@@ -186,7 +185,7 @@ export class UploadDocumentComponent {
               console.log(res);
               this.msg.success(res.message);
             },
-            (e) => this.msg.error('Upload BILL OF LANDING unsuccessfully')
+            (e) => this.msg.error('Upload BILL OF LADING unsuccessfully')
           );
         }
         if (this.invoice_new) {
