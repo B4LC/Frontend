@@ -315,7 +315,10 @@
                     </ng-template>
                 </nz-steps>
             </nz-card>
-            <nz-card style="width:100%;" nzTitle="Content">
+            <nz-card style="width:100%;" nzTitle="Content" [nzExtra]="moreDetailTemp">
+                <ng-template #moreDetailTemp>
+                    <a [routerLink]="['/LCs/event-contract', lc_id]">Event Contract</a>
+                  </ng-template>
                 <ul nz-menu nzMode="inline">
                     <li nz-menu-item (click)="scrollToTarget('letterOfCreditPart')"><span>Letter of Credit</span></li>
                     <li nz-menu-item (click)="scrollToTarget('saleContractDetailPart')" nzOpen><span>Sale Contract</span>
