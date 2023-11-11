@@ -1,0 +1,70 @@
+<div *ngIf="isLoadingPage == false" class="content-main">
+    <h5 style="text-align: center;">Profile</h5>
+    <div style="padding: 48px 40px 20px 40px;">
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="6">
+                <div style="display: flex; flex-direction: column; align-content: center; align-items: center;">
+                    <span class="avartar-img"><strong>{{ username[0] }}</strong></span>
+                </div>
+            </div>
+            <div nz-col [nzSpan]="2"></div>
+            <div nz-col [nzSpan]="10">
+                <form nz-form [formGroup]="validateForm" class="login-form">
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="username"><strong>Username</strong></nz-form-label>
+                        <nz-form-control *ngIf="isEditing == false" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="The input is not valid username">
+                            <span>{{userInfo.username}}</span>
+                        </nz-form-control>
+                        <nz-form-control *ngIf="isEditing" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="The input is not valid username">
+                            <input nz-input formControlName="username" id="username" [(ngModel)]="userInfo.username" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email">
+                            <span><strong>E-mail</strong></span>
+                        </nz-form-label>
+                        <nz-form-control *ngIf="isEditing == false" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="Please input your email!">
+                            <span>{{userInfo.email}}</span>
+                        </nz-form-control>
+                        <nz-form-control *ngIf="isEditing" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="Please input your email!">
+                            <input nz-input id="email" formControlName="email" [(ngModel)]="userInfo.email" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role">
+                            <span><strong>Role</strong></span>
+                        </nz-form-label>
+                        <nz-form-control [nzSm]="14" [nzXs]="24">
+                            <span>{{role==='bank'?'Bank':'User'}}</span>
+                        </nz-form-control>
+                    </nz-form-item>
+                </form>
+            </div>
+            <div nz-col [nzSpan]="6">
+                <button *ngIf="isEditing == false" nz-button nzType="primary" nzShape="round" (click)="edit()">
+                    <span nz-icon nzType="edit" nzTheme="outline"></span> Edit Profile
+                </button>
+                <button style="background-color: #52c41a;" *ngIf="isEditing == true" nz-button nzType="primary"
+                    nzShape="round" (click)="save()">
+                    <span nz-icon nzType="save" nzTheme="outline"></span> Save
+                </button>
+                <button style="margin-top: 2rem;" nz-button nzType="primary" nzShape="round">
+                    Change password
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="isLoadingPage">
+    <div class="example">
+        <nz-spin nzSimple nzTip="Loading..."></nz-spin>
+    </div>
+</div>
