@@ -44,6 +44,9 @@ import { NzToolTipModule } from 'ng-zorro-antd/tooltip';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzBadgeModule } from 'ng-zorro-antd/badge';
 import { EventContractComponent } from './user/event-contract/event-contract.component';
+import { ProfileComponent } from './user/profile/profile.component';
+import { NzDrawerModule } from 'ng-zorro-antd/drawer';
+import { NzListModule } from 'ng-zorro-antd/list';
 
 
 @NgModule({
@@ -60,8 +63,11 @@ import { EventContractComponent } from './user/event-contract/event-contract.com
     UploadDocumentComponent,
     ListDocumentsComponent,
     EventContractComponent,
+    ProfileComponent,
   ],
   imports: [
+    NzListModule,
+    NzDrawerModule,
     NzUploadModule,
     NzBadgeModule,
     NzSpinModule,
@@ -95,7 +101,7 @@ import { EventContractComponent } from './user/event-contract/event-contract.com
     NzModalModule,
     NzMessageModule,
     NzStepsModule,
-    NzPopconfirmModule
+    NzPopconfirmModule,
   ],
 })
 export class PagesModule {}

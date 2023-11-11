@@ -120,7 +120,8 @@
                                 </strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{salesContractCreatedEvent.transactionHash}}</p>
+                                <a href="https://mumbai.polygonscan.com/tx/{{salesContractCreatedEvent.transactionHash}}"
+                                    target="_blank">{{salesContractCreatedEvent.transactionHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -187,7 +188,7 @@
                                 <strong>Invoice Hash</strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{LcCreatedEvent.invoiceHash}}</p>
+                                <a>{{LcCreatedEvent.invoiceHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -228,23 +229,13 @@
 
                     <div nz-row [nzGutter]="24">
                         <nz-form-item nz-col [nzSpan]="12" class="info">
-                            <nz-form-label nzFor="date">
-                                <strong>ID</strong>
-                            </nz-form-label>
-                            <nz-form-control [nzSpan]="8">
-                                <p>{{LcCreatedEvent.id}}</p>
-                            </nz-form-control>
-                        </nz-form-item>
-                    </div>
-
-                    <div nz-row [nzGutter]="24">
-                        <nz-form-item nz-col [nzSpan]="12" class="info">
                             <nz-form-label nzFor="agreementID">
                                 <strong>Transaction Hash
                                 </strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{LcCreatedEvent.transactionHash}}</p>
+                                <a href="https://mumbai.polygonscan.com/tx/{{LcCreatedEvent.transactionHash}}"
+                                    target="_blank">{{LcCreatedEvent.transactionHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -293,7 +284,8 @@
                                 </strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{LcStatusChangedEvent.transactionHash}}</p>
+                                <a href="https://mumbai.polygonscan.com/tx/{{LcStatusChangedEvent.transactionHash}}"
+                                    target="_blank">{{LcStatusChangedEvent.transactionHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -374,7 +366,8 @@
                                 </strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{docUploadedEvent.transactionHash}}</p>
+                                <a href="https://mumbai.polygonscan.com/tx/{{docUploadedEvent.transactionHash}}"
+                                    target="_blank">{{docUploadedEvent.transactionHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -410,7 +403,8 @@
                                 </strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{LcApprovedEvent.transactionHash}}</p>
+                                <a href="https://mumbai.polygonscan.com/tx/{{LcApprovedEvent.transactionHash}}"
+                                    target="_blank">{{LcApprovedEvent.transactionHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -447,7 +441,8 @@
                                 </strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{LcRejectedEvent.transactionHash}}</p>
+                                <a href="https://mumbai.polygonscan.com/tx/{{LcRejectedEvent.transactionHash}}"
+                                    target="_blank">{{LcRejectedEvent.transactionHash}}</a>
                             </nz-form-control>
                         </nz-form-item>
                     </div>

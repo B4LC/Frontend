@@ -10,6 +10,7 @@ import { DetailLcComponent } from './user/manage-lcs/detail-lc/detail-lc.compone
 import { UploadDocumentComponent } from './user/manage-documents/upload-document/upload-document.component';
 import { ListDocumentsComponent } from './user/manage-documents/list-documents/list-documents.component';
 import { EventContractComponent } from './user/event-contract/event-contract.component';
+import { ProfileComponent } from './user/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -58,6 +59,10 @@ const routes: Routes = [
        component: EventContractComponent 
       }
     ],
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   },
   {
     path: 'documents',

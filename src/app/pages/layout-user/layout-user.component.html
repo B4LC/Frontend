@@ -31,16 +31,33 @@
         </span>
 
         <div class="header-user">
-          <div class="user-menu">
-            <span style="font-size: 16px" [routerLink]="'user-infomation'">
-              <strong>{{username}}</strong>
-            </span>
-            <span (click)="showConfirm()">
-              <span style="font-size: 16px; color: #007bc3" nz-icon nzType="logout" nzTheme="outline"></span>
-              <span style="margin-left: 0.5em; font-size: 16px">Log out</span>
-            </span>
+          <span class="avartar-img"><strong>{{username[0].toUpperCase()}}</strong></span>
+          <div>
+            <ul nz-menu nzMode="horizontal">
+              <li nz-submenu nzPlacement="bottomCenter" [nzTitle]="menuTemp">
+                <ng-template #menuTemp>
+                  <div style="display: flex; align-items: center;">
+                    <div class="user-menu">
+                      <span style="font-size: 14px">
+                        <strong>{{username}}</strong>
+                      </span>
+                      <span style="font-size: 12px">
+                        {{role==='bank'?'Bank':'User'}}
+                      </span>
+                    </div>
+                    <div style="margin-left: 0.5rem;"><span nz-icon nzType="caret-down" nzTheme="outline"></span></div>
+                  </div>
+                </ng-template>
+                <ul>
+                  <li nz-menu-item [routerLink]="'profile'"><span nz-icon nzType="user" nzTheme="outline"></span>
+                    Profile</li>
+                  <li nz-menu-item (click)="showConfirm()">
+                    <span nz-icon nzType="logout" nzTheme="outline"></span> Log out
+                  </li>
+                </ul>
+              </li>
+            </ul>
           </div>
-          <span class="avartar-img" [routerLink]="'user-infomation'"><strong>{{username[0].toUpperCase()}}</strong></span>
         </div>
       </div>
     </nz-header>

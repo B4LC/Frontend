@@ -75,7 +75,7 @@
   }
   
   .header-trigger {
-    height: 64px;
+    height: 50px;
     padding: 20px 24px;
     font-size: 20px;
     cursor: pointer;
@@ -94,7 +94,7 @@
   
   .app-header {
     position: relative;
-    height: 64px;
+    height: 50px !important;
     padding: 0;
     background: #fff;
     box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
@@ -159,7 +159,6 @@
     // height: 100px;
     padding-left: 24px;
     // overflow: hidden;
-    line-height: 80px;
     transition: all 0.3s;
     float: right;
     display: flex;
@@ -171,8 +170,8 @@
   
   .avartar-img {
     display: inline-block;
-    height: 3rem;
-    width: 3rem;
+    height: 2.6rem;
+    width: 2.6rem;
     vertical-align: middle;
     border-radius: 2em;
     background-color: #d9d9d9;
@@ -203,7 +202,7 @@
   }
   
   .header-trigger {
-    height: 64px;
+    height: 50px;
     padding: 20px 24px;
     font-size: 20px;
     cursor: pointer;
@@ -219,10 +218,17 @@
     width: 100%;
     z-index: 2;
   }
+
+  .ant-layout-header {
+    height: 50px;
+    color: rgba(0,0,0,.85);
+    line-height: 50px;
+    background: #fff;
+  }
   
   .app-header {
     position: relative;
-    height: 64px;
+    height: 50px;
     padding: 0;
     background: #fff;
     box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
@@ -230,14 +236,13 @@
   
   .user-menu {
     display: flex;
-      line-height: 1.3rem;
-      flex-direction: column;
-      justify-content: space-evenly;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      margin-right: 1rem;
-      border-left: 3px solid #DCDCDC;
-      padding-left: 1.5rem;
+    line-height: 1.3rem;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-right: 0.5rem;
+    text-align: left;
   }
   
   nz-breadcrumb {
