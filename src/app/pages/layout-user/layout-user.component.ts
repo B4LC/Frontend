@@ -134,17 +134,17 @@ export class LayoutUserComponent implements OnInit {
   showConfirm(): void {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to log out?</i>',
-      nzOnOk: () => {
-        this.authenSer.logout().subscribe((res) => {
-          console.log(res);
-          this.msg.success(res.message);
-          localStorage.clear();
-          this.router.navigate(['/auth/login']);
-          window.location.reload();
-        }, (error) => {
-          this.msg.error('Logout unsuccessfully');
-        });
-      },
+      nzOnOk: () => 
+      new Promise((resolve, reject) => {
+          this.authenSer.logout().subscribe((res) => {
+            localStorage.clear();
+            this.msg.success(res.message);
+            this.router.navigate(['/auth/login']);
+            window.location.reload();
+          }, (error) => 
+            this.msg.error('Logout unsuccessfully')
+          );
+        }).catch((error) => console.log(error)),
     });
   }
 }
