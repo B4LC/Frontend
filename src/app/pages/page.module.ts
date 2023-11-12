@@ -47,6 +47,7 @@ import { EventContractComponent } from './user/event-contract/event-contract.com
 import { ProfileComponent } from './user/profile/profile.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { NzListModule } from 'ng-zorro-antd/list';
     ProfileComponent,
   ],
   imports: [
+    NzDropDownModule,
     NzListModule,
     NzDrawerModule,
     NzUploadModule,

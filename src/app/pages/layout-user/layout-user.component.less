@@ -164,7 +164,7 @@
     display: flex;
     align-items: center;
     height: inherit;
-    margin-right: 1.2rem;
+    margin-right: 1.5rem;
     cursor: pointer;
   }
   
@@ -202,14 +202,14 @@
   }
   
   .header-trigger {
-    height: 50px;
-    padding: 20px 24px;
-    font-size: 20px;
+    height: 40px;
+    padding: 4px 24px;
+    font-size: 16px;
     cursor: pointer;
     transition: all 0.3s, padding 0s;
   }
   
-  .trigger:hover {
+  .header-trigger:hover {
     color: #1890ff;
   }
   
@@ -241,7 +241,8 @@
     justify-content: space-evenly;
     align-items: flex-start;
     flex-wrap: wrap;
-    margin-right: 0.5rem;
+    margin-right: 1rem;
+    margin-left: 1rem;
     text-align: left;
   }
   
@@ -255,11 +256,15 @@
   top: 0 !important;
   position: sticky !important;
   z-index: 5;
-  flex: 0 0 256px;
-  max-width: 256px;
-  min-width: 256px;
-  width: 256px;
+  flex: 0 0 220px;
+  max-width: 220px;
+  min-width: 220px;
+  width: 220px;
   max-height: 400px !important;
+}
+
+.ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title {
+  padding: 5px 12px;
 }
 
   
