@@ -31,7 +31,7 @@
         </td>
         <td *ngIf="role=='user'">
           <a>
-            <span nz-tooltip nzTooltipTitle="Waiting for aprroving" *ngIf="data.status !== 'advising_bank_approved'"
+            <span nz-tooltip nzTooltipTitle="Can't upload documents" *ngIf="data.status !== 'advising_bank_approved'"
               [style.color]="'#595959'" [ngStyle]="{'cursor': 'default'}" [routerLink]="null" nz-icon nzType="diff"
               nzTheme="outline"></span>
             <span *ngIf="data.status === 'advising_bank_approved'" [style.color]="'#2F54EB'"
