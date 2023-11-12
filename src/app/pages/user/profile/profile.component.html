@@ -46,7 +46,8 @@
                     </nz-form-item>
                 </form>
             </div>
-            <div nz-col [nzSpan]="6">
+            <div nz-col [nzSpan]="6"
+                style="display: flex; justify-content: center; align-items: flex-start; flex-direction: column;">
                 <button *ngIf="isEditing == false" nz-button nzType="primary" nzShape="round" (click)="edit()">
                     <span nz-icon nzType="edit" nzTheme="outline"></span> Edit Profile
                 </button>
@@ -55,7 +56,7 @@
                     <span nz-icon nzType="save" nzTheme="outline"></span> Save
                 </button>
                 <button style="margin-top: 2rem;" nz-button nzType="primary" nzShape="round">
-                    Change password
+                    <span nz-icon nzType="edit" nzTheme="outline"></span> Change password
                 </button>
             </div>
         </div>

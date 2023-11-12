@@ -22,7 +22,7 @@ export class LayoutUserComponent implements OnInit {
     },
     {
       title: 'Manage agreements',
-      icon: 'database',
+      icon: 'hdd',
       subMenus: [
         {
           title: 'Agreements list',

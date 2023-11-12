@@ -1,9 +1,9 @@
 <nz-layout class="layout">
-  <nz-sider class="menu-sidebar" nzTheme="light" nzCollapsible nzWidth="256px" nzBreakpoint="md"
+  <nz-sider class="menu-sidebar" nzTheme="light" nzCollapsible nzWidth="220px" nzBreakpoint="md"
     [(nzCollapsed)]="isCollapsed" [nzTrigger]="null">
     <div class="sidebar-logo" [routerLink]="'/'">
       <img src="https://ng.ant.design/assets/img/logo.svg" alt="logo" />
-      <span style="margin: 1em; font-size: 16px"><strong></strong></span>
+      <span style="margin: 1em; font-size: 16px"><strong>BC4LC</strong></span>
     </div>
     <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
       <ng-container *ngFor="let item of menus">
@@ -20,43 +20,44 @@
         </li>
       </ng-container>
     </ul>
+    <span class="header-trigger"
+      style="position: absolute; bottom: 0; width: 100%; display: flex; 
+      justify-content: left; border-top: 1px solid rgba(0,0,0,.06); align-items: center; align-content: center; flex-wrap: nowrap;"
+      (click)="isCollapsed = !isCollapsed">
+      <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'">
+      </span>
+    </span>
   </nz-sider>
   <nz-layout class="right-layout">
     <nz-header>
       <div class="app-header">
-        <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
-          <span class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'">
-          </span>
-          <span style="margin: 1em; font-size: 16px"><strong></strong></span>
-        </span>
-
         <div class="header-user">
           <span class="avartar-img"><strong>{{username[0].toUpperCase()}}</strong></span>
           <div>
-            <ul nz-menu nzMode="horizontal">
-              <li nz-submenu nzPlacement="bottomCenter" [nzTitle]="menuTemp">
-                <ng-template #menuTemp>
-                  <div style="display: flex; align-items: center;">
-                    <div class="user-menu">
-                      <span style="font-size: 14px">
-                        <strong>{{username}}</strong>
-                      </span>
-                      <span style="font-size: 12px">
-                        {{role==='bank'?'Bank':'User'}}
-                      </span>
-                    </div>
-                    <div style="margin-left: 0.5rem;"><span nz-icon nzType="caret-down" nzTheme="outline"></span></div>
-                  </div>
-                </ng-template>
-                <ul>
-                  <li nz-menu-item [routerLink]="'profile'"><span nz-icon nzType="user" nzTheme="outline"></span>
-                    Profile</li>
-                  <li nz-menu-item (click)="showConfirm()">
+            <div style="display: flex; align-items: center;">
+              <div class="user-menu" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
+                <span style="font-size: 14px">
+                  <strong>{{username}}</strong>
+                </span>
+                <span style="font-size: 12px">
+                  {{role==='bank'?'Bank':'User'}}
+                </span>
+              </div>
+              <div style="margin-left: 0.5rem;"><span nz-icon nzType="caret-down" nzTheme="outline"></span></div>
+            </div>
+            <nz-dropdown-menu #menu="nzDropdownMenu">
+              <ul nz-menu nzSelectable>
+                <li class="ant-dropdown-menu-item" nz-menu-item [routerLink]="'profile'">
+                  <div style=" padding: 5px 12px !important;"><span nz-icon nzType="user" nzTheme="outline"></span>
+                    Profile</div>
+                </li>
+                <li class="ant-dropdown-menu-item" nz-menu-item (click)="showConfirm()">
+                  <div style=" padding: 5px 12px !important;">
                     <span nz-icon nzType="logout" nzTheme="outline"></span> Log out
-                  </li>
-                </ul>
-              </li>
-            </ul>
+                  </div>
+                </li>
+              </ul>
+            </nz-dropdown-menu>
           </div>
         </div>
       </div>
