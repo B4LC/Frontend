@@ -35,7 +35,7 @@
           <span class="avartar-img"><strong>{{username[0].toUpperCase()}}</strong></span>
           <div>
             <div style="display: flex; align-items: center;">
-              <div class="user-menu" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomRight'">
+              <div class="user-menu" nz-dropdown [nzDropdownMenu]="menu" [nzPlacement]="'bottomCenter'">
                 <span style="font-size: 14px">
                   <strong>{{username}}</strong>
                 </span>
@@ -47,11 +47,11 @@
             </div>
             <nz-dropdown-menu #menu="nzDropdownMenu">
               <ul nz-menu nzSelectable>
-                <li class="ant-dropdown-menu-item" nz-menu-item [routerLink]="'profile'">
+                <li style="width: 160px;" class="ant-dropdown-menu-item" nz-menu-item [routerLink]="'profile'">
                   <div style=" padding: 5px 12px !important;"><span nz-icon nzType="user" nzTheme="outline"></span>
                     Profile</div>
                 </li>
-                <li class="ant-dropdown-menu-item" nz-menu-item (click)="showConfirm()">
+                <li style="width: 160px;" class="ant-dropdown-menu-item" nz-menu-item (click)="showConfirm()">
                   <div style=" padding: 5px 12px !important;">
                     <span nz-icon nzType="logout" nzTheme="outline"></span> Log out
                   </div>

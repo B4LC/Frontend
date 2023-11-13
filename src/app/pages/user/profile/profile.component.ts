@@ -17,6 +17,8 @@ export class ProfileComponent {
   userInfo = {
     username: '',
     email: '',
+    phoneNumber: '',
+    address: '',
   };
 
   role = localStorage.getItem('role');
@@ -33,6 +35,8 @@ export class ProfileComponent {
     this.validateForm = this.fb.group({
       username: [this.userInfo.username, [Validators.required]],
       email: [this.userInfo.email, [Validators.required]],
+      phoneNumber: '',
+      address: '',
     });
   }
 
@@ -42,6 +46,8 @@ export class ProfileComponent {
         console.log(res);
         this.userInfo.username = res.username;
         this.userInfo.email = res.email;
+        this.userInfo.phoneNumber = res.phoneNumber;
+        this.userInfo.address = res.address;
         this.isLoadingPage = false;
       },
       (e) => this.msg.error('Something is wrong!')
