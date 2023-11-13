@@ -7,8 +7,8 @@
                     <span class="avartar-img"><strong>{{ username[0] }}</strong></span>
                 </div>
             </div>
-            <div nz-col [nzSpan]="2"></div>
-            <div nz-col [nzSpan]="10">
+            <div nz-col [nzSpan]="1"></div>
+            <div nz-col [nzSpan]="11">
                 <form nz-form [formGroup]="validateForm" class="login-form">
                     <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="username"><strong>Username</strong></nz-form-label>
@@ -37,6 +37,34 @@
                     </nz-form-item>
 
                     <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phoneNumber">
+                            <span><strong>Phone</strong></span>
+                        </nz-form-label>
+                        <nz-form-control *ngIf="isEditing == false" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="Please input your phoneNumber!">
+                            <span>{{userInfo.phoneNumber || 'No information'}}</span>
+                        </nz-form-control>
+                        <nz-form-control *ngIf="isEditing" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="Please input your phoneNumber!">
+                            <input nz-input id="phoneNumber" formControlName="phoneNumber" [(ngModel)]="userInfo.phoneNumber" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
+                        <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="address">
+                            <span><strong>Address</strong></span>
+                        </nz-form-label>
+                        <nz-form-control *ngIf="isEditing == false" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="Please input your address!">
+                            <span>{{userInfo.address || 'No information'}}</span>
+                        </nz-form-control>
+                        <nz-form-control *ngIf="isEditing" [nzSm]="18" [nzXs]="24"
+                            nzErrorTip="Please input your address!">
+                            <input nz-input id="address" formControlName="address" [(ngModel)]="userInfo.address" />
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item>
                         <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="role">
                             <span><strong>Role</strong></span>
                         </nz-form-label>
@@ -44,6 +72,7 @@
                             <span>{{role==='bank'?'Bank':'User'}}</span>
                         </nz-form-control>
                     </nz-form-item>
+
                 </form>
             </div>
             <div nz-col [nzSpan]="6"
