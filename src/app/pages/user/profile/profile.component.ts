@@ -20,12 +20,20 @@ export class ProfileComponent {
     phoneNumber: '',
     address: '',
   };
+  isButtonLoading = false;
 
   role = localStorage.getItem('role');
   username = localStorage.getItem('username');
   isLoadingPage = true;
   isEditing = false;
   validateForm!: UntypedFormGroup;
+  isVisible = false;
+  oldpasswordVisible = false;
+  passwordVisible = false;
+  againpasswordVisible = false;
+  oldPassword = '';
+  password = '';
+  passwordEnteredAgain = '';
 
   constructor(
     private userSer: UserService,
@@ -60,13 +68,18 @@ export class ProfileComponent {
 
   save() {
     if (this.validateForm.valid) {
+      this.isButtonLoading = true;
       console.log('submit', this.validateForm.value);
       this.userSer.updateInfo(this.validateForm.value).subscribe(
         (res) => {
           this.msg.success('Change infomation successfully');
           this.isEditing = false;
+          this.isButtonLoading = false;
         },
-        (e) => this.msg.error('Change infomation unsuccessfully')
+        (e) => {
+          this.msg.error('Change infomation unsuccessfully');
+          this.isButtonLoading = false;
+        }
       );
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
@@ -77,6 +90,19 @@ export class ProfileComponent {
       });
     }
   }
+
+  openForm() {
+    this.isVisible = true;
+    this.oldPassword = '';
+    this.password = '';
+    this.passwordEnteredAgain = '';
+  }
+
+  handleCancel() {
+    this.isVisible = false;
+  }
+
+  handleOk() {}
 
   ngOnInit(): void {
     this.getUserInfo();
