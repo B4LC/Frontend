@@ -31,6 +31,7 @@ export class SignupComponent implements OnInit {
     theme: 'twotone',
   };
   num: number;
+  isButtonLoading = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -41,6 +42,7 @@ export class SignupComponent implements OnInit {
 
   async submitForm(): Promise<void> {
     if (this.validateForm.valid) {
+      this.isButtonLoading = true;
       this.requestRegisterForm.username = this.validateForm.value.nickname;
       this.requestRegisterForm.email = this.validateForm.value.email;
       this.requestRegisterForm.password = this.validateForm.value.password;
@@ -50,9 +52,14 @@ export class SignupComponent implements OnInit {
         .subscribe((res) => {
           if (res.message == 'Register successfully') {
             this.mess.success('Register successfully!');
+            this.isButtonLoading = false;
             this.router.navigate(['/auth/login']);
           } else this.mess.error('Register unsuccessfully!');
-        });
+        }),
+        (e) => {
+          this.mess.error('Something is wrong!');
+          this.isButtonLoading = false;
+        };
     } else {
       Object.values(this.validateForm.controls).forEach((control) => {
         if (control.invalid) {
