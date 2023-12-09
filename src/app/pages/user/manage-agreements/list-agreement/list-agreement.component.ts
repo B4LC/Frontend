@@ -23,9 +23,8 @@ export class ListAgreementComponent implements OnInit {
     private route: ActivatedRoute,
     private agreementSer: AgreementService,
     private msg: NzMessageService,
-    private modal: NzModalService,
-  ) {
-  }
+    private modal: NzModalService
+  ) {}
 
   detail(id: number) {
     this.route.params.subscribe((params) => {
@@ -35,19 +34,22 @@ export class ListAgreementComponent implements OnInit {
 
   getList() {
     this.agreementSer.list().subscribe((res) => {
-      console.log(res);
       this.listOfData = res;
       this.isLoading = false;
     });
   }
 
   deleteAgreement(id: String) {
-    this.agreementSer.delete(id).subscribe((res) => {
-      console.log(res);
-      this.msg.success(res.message);
-      this.getList();
-    });
-
+    let deleteItem = this.listOfData.find(i => i.salescontract_id === id);
+    this.agreementSer.delete(id).subscribe(
+      (res) => {
+        console.log(res);
+        this.msg.success(res.message);
+        this.listOfData = this.listOfData.filter(data => {return data !== deleteItem})
+        // this.getList();
+      },
+      (e) => this.msg.error('Something is wrong!')
+    );
   }
 
   showDeleteConfirm(id: String): void {
