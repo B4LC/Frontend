@@ -101,7 +101,7 @@ export class DetailAgreementComponent {
     });
 
     this.validateRefuseForm = this.fb.group({
-      reason: [String, [Validators.required]],
+      reason: [ '' , [Validators.required]],
     });
   }
 
