@@ -47,8 +47,8 @@ import { EventContractComponent } from './user/event-contract/event-contract.com
 import { ProfileComponent } from './user/profile/profile.component';
 import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzListModule } from 'ng-zorro-antd/list';
+import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
-
 
 @NgModule({
   declarations: [
@@ -104,6 +104,7 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
     NzMessageModule,
     NzStepsModule,
     NzPopconfirmModule,
+    NzTreeSelectModule
   ],
 })
 export class PagesModule {}
