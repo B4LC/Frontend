@@ -78,7 +78,7 @@ export class LayoutUserComponent implements OnInit {
   ];
 
   breadcrumbs: string[] = [];
-  
+
   url: string;
 
   constructor(
@@ -134,17 +134,26 @@ export class LayoutUserComponent implements OnInit {
   showConfirm(): void {
     this.modal.confirm({
       nzTitle: '<i>Do you Want to log out?</i>',
-      nzOnOk: () => 
-      new Promise((resolve, reject) => {
-          this.authenSer.logout().subscribe((res) => {
-            localStorage.clear();
-            this.msg.success(res.message);
-            this.router.navigate(['/auth/login']);
-            window.location.reload();
-          }, (error) => 
-            this.msg.error('Logout unsuccessfully')
-          );
-        }).catch((error) => console.log(error)),
+      nzOnOk: () => {
+        localStorage.clear();
+        this.msg.success('Logout success');
+        this.router.navigate(['/auth/login']);
+      },
+      //   new Promise((resolve, reject) => {
+      //       // this.authenSer.logout().subscribe((res) => {
+      //       //   localStorage.clear();
+      //       //   this.msg.success(res.message);
+      //       //   this.router.navigate(['/auth/login']);
+      //       //   window.location.reload();
+      //       // }, (error) =>
+      //       //   this.msg.error('Logout unsuccessfully')
+      //       // );
+      //     }).catch((error) => console.log(error)),
+      // });
     });
+  }
+
+  uploadFile() {
+    
   }
 }

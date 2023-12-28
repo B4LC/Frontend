@@ -1,6 +1,10 @@
 import { HttpClient, HttpEventType } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
   UntypedFormBuilder,
   UntypedFormGroup,
   Validators,
@@ -15,14 +19,16 @@ import { InvoiceService } from 'src/app/service/upload-service/invoice-service/i
 import { LcService } from 'src/app/service/lc-service/lc.service';
 import { BoeUploadService } from 'src/app/service/upload-service/BoE/boe-upload.service';
 import { BolUploadService } from 'src/app/service/upload-service/BoL/bol-upload.service';
+import { UploadService } from 'src/app/service/upload-service/upload.service';
 
 @Component({
   selector: 'app-upload-document',
   templateUrl: './upload-document.component.html',
   styleUrls: ['./upload-document.component.less'],
 })
-export class UploadDocumentComponent {
+export class UploadDocumentComponent implements OnInit {
   id_token = localStorage.getItem('id_token');
+  formData = new FormData();
   formData_bill_of_exchange = new FormData();
   formData_bill_of_lading = new FormData();
   formData_invoice = new FormData();
@@ -53,17 +59,103 @@ export class UploadDocumentComponent {
   bill_of_lading_new = false;
   bill_of_exchange_new = false;
   invoice_new = false;
+  expandKeys = ['100', '1001'];
+  value?: string;
+  nodes = [
+    {
+      title: 'Invoice',
+      key: 'invoice',
+      children: [
+        {
+          title: 'invoice_1',
+          key: 'invoice 1',
+          isLeaf: true,
+        },
+      ],
+    },
+    {
+      title: 'Bill of exchange',
+      key: 'bill_of_exchange',
+      children: [
+        {
+          title: 'BoE_1',
+          key: 'bill_of_exchange 1',
+          isLeaf: true,
+          // children: [{ title: 'Type 1', key: '10020', isLeaf: true }]
+        },
+      ],
+    },
+  ];
+  isLoadingCard: boolean = true;
+  isDisplay: boolean = false;
+  typeDocSelect: string = '';
+  ocrDocument: any;
+  invoiceForm: FormGroup;
+  invoiceTableForm: FormGroup;
+  tableHeaders: string[];
+  tableData: any[];
+  editId: any;
+  isEditable: boolean = false;
+  editingCell: { rowIndex: number; columnName: string } = null;
+  formControls: { name: string; label: string }[];
 
   constructor(
+    private fb: FormBuilder,
     private modal: NzModalService,
     private msg: NzMessageService,
     private route: ActivatedRoute,
     private bOLSer: BolUploadService,
     private bOESer: BoeUploadService,
     private invoiceSer: InvoiceService,
+    private uploadSer: UploadService,
     private lcSer: LcService,
     private http: HttpClient // private sanitizer: DomSanitizer
   ) {}
+
+  onChange($event: string): void {
+    console.log(this.typeDocSelect);
+  }
+
+  onFileSelected(event) {
+    this.isDisplay = true;
+    const file: File = event.target.files[0];
+    const typeDocMatch = this.typeDocSelect.split(' ');
+
+    if (typeDocMatch && file) {
+      const input = {
+        doc_type: typeDocMatch[0],
+        type: parseInt(typeDocMatch[1]),
+        image_url: '',
+      };
+
+      console.log(input);
+      this.formData.append('file', file);
+      this.uploadSer.upload(this.formData).subscribe(
+        (res) => {
+          input.image_url = res;
+          this.msg.success('Upload file success!');
+          this.uploadSer.ocr_document(input).subscribe(
+            (res2) => {
+              console.log(res2);
+              this.ocrDocument = res2.results;
+              this.createFomatFormData(this.ocrDocument);
+              if (this.ocrDocument.table) {
+                this.createTableForm(this.ocrDocument.table);
+              }
+              console.log(this.ocrDocument);
+            },
+            (e) => {
+              this.msg.error("Something's wrong!");
+            }
+          );
+          console.log(input);
+        },
+        (e) => {
+          this.msg.error("Something's wrong!");
+        }
+      );
+    }
+  }
 
   onFileSelectedBillOfExchange(event) {
     const file: File = event.target.files[0];
@@ -152,6 +244,7 @@ export class UploadDocumentComponent {
       }
     });
   }
+
   uploadConfirm(): void {
     const filesNotUploaded: string[] = [];
     if (!this.bill_of_exchange) {
@@ -175,7 +268,9 @@ export class UploadDocumentComponent {
               console.log(res);
               this.msg.success(res.message);
             },
-            (e) => {this.msg.error('Upload BILL OF EXCHANGE unsuccessfully'); console.log(e);
+            (e) => {
+              this.msg.error('Upload BILL OF EXCHANGE unsuccessfully');
+              console.log(e);
             }
           );
         }
@@ -200,6 +295,103 @@ export class UploadDocumentComponent {
         this.getDetailLC(this.id_lc);
       },
     });
+  }
+
+  createFomatFormData(formData: any) {
+    this.formControls = Object.keys(formData)
+      .map((key) => {
+        if (key !== 'table') {
+          return { name: key, label: key.replace(/_/g, ' ').toUpperCase() };
+        } else {
+          return null; // Bỏ qua trường 'table'
+        }
+      })
+      .filter((control) => control !== null);
+
+    // Tạo form group và thêm controls vào nó
+    const formGroupControls = {};
+    this.formControls.forEach((control) => {
+      formGroupControls[control.name] = new FormControl(formData[control.name]);
+    });
+
+    this.invoiceForm = this.fb.group(formGroupControls);
+  }
+
+  createTableForm(formData) {
+    this.tableHeaders = Object.keys(formData);
+    this.tableData = Object.keys(formData['0']).map((column) => {
+      const rowData = {};
+      this.tableHeaders.forEach((header, index) => {
+        rowData[header] = formData[header][column];
+      });
+      return rowData;
+    });
+
+    this.invoiceTableForm = this.fb.group({
+      table: this.fb.array([]),
+    });
+
+    const tableArray = this.invoiceTableForm.get('table') as FormArray;
+    this.tableData.forEach((row) => {
+      const formGroup = this.fb.group({});
+      Object.keys(row).forEach((key, index) => {
+        formGroup.addControl(key, new FormControl(row[key]));
+      });
+      tableArray.push(formGroup);
+    });
+  }
+
+  getRowFormGroup(rowIndex: number): FormGroup {
+    const tableArray = this.invoiceTableForm.get('table') as FormArray;
+    return tableArray.at(rowIndex) as FormGroup;
+  }
+
+  getCellControl(rowIndex: number, columnName: string): FormControl {
+    const rowFormGroup = this.getRowFormGroup(rowIndex);
+    return rowFormGroup.get(columnName) as FormControl;
+  }
+
+  startEdit(rowIndex: number, columnName: string) {
+    this.editingCell = { rowIndex, columnName };
+    this.getCellControl(rowIndex, columnName).enable();
+  }
+
+  stopEdit() {
+    this.editingCell = null;
+  }
+
+  requestEdit() {
+    this.isEditable = true;
+  }
+
+  onSubmit() {
+    console.log('this.invoiceTableForm.value', this.invoiceTableForm.value);
+    console.log('this.invoiceForm.value', this.invoiceForm.value);
+    this.isEditable = false;
+
+    // Get the data in the original format
+    const originalFormatData = this.getFormattedData();
+    console.log(originalFormatData);
+  }
+
+  getFormattedData(): any {
+    const formattedData = {};
+
+    this.tableHeaders.forEach((header, i) => {
+      formattedData[header] = {};
+      this.tableData.forEach((data, j) => {
+        formattedData[header][j.toString()] = this.getCellControl(
+          j,
+          header
+        ).value;
+      });
+    });
+
+    return formattedData;
+  }
+
+  saveDocument() {
+    const data = { ...this.invoiceForm, ...this.invoiceTableForm };
   }
 
   ngOnInit(): void {
