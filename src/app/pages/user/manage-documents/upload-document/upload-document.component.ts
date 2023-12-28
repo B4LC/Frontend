@@ -116,25 +116,26 @@ export class UploadDocumentComponent implements OnInit {
     console.log(this.typeDocSelect);
   }
 
+  input: any;
+
   onFileSelected(event) {
     this.isDisplay = true;
     const file: File = event.target.files[0];
     const typeDocMatch = this.typeDocSelect.split(' ');
 
     if (typeDocMatch && file) {
-      const input = {
+      this.input = {
         doc_type: typeDocMatch[0],
         type: parseInt(typeDocMatch[1]),
         image_url: '',
       };
 
-      console.log(input);
       this.formData.append('file', file);
       this.uploadSer.upload(this.formData).subscribe(
         (res) => {
-          input.image_url = res;
+          this.input.image_url = res;
           this.msg.success('Upload file success!');
-          this.uploadSer.ocr_document(input).subscribe(
+          this.uploadSer.ocr_document(this.input).subscribe(
             (res2) => {
               console.log(res2);
               this.ocrDocument = res2.results;
@@ -148,7 +149,6 @@ export class UploadDocumentComponent implements OnInit {
               this.msg.error("Something's wrong!");
             }
           );
-          console.log(input);
         },
         (e) => {
           this.msg.error("Something's wrong!");
@@ -372,6 +372,7 @@ export class UploadDocumentComponent implements OnInit {
     // Get the data in the original format
     const originalFormatData = this.getFormattedData();
     console.log(originalFormatData);
+    this.saveDocument();
   }
 
   getFormattedData(): any {
@@ -391,7 +392,24 @@ export class UploadDocumentComponent implements OnInit {
   }
 
   saveDocument() {
-    const data = { ...this.invoiceForm, ...this.invoiceTableForm };
+    const type = {
+      file_path: this.input.image_url
+    };
+    const data = { ...type, ...this.invoiceForm, ...this.invoiceTableForm };
+    this.createDocument(this.input.doc_type, data);
+  }
+
+  createDocument(type, body) {
+    if (type == 'invoice') {
+      this.invoiceSer.upload(body).subscribe(
+        (res) => {
+          console.log(res);
+        },
+        (e) => {
+          console.log(e);
+        }
+      );
+    }
   }
 
   ngOnInit(): void {
