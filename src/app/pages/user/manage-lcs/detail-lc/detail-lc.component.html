@@ -212,20 +212,20 @@
                                 <strong>Status</strong>
                             </nz-form-label>
                             <nz-form-control>
-                                <p>{{lcDetail.billOfLading.status || 'Seller/Buyer not uploaded yet'}}</p>
+                                <p>{{lcDetail.billOfLading?.status || 'Seller/Buyer not uploaded yet'}}</p>
                             </nz-form-control>
                         </nz-form-item>
-                        <div *ngIf="bill_of_lading.file" nz-col [nzSpan]="12">
+                        <div *ngIf="bill_of_lading?.file" nz-col [nzSpan]="12">
                             <nz-form-label nzFor="additionalInformation">
                                 <strong>File</strong>
                             </nz-form-label>
                             <div class="file-upload" style="color: #1890ff;">
                                 <div *ngIf="bill_of_lading.file">
-                                    <a style="color: rgba(0,0,0,.85);" href="{{bill_of_lading.file}}"
+                                    <a style="color: rgba(0,0,0,.85);" href="{{bill_of_lading?.file}}"
                                         target="_blank"><span nz-icon nzType="paper-clip" nzTheme="outline"></span>
                                         {{getFileName(bill_of_lading.file)}}</a>
                                 </div>
-                                <span *ngIf="!bill_of_lading.file" style="color: #555;">Seller/Buyer hasn't uploaded
+                                <span *ngIf="!bill_of_lading?.file" style="color: #555;">Seller/Buyer hasn't uploaded
                                     yet!</span>
                             </div>
                         </div>
@@ -375,7 +375,7 @@
   </nz-modal>
 
 <ng-template #extraTemplateBOE>
-    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfExchange.status == 'user_uploaded'">
+    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfExchange?.status == 'user_uploaded'">
         <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" nzOkText="Yes"
             nzCancelText="Cancel" nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentBOE()"
             (nzOnCancel)="cancel()">Reject</button>
@@ -386,7 +386,7 @@
 </ng-template>
 
 <ng-template #extraTemplateBOL>
-    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfLading.status == 'user_uploaded'">
+    <nz-button-group *ngIf="role == 'bank' && lcDetail.billOfLading?.status == 'user_uploaded'">
         <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" nzOkText="Yes"
             nzCancelText="Cancel" nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentBOL()"
             (nzOnCancel)="cancel()">Reject</button>
@@ -396,7 +396,7 @@
 </ng-template>
 
 <ng-template #extraTemplateINVOICE>
-    <nz-button-group *ngIf="role == 'bank' && lcDetail.invoice.status == 'user_uploaded'">
+    <nz-button-group *ngIf="role == 'bank' && lcDetail.invoice?.status == 'user_uploaded'">
         <button nz-button nz-popconfirm nzPopconfirmTitle="Are you sure REJECT this task?" nzOkText="Yes"
             nzCancelText="Cancel" nzPopconfirmPlacement="top" (nzOnConfirm)="rejectDocumentINVOICE()"
             (nzOnCancel)="cancel()">Reject</button>
