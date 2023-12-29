@@ -44,8 +44,8 @@
                     <strong>Beneficiary</strong>
                 </nz-form-label>
                 <nz-form-control nzErrorTip="Please input your beneficiary">
-                    <nz-select style="min-width: 350px;" nzShowSearch nzAllowClear nzPlaceHolder="Select your beneficiary"
-                        formControlName="beneficiary">
+                    <nz-select style="min-width: 350px;" nzShowSearch nzAllowClear
+                        nzPlaceHolder="Select your beneficiary" formControlName="beneficiary">
                         <nz-option *ngFor="let item of listCustomer" [nzLabel]="item" [nzValue]="item"></nz-option>
                     </nz-select>
                 </nz-form-control>
@@ -158,6 +158,26 @@
             </nz-form-item>
         </div>
 
+        <div nz-row [nzGutter]="24">
+            <nz-form-item nz-col [nzSpan]="12">
+                <nz-form-label nzRequired nzFor="requiredDocument">
+                    <strong>Required documents</strong>
+                </nz-form-label>
+                <nz-form-control>
+                    <nz-checkbox-wrapper style="width: 100%;">
+                        <div><label nz-checkbox nzValue="invoice" [ngModel]="true"
+                                formControlName="invoice">Inoivce</label></div>
+                        <div>
+                            <label nz-checkbox nzValue="otherDocument" formControlName="otherDocument">
+                                Other document
+                            </label>
+                            <!-- <input nz-input style="min-width: 100px;" [(ngModel)]="otherDocument" type="text"> -->
+                        </div>
+                    </nz-checkbox-wrapper>
+                </nz-form-control>
+            </nz-form-item>
+        </div>
+
         <hr style="margin-top: 40px;">
 
         <div nz-row [nzGutter]="24">
@@ -177,7 +197,8 @@
 
         <nz-form-item style="display: flex; justify-content: center; ">
             <nz-form-control [nzSpan]="8" [nzOffset]="4">
-                <button *ngIf="isLoading == false" nz-button nzType="primary"><span nz-icon nzType="send" nzTheme="outline">
+                <button *ngIf="isLoading == false" nz-button nzType="primary"><span nz-icon nzType="send"
+                        nzTheme="outline">
                     </span> Send to seller</button>
                 <button *ngIf="isLoading" nz-button nzType="primary" nzLoading>
                     Send to seller
