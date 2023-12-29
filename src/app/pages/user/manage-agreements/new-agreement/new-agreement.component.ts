@@ -29,11 +29,20 @@ export class NewAgreementComponent implements OnInit {
     paymentMethod: String,
     additionalInfo: String,
     deadline: null,
+    requiredDocument: {
+      invoice: true,
+      otherDocument: '',
+    },
   };
   listBank = [];
   listCustomer = [];
   currencyUnitList = ['VND', 'USD', 'EUR'];
   isLoading = false;
+  checkOptionsOne = [
+    { label: 'Invoice', value: 'Invoice', checked: true },
+    { label: 'Other document', value: 'otherDocument' },
+  ];
+  otherDocument: any;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -80,7 +89,9 @@ export class NewAgreementComponent implements OnInit {
         this.validateNewAgreementForm.value.deadline.toLocaleDateString();
       this.newAgreement.additionalInfo =
         this.validateNewAgreementForm.value.additionalInformation;
-      console.log(this.newAgreement);
+      this.newAgreement.requiredDocument.invoice =
+        this.validateNewAgreementForm.value.invoice;
+      this.newAgreement.requiredDocument.otherDocument = '';
       this.agreementSer.create(this.newAgreement).subscribe(
         (res) => {
           this.msg.success(res.message);

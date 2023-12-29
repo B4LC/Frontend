@@ -39,6 +39,10 @@ export class DetailAgreementComponent {
     additionalInformation: '',
     date: null,
     currencyUnit: '',
+    requiredDocument: {
+      invoice: true,
+      otherDocument: false,
+    },
   };
   confirmModal?: NzModalRef;
   isVisible = false;
@@ -57,6 +61,10 @@ export class DetailAgreementComponent {
     paymentMethod: String,
     additionalInfo: String,
     deadline: null,
+    requiredDocument: {
+      invoice: true,
+      otherDocument: '',
+    },
   };
   isAccepted: boolean;
   salescontract_id: string;
@@ -101,7 +109,7 @@ export class DetailAgreementComponent {
     });
 
     this.validateRefuseForm = this.fb.group({
-      reason: [ '' , [Validators.required]],
+      reason: ['', [Validators.required]],
     });
   }
 
@@ -226,6 +234,12 @@ export class DetailAgreementComponent {
         this.validateForm.value.additionalInformation =
           this.requestForm.additionalInformation = res.additionalInfo;
         this.requestForm.status = res.status;
+        this.requestForm.requiredDocument.invoice =
+          res.requiredDocument?.invoice;
+        this.requestForm.requiredDocument.otherDocument = res.requiredDocument
+          ?.otherDocument
+          ? true
+          : false;
         this.isLoadingPage = false;
         if (res.status == 'created') {
           this.isAccepted = false;
@@ -266,6 +280,9 @@ export class DetailAgreementComponent {
       this.updateAgreement.deadline = this.validateForm.value.deadline;
       this.updateAgreement.additionalInfo =
         this.validateForm.value.additionalInformation;
+      this.updateAgreement.requiredDocument.invoice =
+        this.validateForm.value.invoice;
+      this.updateAgreement.requiredDocument.otherDocument = '';
       this.isEdit = false;
       this.agreementSer
         .update(this.updateAgreement, this.salescontract_id)

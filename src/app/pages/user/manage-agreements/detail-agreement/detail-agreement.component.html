@@ -165,7 +165,7 @@
                     </nz-form-item>
                 </div>
                 <div nz-row [nzGutter]="24">
-                    <nz-form-item nz-col [nzSpan]="24" class="info">
+                    <nz-form-item nz-col [nzSpan]="12" class="info">
                         <nz-form-label nzFor="paymentMethod">
                             <strong>Payment method</strong>
                         </nz-form-label>
@@ -178,6 +178,29 @@
                                 <label nz-radio nzValue="Via bank">Via bank</label>
                                 <label nz-radio nzValue="Digital money">Digital money</label>
                             </nz-radio-group>
+                        </nz-form-control>
+                    </nz-form-item>
+
+                    <nz-form-item nz-col [nzSpan]="12" class="info">
+                        <nz-form-label nzFor="requiredDocument">
+                            <strong>Required documents</strong>
+                        </nz-form-label>
+                        <nz-form-control *ngIf="isEdit == false">
+                            <p>{{requestForm.requiredDocument.invoice? 'Invoice' : ''}}</p>
+                            <p>{{requestForm.requiredDocument.otherDocument? 'Other documents' : ''}}</p>
+                        </nz-form-control>
+                        <nz-form-control [nzSpan]="12" *ngIf="isEdit == true">
+                            <nz-checkbox-wrapper style="width: 100%;">
+                                <div><label nz-checkbox nzValue="invoice" [(ngModel)]="requestForm.requiredDocument.invoice"
+                                        formControlName="invoice">Inoivce</label></div>
+                                <div>
+                                    <label nz-checkbox nzValue="otherDocument" [(ngModel)]="requestForm.requiredDocument.otherDocument"
+                                    formControlName="otherDocument">
+                                        Other document
+                                    </label>
+                                    <!-- <input nz-input style="min-width: 100px;" [(ngModel)]="otherDocument" type="text"> -->
+                                </div>
+                            </nz-checkbox-wrapper>
                         </nz-form-control>
                     </nz-form-item>
                 </div>
