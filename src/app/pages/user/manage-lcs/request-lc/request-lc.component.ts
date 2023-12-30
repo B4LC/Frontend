@@ -54,7 +54,6 @@ export class RequestLCComponent {
   getContractDetail() {
     this.salescontract_id = this.route.snapshot.paramMap.get('id');
     this.agreementSer.detail(this.salescontract_id).subscribe((res) => {
-      console.log(res);
       
     })
   }
@@ -69,7 +68,6 @@ export class RequestLCComponent {
 
   submitForm(): void {
     if (this.validateRequestLCForm.valid) {
-      console.log('submit', this.validateRequestLCForm.value);
     } else {
       Object.values(this.validateRequestLCForm.controls).forEach((control) => {
         if (control.invalid) {
@@ -95,7 +93,6 @@ export class RequestLCComponent {
 
   handleChange(info: NzUploadChangeParam): void {
     if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
     }
     if (info.file.status === 'done') {
       this.msg.success(`${info.file.name} file uploaded successfully`);
@@ -159,6 +156,5 @@ export class RequestLCComponent {
       required: false,
     });
 
-    console.log(this.validateRequestLCForm);
   }
 }

@@ -26,7 +26,6 @@ export class ListLCsComponent {
 
   getList() {
     this.lcSer.list().subscribe((res) => {
-      console.log(res);
       this.listOfData = res;
       this.isLoading = false;
     });

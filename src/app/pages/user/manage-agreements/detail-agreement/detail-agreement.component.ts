@@ -166,7 +166,6 @@ export class DetailAgreementComponent {
       nzTitle: 'Do you Want to request LC to Issuing Bank?',
       nzCancelText: 'Cancel',
       nzOnOk: () => {
-        console.log('ok');
       },
     });
   }
@@ -182,7 +181,6 @@ export class DetailAgreementComponent {
             (res) => {
               this.msg.success(res.message);
               this.getDetail();
-              console.log(res);
               reject("Oops, there's a result!");
             },
             (e) => this.msg.error('Create unsuccessfully!')
@@ -251,7 +249,6 @@ export class DetailAgreementComponent {
 
   handleChange(info: NzUploadChangeParam): void {
     if (info.file.status !== 'uploading') {
-      console.log(info.file, info.fileList);
     }
     if (info.file.status === 'done') {
       this.msg.success(`${info.file.name} file uploaded successfully`);

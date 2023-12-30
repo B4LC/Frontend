@@ -42,17 +42,17 @@ export class LayoutUserComponent implements OnInit {
       ],
       role: 'user',
     },
-    // {
-    //   title: 'Manage documents',
-    //   icon: 'file-done',
-    //   subMenus: [
-    //     {
-    //       title: 'Documents list',
-    //       url: `documents`,
-    //     },
-    //   ],
-    //   role: 'user',
-    // },
+    {
+      title: 'Manage documents',
+      icon: 'file-done',
+      subMenus: [
+        {
+          title: 'Documents list',
+          url: `documents`,
+        },
+      ],
+      role: 'user',
+    },
     {
       title: 'Manage agreements',
       icon: 'database',
@@ -93,8 +93,6 @@ export class LayoutUserComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         // Lấy URL hiện tại
         this.url = this.router.url;
-        console.log(this.url);
-
         // Tạo breadcrumbs từ URL
         this.breadcrumbs = this.createBreadcrumbs(this.url);
       }
@@ -118,7 +116,6 @@ export class LayoutUserComponent implements OnInit {
     for (const part of parts) {
       currentUrl += `${part}`;
       breadcrumbs.push(this.getMenuTitle(currentUrl));
-      console.log(this.getMenuTitle(currentUrl));
     }
     return breadcrumbs;
   }

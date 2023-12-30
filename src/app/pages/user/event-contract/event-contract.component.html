@@ -321,7 +321,7 @@
                                 <strong>Invoice</strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{docUploadedEvent.invoice}}</p>
+                                <p>{{docUploadedEvent.invoice || 'none'}}</p>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -332,7 +332,7 @@
                                 <strong>BoE</strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{docUploadedEvent.BoE}}</p>
+                                <p>{{docUploadedEvent.BoE || 'none'}}</p>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -343,7 +343,7 @@
                                 <strong>BoL</strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{docUploadedEvent.BoL}}</p>
+                                <p>{{docUploadedEvent.BoL || 'none'}}</p>
                             </nz-form-control>
                         </nz-form-item>
                     </div>
@@ -354,7 +354,7 @@
                                 <strong>Other</strong>
                             </nz-form-label>
                             <nz-form-control [nzSpan]="8">
-                                <p>{{docUploadedEvent.other}}</p>
+                                <p>{{docUploadedEvent.other || 'none'}}</p>
                             </nz-form-control>
                         </nz-form-item>
                     </div>

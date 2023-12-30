@@ -49,6 +49,11 @@ import { NzDrawerModule } from 'ng-zorro-antd/drawer';
 import { NzListModule } from 'ng-zorro-antd/list';
 import { NzTreeSelectModule } from 'ng-zorro-antd/tree-select';
 import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
+import { DetailDocumentComponent } from './user/manage-documents/detail-document/detail-document.component';
+import { NzTabsModule } from 'ng-zorro-antd/tabs';
+import { NzInputNumberModule } from 'ng-zorro-antd/input-number';
+import { NzDescriptionsModule } from 'ng-zorro-antd/descriptions';
+
 
 @NgModule({
   declarations: [
@@ -65,8 +70,13 @@ import { NzDropDownModule } from 'ng-zorro-antd/dropdown';
     ListDocumentsComponent,
     EventContractComponent,
     ProfileComponent,
+    DetailDocumentComponent,
   ],
   imports: [
+    NzDescriptionsModule,
+    NzInputNumberModule,
+    NzTabsModule,
+    NzTabsModule,
     NzDropDownModule,
     NzListModule,
     NzDrawerModule,

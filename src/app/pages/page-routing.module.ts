@@ -11,6 +11,7 @@ import { UploadDocumentComponent } from './user/manage-documents/upload-document
 import { ListDocumentsComponent } from './user/manage-documents/list-documents/list-documents.component';
 import { EventContractComponent } from './user/event-contract/event-contract.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { DetailDocumentComponent } from './user/manage-documents/detail-document/detail-document.component';
 
 const routes: Routes = [
   {
@@ -72,8 +73,12 @@ const routes: Routes = [
         component: ListDocumentsComponent,
       },
       {
-        path: ':id',
+        path: 'upload/:id',
         component: UploadDocumentComponent,
+      },
+      {
+        path: ':id',
+        component: DetailDocumentComponent,
       },
     ],
   },

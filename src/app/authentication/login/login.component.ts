@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
   };
   isLoginFailed: boolean;
   isLoading = false;
+  isLogin = false;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -32,14 +33,11 @@ export class LoginComponent implements OnInit {
   submitForm(): void {
     this.isLoading = true;
     if (this.validateFormLogin.valid) {
-      console.log('submit', this.validateFormLogin.value);
       this.requestLoginForm.email = this.validateFormLogin.value.username;
       this.requestLoginForm.password = this.validateFormLogin.value.password;
-      console.log(this.requestLoginForm);
 
       this.loginService.login(this.requestLoginForm).subscribe(
         (res) => {
-          console.log(res);
           this.msg.success('Login successfully!');
           this.isLoading = false;
           if (localStorage.getItem('role') == 'user') {
@@ -47,7 +45,6 @@ export class LoginComponent implements OnInit {
           } else this.router.navigateByUrl('/agreements');
         },
         (error) => {
-          console.error('Login failed:', error);
           this.msg.error('Login failed!')
           this.isLoginFailed = true;
           this.isLoading = false;
@@ -64,11 +61,22 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  checkIsLogin() {
+    if (localStorage.getItem('id_token')) {
+      this.isLogin = true;
+    }
+    if (this.isLogin) {
+      this.router.navigateByUrl('/');
+    }
+  }
+
   ngOnInit(): void {
     this.validateFormLogin = this.fb.group({
       username: [null, [Validators.required]],
       password: [null, [Validators.required]],
       remember: true,
     });
+
+    this.checkIsLogin();
   }
 }

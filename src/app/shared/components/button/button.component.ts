@@ -22,7 +22,6 @@ export class ButtonComponent {
   @Output() confirmClick = new EventEmitter();
 
   constructor(private modal: NzModalService) {
-    // console.log(typeof this.modalContent);
   }
 
   onClick() {

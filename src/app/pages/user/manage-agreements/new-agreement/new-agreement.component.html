@@ -160,18 +160,18 @@
 
         <div nz-row [nzGutter]="24">
             <nz-form-item nz-col [nzSpan]="12">
-                <nz-form-label nzRequired nzFor="requiredDocument">
+                <nz-form-label nzFor="requiredDocument">
                     <strong>Required documents</strong>
                 </nz-form-label>
                 <nz-form-control>
                     <nz-checkbox-wrapper style="width: 100%;">
-                        <div><label nz-checkbox nzValue="invoice" [ngModel]="true"
+                        <div><label nz-checkbox nzValue="invoice"
                                 formControlName="invoice">Inoivce</label></div>
                         <div>
                             <label nz-checkbox nzValue="otherDocument" formControlName="otherDocument">
                                 Other document
                             </label>
-                            <!-- <input nz-input style="min-width: 100px;" [(ngModel)]="otherDocument" type="text"> -->
+                            <input placeholder="Enter list other necessary documents" nz-input *ngIf="validateNewAgreementForm.value.otherDocument" style="min-width: 100px;" formControlName="listOtherDocument" type="text">
                         </div>
                     </nz-checkbox-wrapper>
                 </nz-form-control>

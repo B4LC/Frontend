@@ -29,7 +29,6 @@ export class EventContractComponent {
   getEventContract() {
     this.lc_id = this.route.snapshot.paramMap.get('id');
     this.lcSer.getContractEvent(this.lc_id).subscribe((res) => {
-      console.log(res);
       this.salesContractCreatedEvents = res.salesContractCreatedEvent;
       this.docUploadedEvents = res.docUploadedEvent;
       this.LcStatusChangedEvents = res.LcStatusChangedEvent;
@@ -41,9 +40,7 @@ export class EventContractComponent {
   }
 
   parseToDate(timeStamp: any): string{
-    console.log(timeStamp);
     let time = new Date(timeStamp);
-    console.log('time: '+ time);
     return time.toLocaleDateString();
   }
 
