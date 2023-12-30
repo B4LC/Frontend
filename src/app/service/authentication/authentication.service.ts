@@ -44,8 +44,6 @@ export class AuthenticationService {
     const refreshTokenDecode = this.getDecodedAccessToken(
       authResult.refreshToken
     );
-    console.log(authResultDecode);
-    console.log(refreshTokenDecode);
 
     const expiresAt = moment().add(authResultDecode.exp, 'second');
 

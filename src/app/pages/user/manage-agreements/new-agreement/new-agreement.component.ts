@@ -42,7 +42,9 @@ export class NewAgreementComponent implements OnInit {
     { label: 'Invoice', value: 'Invoice', checked: true },
     { label: 'Other document', value: 'otherDocument' },
   ];
-  otherDocument: any;
+  otherDocument: boolean = false;
+  invoice: boolean = true;
+  listOtherDocument: any;
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -91,7 +93,8 @@ export class NewAgreementComponent implements OnInit {
         this.validateNewAgreementForm.value.additionalInformation;
       this.newAgreement.requiredDocument.invoice =
         this.validateNewAgreementForm.value.invoice;
-      this.newAgreement.requiredDocument.otherDocument = '';
+      this.newAgreement.requiredDocument.otherDocument =
+        this.validateNewAgreementForm.value.listOtherDocument;
       this.agreementSer.create(this.newAgreement).subscribe(
         (res) => {
           this.msg.success(res.message);
@@ -159,11 +162,13 @@ export class NewAgreementComponent implements OnInit {
       deadline: [null, [Validators.required]],
       currencyUnit: [this.currencyUnitList[0], [Validators.required]],
       amount: [Number, [Validators.required]],
+      listOtherDocument: '',
+      otherDocument: false,
+      invoice: true,
       additionalInformation: '',
       date: [format(currentDate, 'dd-MM-yyyy')],
       required: false,
     });
-    console.log(this.validateNewAgreementForm);
 
     this.getListBank();
     this.getListCustomer();

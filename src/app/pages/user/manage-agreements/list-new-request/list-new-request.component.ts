@@ -20,7 +20,6 @@ export class ListNewRequestComponent {
 
   getList() {
     this.agreementSer.list().subscribe((res) => {
-      console.log(res);
       this.listOfData = res;
     })
   }

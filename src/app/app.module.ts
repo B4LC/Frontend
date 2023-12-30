@@ -48,7 +48,10 @@ registerLocaleData(vi);
     NzModalModule,
     ReactiveFormsModule
   ],
-  providers: [{ provide: NZ_I18N, useValue: vi_VN }, AuthGuard, authInterceptorProviders],
+  providers: [{ provide: NZ_I18N, useValue: vi_VN }
+    , AuthGuard
+    // , authInterceptorProviders
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -43,7 +43,6 @@ export class ListAgreementComponent implements OnInit {
     let deleteItem = this.listOfData.find(i => i.salescontract_id === id);
     this.agreementSer.delete(id).subscribe(
       (res) => {
-        console.log(res);
         this.msg.success(res.message);
         this.listOfData = this.listOfData.filter(data => {return data !== deleteItem})
         // this.getList();

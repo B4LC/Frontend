@@ -4,7 +4,7 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzModalRef, NzModalService } from 'ng-zorro-antd/modal';
 import { InvoiceService } from 'src/app/service/upload-service/invoice-service/invoice.service';
@@ -41,6 +41,7 @@ export class DetailLcComponent {
   };
   isLoadingPage = true;
   isConfirmLoading = false;
+  files: any;
 
   constructor(
     private lcSer: LcService,
@@ -51,7 +52,8 @@ export class DetailLcComponent {
     private modal: NzModalService,
     private bOLSer: BolUploadService,
     private bOESer: BoeUploadService,
-    private invoiceSer: InvoiceService
+    private invoiceSer: InvoiceService,
+    private router: Router
   ) {
     this.validateRefuseForm = this.fb.group({
       reason: ['', [Validators.required]],
@@ -75,12 +77,17 @@ export class DetailLcComponent {
     return null;
   }
 
+  detailDocument() {
+    this.router.navigate(['/documents', this.lc_id]);
+  }
+
   getDetailLC() {
     this.lc_id = this.route.snapshot.paramMap.get('id');
     this.lcSer.detail(this.lc_id).subscribe(
       (res) => {
-        console.log(res);
+        this.isLoadingPage = false;
         this.lcDetail = res;
+        this.files = res.files;
         if (this.lcDetail.letterOfCredit.status == 'created') this.progress = 1;
         else if (
           this.lcDetail.letterOfCredit.status == 'advising_bank_approved'
@@ -100,7 +107,6 @@ export class DetailLcComponent {
 
         if (this.lcDetail.billOfLading) {
           this.bill_of_lading = this.lcDetail.billOfLading;
-          console.log(this.bill_of_lading);
         }
         if (this.lcDetail.billOfExchange) {
           this.bill_of_exchange = this.lcDetail.billOfExchange;
@@ -108,7 +114,6 @@ export class DetailLcComponent {
         if (this.lcDetail.invoice) {
           this.invoice = this.lcDetail.invoice;
         }
-
         if (
           this.bill_of_exchange.status == 'approved' &&
           this.bill_of_lading.status == 'approved' &&
@@ -117,13 +122,13 @@ export class DetailLcComponent {
         ) {
           this.isAllApprove = true;
         }
-        this.isLoadingPage = false;
       },
       (e) => {
         this.msg.error('Something is wrong!');
       }
     );
   }
+
   approveLC(): void {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to approve this LC?',
@@ -132,7 +137,6 @@ export class DetailLcComponent {
         new Promise((resolve, reject) => {
           this.lcSer.approve(this.lc_id, {}).subscribe(
             (res) => {
-              console.log(res);
               this.msg.success(res.message);
               this.getDetailLC();
               reject("Oops, there's a result!");
@@ -158,7 +162,6 @@ export class DetailLcComponent {
       this.lcSer
         .return(this.lc_id, this.validateRefuseForm.value)
         .subscribe((res) => {
-          console.log(res);
           this.msg.success(res.message);
           this.getDetailLC();
         });
@@ -176,7 +179,6 @@ export class DetailLcComponent {
   handleOkChangeStatus(): void {
     if (this.validateChangeStatus.valid) {
       this.isConfirmLoading = true;
-      console.log(this.validateChangeStatus.value);
       this.lcSer
         .updateStatus(this.lc_id, this.validateChangeStatus.value)
         .subscribe(
@@ -273,7 +275,6 @@ export class DetailLcComponent {
   getEventContract() {
     this.lcSer.getContractEvent(this.lc_id).subscribe(
       (res) => {
-        console.log(res);
         this.eventContract.LcApprovedEvent =
           res.LcApprovedEvent.length > 0
             ? res.LcApprovedEvent[0].transactionHash
@@ -294,7 +295,6 @@ export class DetailLcComponent {
           res.docUploadedEvent.length > 0
             ? res.docUploadedEvent[0].transactionHash
             : null;
-        console.log(this.eventContract);
       },
       (e) => {
         this.msg.error('Something is wrong!');

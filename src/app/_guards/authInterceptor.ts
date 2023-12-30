@@ -29,7 +29,6 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthenticationService) {}
 
   private addTokenHeader(request: HttpRequest<any>, token: string) {
-    console.log('===============4============');
     return request.clone({
       headers: request.headers.set(TOKEN_HEADER_KEY, 'Bearer ' + token),
     });
@@ -48,22 +47,17 @@ export class AuthInterceptor implements HttpInterceptor {
         return this.authService.refresh().pipe(
           switchMap((res: any) => {
             this.isRefreshing = false;
-            console.log('=========1==========');
-            console.log(res);
             // this.tokenService.saveToken(token.accessToken);
             localStorage.removeItem('id_token')
             localStorage.removeItem('refresh_token');
             localStorage.setItem('id_token', res.accessToken)
             localStorage.setItem('refresh_token', res.refreshToken);
             this.refreshTokenSubject.next(res.refreshToken);
-            console.log('=========2==========');
 
             return next.handle(this.addTokenHeader(request, res.accessToken));
           }
         ))
         catchError((err) => {
-          console.log(err.message);
-          console.log('=========3==========');
           this.isRefreshing = false;
           localStorage.clear();
           return throwError(err);
@@ -94,8 +88,6 @@ export class AuthInterceptor implements HttpInterceptor {
           !authReq.url.includes('/auth/login') &&
           error.status === 401
         ) {
-          console.log('404040404004');
-          
           return this.handle401Error(authReq, next);
         }
         return throwError(error);
