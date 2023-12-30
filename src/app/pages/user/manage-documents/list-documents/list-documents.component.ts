@@ -14,7 +14,6 @@ export class ListDocumentsComponent {
   constructor(private lcSer: LcService) {}
   getList() {
     this.lcSer.list().subscribe((res) => {
-      console.log(res);
       this.listOfData = res;
     })
   }

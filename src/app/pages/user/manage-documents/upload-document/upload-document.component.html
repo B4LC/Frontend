@@ -48,6 +48,16 @@
 
                     </div>
 
+                    <div nz-row>
+                        <nz-form-label nzRequired nzFor="additionalInformation" nz-col [nzSpan]="4">
+                            <strong>Document uploaded</strong>
+                        </nz-form-label>
+                        <nz-form-control>
+                            <a *ngIf="path_file" target="_blank" [href]="path_file">{{path_file}}</a>
+                            <span *ngIf="!path_file">No file uploaded</span>
+                        </nz-form-control>
+                    </div>
+
                     <!-- <nz-divider></nz-divider> -->
 
                     <!-- <div>
@@ -119,7 +129,7 @@
             </nz-card>
         </form>
     </div>
-</div>   
+</div>
 <div nz-row>
     <nz-card nz-col [nzSpan]="24" *ngIf="isDisplay" style="width: 100%; margin-top: 16px" [nzLoading]="!ocrDocument"
         nzTitle="Nội dung tài liệu" [nzExtra]="extraTemplate2">
@@ -136,7 +146,7 @@
                 </nz-form-control>
             </nz-form-item>
         </form>
-        <form nz-form [formGroup]="invoiceTableForm" (ngSubmit)="onSubmit()">
+        <form *ngIf="invoiceTableForm" nz-form [formGroup]="invoiceTableForm" (ngSubmit)="onSubmit()">
             <nz-form-item>
                 <nz-form-control>
                     <nz-table [nzNoResult]="' '">
@@ -170,12 +180,12 @@
                     </nz-table>
                 </nz-form-control>
             </nz-form-item>
-            <nz-form-item>
-                <nz-form-control>
-                    <button nz-button nzType="primary" type="submit">Confirm to save</button>
-                </nz-form-control>
-            </nz-form-item>
         </form>
+        <nz-form-item>
+            <nz-form-control>
+                <button nz-button nzType="primary" (click)="onSubmit()" type="submit">Confirm to save</button>
+            </nz-form-control>
+        </nz-form-item>
         <ng-template #extraTemplate2>
             <button nz-button nzType="primary" (click)="requestEdit()">Edit infomation</button>
         </ng-template>

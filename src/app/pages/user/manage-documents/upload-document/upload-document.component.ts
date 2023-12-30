@@ -98,6 +98,7 @@ export class UploadDocumentComponent implements OnInit {
   isEditable: boolean = false;
   editingCell: { rowIndex: number; columnName: string } = null;
   formControls: { name: string; label: string }[];
+  path_file: any;
 
   constructor(
     private fb: FormBuilder,
@@ -113,7 +114,6 @@ export class UploadDocumentComponent implements OnInit {
   ) {}
 
   onChange($event: string): void {
-    console.log(this.typeDocSelect);
   }
 
   input: any;
@@ -134,16 +134,15 @@ export class UploadDocumentComponent implements OnInit {
       this.uploadSer.upload(this.formData).subscribe(
         (res) => {
           this.input.image_url = res;
+          this.path_file = res;
           this.msg.success('Upload file success!');
           this.uploadSer.ocr_document(this.input).subscribe(
             (res2) => {
-              console.log(res2);
               this.ocrDocument = res2.results;
               this.createFomatFormData(this.ocrDocument);
-              if (this.ocrDocument.table) {
+              if (Object.keys(this.ocrDocument.table).length !== 0) {
                 this.createTableForm(this.ocrDocument.table);
               }
-              console.log(this.ocrDocument);
             },
             (e) => {
               this.msg.error("Something's wrong!");
@@ -160,11 +159,9 @@ export class UploadDocumentComponent implements OnInit {
   onFileSelectedBillOfExchange(event) {
     const file: File = event.target.files[0];
     if (file) {
-      console.log(file);
       this.bill_of_exchange.name = file.name;
       this.formData_bill_of_exchange.append('bill_of_exchange', file);
       this.formData_bill_of_exchange.append('LCID', this.id_lc);
-      console.log(this.formData_bill_of_exchange);
       this.bill_of_exchange_new = true;
     }
   }
@@ -194,18 +191,15 @@ export class UploadDocumentComponent implements OnInit {
     this.bill_of_exchange_new = false;
     this.invoice_new = false;
 
-    console.log(this.formData_bill_of_exchange);
 
     this.lcSer.detail(id).subscribe((res) => {
       this.lcDetail = res;
-      console.log(res);
       if (this.lcDetail.letterOfCredit.status == 'document_approved') {
         this.isFinish = true;
       }
       if (this.lcDetail.billOfLading.id) {
         this.bill_of_lading.id = this.lcDetail.billOfLading.id;
         this.bOLSer.get(this.bill_of_lading.id).subscribe((res) => {
-          console.log(res);
           this.bill_of_lading.name = this.lcDetail.billOfLading.file
             .split('\\')
             .pop()
@@ -214,12 +208,10 @@ export class UploadDocumentComponent implements OnInit {
           this.bill_of_lading.url = this.lcDetail.billOfLading.file;
           this.bill_of_lading.status = this.lcDetail.billOfLading.status;
         });
-        console.log(this.bill_of_lading);
       }
       if (this.lcDetail.billOfExchange.id) {
         this.bill_of_exchange.id = this.lcDetail.billOfExchange.id;
         this.bOESer.get(this.bill_of_exchange.id).subscribe((res) => {
-          console.log(res);
           this.bill_of_exchange.name = this.lcDetail.billOfExchange.file
             .split('\\')
             .pop()
@@ -232,7 +224,6 @@ export class UploadDocumentComponent implements OnInit {
       if (this.lcDetail.invoice.id) {
         this.invoice.id = this.lcDetail.invoice.id;
         this.invoiceSer.get(this.invoice.id).subscribe((res) => {
-          console.log(res);
           this.invoice.name = this.lcDetail.invoice.file
             .split('\\')
             .pop()
@@ -265,19 +256,16 @@ export class UploadDocumentComponent implements OnInit {
         if (this.bill_of_exchange_new) {
           this.bOESer.upload(this.formData_bill_of_exchange).subscribe(
             (res) => {
-              console.log(res);
               this.msg.success(res.message);
             },
             (e) => {
               this.msg.error('Upload BILL OF EXCHANGE unsuccessfully');
-              console.log(e);
             }
           );
         }
         if (this.bill_of_lading_new) {
           this.bOLSer.upload(this.formData_bill_of_lading).subscribe(
             (res) => {
-              console.log(res);
               this.msg.success(res.message);
             },
             (e) => this.msg.error('Upload BILL OF LADING unsuccessfully')
@@ -286,7 +274,6 @@ export class UploadDocumentComponent implements OnInit {
         if (this.invoice_new) {
           this.invoiceSer.upload(this.formData_invoice).subscribe(
             (res) => {
-              console.log(res);
               this.msg.success(res.message);
             },
             (e) => this.msg.error('Upload INVOICE unsuccessfully')
@@ -365,13 +352,11 @@ export class UploadDocumentComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('this.invoiceTableForm.value', this.invoiceTableForm.value);
-    console.log('this.invoiceForm.value', this.invoiceForm.value);
     this.isEditable = false;
-
     // Get the data in the original format
-    const originalFormatData = this.getFormattedData();
-    console.log(originalFormatData);
+    if(this.invoiceTableForm) {
+      const originalFormatData = this.getFormattedData();
+    }
     this.saveDocument();
   }
 
@@ -393,9 +378,17 @@ export class UploadDocumentComponent implements OnInit {
 
   saveDocument() {
     const type = {
-      file_path: this.input.image_url
+      file_path: this.input.image_url,
     };
-    const data = { ...type, ...this.invoiceForm, ...this.invoiceTableForm };
+    let data = {};
+    if (this.invoiceTableForm) {
+      data = { ...type, ...this.invoiceForm.value, ...this.invoiceTableForm.value };
+    } else {
+      const table = {
+        table: {}
+      }
+      data = { ...type, ...this.invoiceForm.value, ...table};
+    }
     this.createDocument(this.input.doc_type, data);
   }
 
@@ -403,10 +396,10 @@ export class UploadDocumentComponent implements OnInit {
     if (type == 'invoice') {
       this.invoiceSer.upload(body).subscribe(
         (res) => {
-          console.log(res);
+          this.msg.success('Save file success!');
         },
         (e) => {
-          console.log(e);
+          this.msg.error('Something\'s wrong!');
         }
       );
     }

@@ -8,24 +8,28 @@
       <tr>
         <th>STT</th>
         <th>Letter of credit</th>
+        <th>Start date</th>
         <th>Status</th>
-        <th>Upload document</th>
+        <th>Detail</th>
+        <th>Upload</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let data of basicTable.data; let i = index">
         <td>{{ i + 1 }}</td>
-        <td><a style="color: #2F54EB;" [routerLink]="['/agreements', data.salesContract]">{{ data.salesContract }}</a>
+        <td><a style="color: #2F54EB;" [routerLink]="['/LCs', data.LCID]">{{ data.LCID }}</a>
         </td>
         <td>{{ data.startDate }}</td>
-        <td>{{ data.status }}</td>
+        <td>
+          {{ data.status }}
+        </td>
         <td>
           <a><span style="color: #2F54EB;" nz-icon nzType="eye" nzTheme="outline"
-              [routerLink]="['/LCs', data.LCID]"></span></a>
+              [routerLink]="['/documents', data.LCID]"></span></a>
         </td>
         <td *ngIf="role=='user' && data.status=='advising_bank_approved'">
           <a><span style="color: #2F54EB;" nz-icon nzType="diff" nzTheme="outline"
-              [routerLink]="['/documents', data.LCID]"></span></a>
+              [routerLink]="['/LCs/upload', data.LCID]"></span></a>
         </td>
       </tr>
     </tbody>
