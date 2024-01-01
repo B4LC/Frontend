@@ -41,7 +41,7 @@ export class DetailAgreementComponent {
     currencyUnit: '',
     requiredDocument: {
       invoice: true,
-      otherDocument: false,
+      otherDocument: '',
     },
   };
   confirmModal?: NzModalRef;
@@ -105,6 +105,9 @@ export class DetailAgreementComponent {
       deadline: [null, [Validators.required]],
       currencyUnit: [String, [Validators.required]],
       additionalInformation: String,
+      listOtherDocument: '',
+      otherDocument: false,
+      invoice: true,
       // date: [format(currentDate, 'dd-MM-yyyy')],
     });
 
@@ -165,8 +168,7 @@ export class DetailAgreementComponent {
     this.confirmModal = this.modal.confirm({
       nzTitle: 'Do you Want to request LC to Issuing Bank?',
       nzCancelText: 'Cancel',
-      nzOnOk: () => {
-      },
+      nzOnOk: () => {},
     });
   }
 
@@ -234,10 +236,7 @@ export class DetailAgreementComponent {
         this.requestForm.status = res.status;
         this.requestForm.requiredDocument.invoice =
           res.requiredDocument?.invoice;
-        this.requestForm.requiredDocument.otherDocument = res.requiredDocument
-          ?.otherDocument
-          ? true
-          : false;
+        this.requestForm.requiredDocument.otherDocument = res.requiredDocument.otherDocument;
         this.isLoadingPage = false;
         if (res.status == 'created') {
           this.isAccepted = false;
@@ -279,7 +278,8 @@ export class DetailAgreementComponent {
         this.validateForm.value.additionalInformation;
       this.updateAgreement.requiredDocument.invoice =
         this.validateForm.value.invoice;
-      this.updateAgreement.requiredDocument.otherDocument = '';
+      this.updateAgreement.requiredDocument.otherDocument =
+        this.validateForm.value.listOtherDocument;
       this.isEdit = false;
       this.agreementSer
         .update(this.updateAgreement, this.salescontract_id)
