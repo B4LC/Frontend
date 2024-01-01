@@ -68,7 +68,7 @@ export class NewAgreementComponent implements OnInit {
     });
   }
 
-  submitForm(): void {
+  async submitForm(): Promise<void> {
     if (this.validateNewAgreementForm.valid) {
       this.isLoading = true;
       this.newAgreement.importer =

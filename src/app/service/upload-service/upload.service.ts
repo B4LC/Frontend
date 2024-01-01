@@ -17,7 +17,7 @@ export class UploadService {
   }
 
   ocr_document(body: any): Observable<any> {
-    return this.http.post('http://34.142.236.121:8089/ocr_document', body);
-    // return this.http.post('http://localhost:16006/ocr_document', body);
+    // return this.http.post('http://34.142.236.121:8089/ocr_document', body);
+    return this.http.post('http://localhost:8000/ocr_document', body);
   }
 }
