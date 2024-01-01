@@ -135,6 +135,7 @@ export class LayoutUserComponent implements OnInit {
         localStorage.clear();
         this.msg.success('Logout success');
         this.router.navigate(['/auth/login']);
+        window.location.reload();
       },
       //   new Promise((resolve, reject) => {
       //       // this.authenSer.logout().subscribe((res) => {
