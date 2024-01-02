@@ -298,9 +298,22 @@
     <ng-container *nzModalContent>
         <form nz-form [formGroup]="validateChangeStatus" (ngSubmit)="submitFormChangeStatus()">
             <nz-form-item>
-                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status">Status</nz-form-label>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired nzFor="status"><strong>Status</strong></nz-form-label>
                 <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="The input is not valid!">
-                    <input nz-input formControlName="status" id="status" />
+                    <nz-radio-group formControlName="status">
+                        <label nz-radio nzValue="created">CREATED</label>
+                        <label nz-radio nzValue="advising_bank_rejected">ADVISING BANK REJECTED</label>
+                        <label nz-radio nzValue="advising_bank_approved">ADVISING BANK APPROVED</label>
+                        <label nz-radio nzValue="document_uploaded">DOCUMENT UPLOADED</label>
+                        <label nz-radio nzValue="document_approved">DOCUMENT APPROVED</label>
+                        <label nz-radio nzValue="document_rejected">DOCUMENT REJECTED</label>
+                        <label nz-radio nzValue="delivery_sent">DELIVERY SENT</label>
+                        <label nz-radio nzValue="delivery_received">DELIVERY RECEIVED</label>
+                        <label nz-radio nzValue="fund_escrowed">FUND ESCROWED</label>
+                        <label nz-radio nzValue="fund_reverted">FUND REVERTED</label>
+                        <label nz-radio nzValue="fund_paid">FUND PAID</label>
+                        <label nz-radio nzValue="ended">ENDED</label>
+                    </nz-radio-group>
                 </nz-form-control>
             </nz-form-item>
         </form>

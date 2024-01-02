@@ -198,6 +198,7 @@ export class DetailAgreementComponent {
   handleOkRefuse(): void {
     if (this.validateRefuseForm.valid) {
       this.isVisible = false;
+      
     } else {
       Object.values(this.validateRefuseForm.controls).forEach((control) => {
         if (control.invalid) {
