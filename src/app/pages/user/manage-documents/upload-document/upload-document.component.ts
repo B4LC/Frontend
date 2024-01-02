@@ -28,6 +28,9 @@ import { UploadService } from 'src/app/service/upload-service/upload.service';
 })
 export class UploadDocumentComponent implements OnInit {
   id_token = localStorage.getItem('id_token');
+  username = localStorage.getItem('username');
+  role = localStorage.getItem('role');
+  lcDetail: any;
   formData = new FormData();
   formData_bill_of_exchange = new FormData();
   formData_bill_of_lading = new FormData();
@@ -55,7 +58,6 @@ export class UploadDocumentComponent implements OnInit {
   // uploadSub: Subscription;
   confirmModal?: NzModalRef;
   isFinish = false;
-  lcDetail: any;
   bill_of_lading_new = false;
   bill_of_exchange_new = false;
   invoice_new = false;
@@ -236,53 +238,53 @@ export class UploadDocumentComponent implements OnInit {
     });
   }
 
-  uploadConfirm(): void {
-    const filesNotUploaded: string[] = [];
-    if (!this.bill_of_exchange) {
-      filesNotUploaded.push('Bill of Exchange');
-    }
-    if (!this.bill_of_lading) {
-      filesNotUploaded.push('Bill of Lading');
-    }
-    if (!this.invoice) {
-      filesNotUploaded.push('Invoice');
-    }
-    const missingFiles = filesNotUploaded.join(', ');
+  // uploadConfirm(): void {
+  //   const filesNotUploaded: string[] = [];
+  //   if (!this.bill_of_exchange) {
+  //     filesNotUploaded.push('Bill of Exchange');
+  //   }
+  //   if (!this.bill_of_lading) {
+  //     filesNotUploaded.push('Bill of Lading');
+  //   }
+  //   if (!this.invoice) {
+  //     filesNotUploaded.push('Invoice');
+  //   }
+  //   const missingFiles = filesNotUploaded.join(', ');
 
-    this.confirmModal = this.modal.confirm({
-      nzTitle: 'Do you Want to upload these file?',
-      nzCancelText: 'Cancel',
-      nzOnOk: () => {
-        if (this.bill_of_exchange_new) {
-          this.bOESer.upload(this.formData_bill_of_exchange).subscribe(
-            (res) => {
-              this.msg.success(res.message);
-            },
-            (e) => {
-              this.msg.error('Upload BILL OF EXCHANGE unsuccessfully');
-            }
-          );
-        }
-        if (this.bill_of_lading_new) {
-          this.bOLSer.upload(this.formData_bill_of_lading).subscribe(
-            (res) => {
-              this.msg.success(res.message);
-            },
-            (e) => this.msg.error('Upload BILL OF LADING unsuccessfully')
-          );
-        }
-        if (this.invoice_new) {
-          this.invoiceSer.upload(this.formData_invoice).subscribe(
-            (res) => {
-              this.msg.success(res.message);
-            },
-            (e) => this.msg.error('Upload INVOICE unsuccessfully')
-          );
-        }
-        this.getDetailLC(this.id_lc);
-      },
-    });
-  }
+  //   this.confirmModal = this.modal.confirm({
+  //     nzTitle: 'Do you Want to upload these file?',
+  //     nzCancelText: 'Cancel',
+  //     nzOnOk: () => {
+  //       if (this.bill_of_exchange_new) {
+  //         this.bOESer.upload(this.formData_bill_of_exchange).subscribe(
+  //           (res) => {
+  //             this.msg.success(res.message);
+  //           },
+  //           (e) => {
+  //             this.msg.error('Upload BILL OF EXCHANGE unsuccessfully');
+  //           }
+  //         );
+  //       }
+  //       if (this.bill_of_lading_new) {
+  //         this.bOLSer.upload(this.formData_bill_of_lading).subscribe(
+  //           (res) => {
+  //             this.msg.success(res.message);
+  //           },
+  //           (e) => this.msg.error('Upload BILL OF LADING unsuccessfully')
+  //         );
+  //       }
+  //       if (this.invoice_new) {
+  //         this.invoiceSer.upload(this.formData_invoice).subscribe(
+  //           (res) => {
+  //             this.msg.success(res.message);
+  //           },
+  //           (e) => this.msg.error('Upload INVOICE unsuccessfully')
+  //         );
+  //       }
+  //       this.getDetailLC(this.id_lc);
+  //     },
+  //   });
+  // }
 
   createFomatFormData(formData: any) {
     this.formControls = Object.keys(formData)
@@ -394,7 +396,17 @@ export class UploadDocumentComponent implements OnInit {
 
   createDocument(type, body) {
     if (type == 'invoice') {
-      this.invoiceSer.upload(body).subscribe(
+      this.invoiceSer.upload(body, this.id_lc).subscribe(
+        (res) => {
+          this.msg.success('Save file success!');
+        },
+        (e) => {
+          this.msg.error('Something\'s wrong!');
+        }
+      );
+    }
+    if(type == 'bill_of_exchange') {
+      this.bOESer.upload(body, this.id_lc).subscribe(
         (res) => {
           this.msg.success('Save file success!');
         },
