@@ -241,7 +241,7 @@
             <div class="button-group"
                 *ngIf="requestForm.issuingBank == username && role == 'bank' && requestForm.status == 'exporter_approved'">
                 <button nz-button nzType="primary" (click)="showConfirmAcceptLC()">Accept</button>
-                <button nz-button nzType="primary" nzDanger (click)="showModalRefuse()">Return with reason</button>
+                <!-- <button nz-button nzType="primary" nzDanger (click)="showModalRefuse()">Return with reason</button> -->
             </div>
         </nz-card>
     </div>
