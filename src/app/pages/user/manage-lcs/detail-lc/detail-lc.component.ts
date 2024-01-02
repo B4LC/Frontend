@@ -204,6 +204,10 @@ export class DetailLcComponent {
     }
   }
 
+  handleCancel() {
+    this.isVisibleStatus = false;
+  }
+ 
   handleCancelRefuse(): void {
     this.isVisible = false;
   }
