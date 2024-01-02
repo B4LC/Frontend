@@ -16,9 +16,10 @@ export class BoeUploadService {
 
   constructor(private http: HttpClient) {}
 
-  upload(body: any): Observable<any> {
+  upload(body: any, id: any): Observable<any> {
     return this.http.post(
-      environment.BASE_API_URI.BASE_SERVICE_API + `/billofexchanges/create`,
+      environment.BASE_API_URI.BASE_SERVICE_API +
+        `/billofexchanges/create/${id}`,
       body,
       this.httpOptions
     );

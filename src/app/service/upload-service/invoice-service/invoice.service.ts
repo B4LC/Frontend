@@ -16,9 +16,9 @@ export class InvoiceService {
 
   constructor(private http: HttpClient) {}
 
-  upload(body: any): Observable<any> {
+  upload(body: any, id: any): Observable<any> {
     return this.http.post(
-      environment.BASE_API_URI.BASE_INVOICE_API + `/create`,
+      environment.BASE_API_URI.BASE_INVOICE_API + `/create/${id}`,
       body,
       this.httpOptions
     );
