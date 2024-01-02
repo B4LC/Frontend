@@ -140,7 +140,7 @@ export class UploadDocumentComponent implements OnInit {
             (res2) => {
               this.ocrDocument = res2.results;
               this.createFomatFormData(this.ocrDocument);
-              if (Object.keys(this.ocrDocument.table).length !== 0) {
+              if (Object?.keys(this.ocrDocument.table).length !== 0) {
                 this.createTableForm(this.ocrDocument.table);
               }
             },
