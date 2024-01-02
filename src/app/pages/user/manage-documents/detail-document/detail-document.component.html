@@ -1,9 +1,9 @@
 <nz-card *ngIf="!isLoadingPage" [nzTitle]="extraTemplate2" [nzExtra]="extraTemplate1">
     <nz-tabset [nzTabPosition]="nzTabPosition" [(nzSelectedIndex)]="selectedIndex" (nzSelectChange)="log([$event])">
         <nz-tab *ngFor="let tab of tabs" [nzTitle]="tab.name" [nzDisabled]="tab.disabled"
-            (nzSelect)="log(['select', tab])" (nzClick)="log(['click', tab])"
+            (nzSelect)="log(['select', tab])" (nzClick)="log(tabs)"
             (nzContextmenu)="log(['contextmenu', tab])" (nzDeselect)="log(['deselect', tab])">
-            <div *ngIf="tab.table.length > 0">
+            <div *ngIf="tab.data.length > 0">
                 <nz-descriptions [nzColumn]="{ xxl: 3, xl: 1, lg: 1, md: 1, sm: 1, xs: 1 }" nzTitle="Content">
                     <nz-descriptions-item *ngFor="let field of tab.data" [nzTitle]="field.label">
                         {{ field.value || 'none'}}
