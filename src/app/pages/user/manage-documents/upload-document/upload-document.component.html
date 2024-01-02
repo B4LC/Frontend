@@ -132,7 +132,7 @@
 </div>
 <div nz-row>
     <nz-card nz-col [nzSpan]="24" *ngIf="isDisplay" style="width: 100%; margin-top: 16px" [nzLoading]="!ocrDocument"
-        nzTitle="Nội dung tài liệu" [nzExtra]="extraTemplate2">
+        nzTitle="Content" [nzExtra]="extraTemplate2">
         <form nz-form [formGroup]="invoiceForm" (ngSubmit)="onSubmit()" [nzLayout]="'horizontal'">
             <nz-form-item *ngFor="let control of formControls">
                 <nz-form-label style="text-align: left;" [nzSpan]="6" nz-for="{{ control.name }}">
