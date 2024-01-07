@@ -10,13 +10,13 @@ export const environment = {
     BASE_SERVICE_API: 'https://b4lc-testv2.onrender.com',
     BASE_SERVICE_TEST_API: 'https://b4lc-testv2.onrender.com',
   },
-//   BASE_API_URI: {
-//     BASE_SALE_CONTRACT_API: 'http://localhost:3000/salescontracts',
-//     BASE_LETTER_OF_CREDIT_API: 'http://localhost:3000/letterofcredits',
-//     BASE_INVOICE_API: 'http://localhost:3000/invoices',
-//     BASE_SERVICE_API: 'http://localhost:3000',
-//     BASE_SERVICE_TEST_API: 'http://localhost:3000',
-//   }, 
+  // BASE_API_URI: {
+  //   BASE_SALE_CONTRACT_API: 'http://localhost:3000/salescontracts',
+  //   BASE_LETTER_OF_CREDIT_API: 'http://localhost:3000/letterofcredits',
+  //   BASE_INVOICE_API: 'http://localhost:3000/invoices',
+  //   BASE_SERVICE_API: 'http://localhost:3000',
+  //   BASE_SERVICE_TEST_API: 'http://localhost:3000',
+  // }, 
   production: true,
 };
 
