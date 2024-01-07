@@ -226,6 +226,7 @@ export class DetailLcComponent {
             (res) => {
               this.msg.success(res.message);
               this.getDetailLC();
+              reject("Oops, there's a result!");
             },
             (e) => this.msg.error('Something is wrong!')
           );
@@ -243,6 +244,7 @@ export class DetailLcComponent {
             (res) => {
               this.msg.success(res.message);
               this.getDetailLC();
+              reject("Oops, there's a result!");
             },
             (e) => this.msg.error('Something is wrong!')
           );
@@ -280,6 +282,7 @@ export class DetailLcComponent {
             (res) => {
               this.msg.success(res.message);
               this.getDetailLC();
+              reject("Oops, there's a result!");
             },
             (e) => this.msg.error('Something is wrong!')
           );
@@ -297,6 +300,7 @@ export class DetailLcComponent {
             (res) => {
               this.msg.success(res.message);
               this.getDetailLC();
+              reject("Oops, there's a result!");
             },
             (e) => this.msg.error('Something is wrong!')
           );
