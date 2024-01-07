@@ -213,23 +213,37 @@ export class DetailLcComponent {
   }
 
   acceptDocumentINVOICE(): void {
-    this.invoiceSer.approve(this.lc_id, {}).subscribe(
-      (res) => {
-        this.msg.success(res.message);
-        this.getDetailLC();
-      },
-      (e) => this.msg.error('Something is wrong!')
-    );
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to approve?',
+      nzCancelText: 'Cancel',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.invoiceSer.approve(this.lc_id, {}).subscribe(
+            (res) => {
+              this.msg.success(res.message);
+              this.getDetailLC();
+            },
+            (e) => this.msg.error('Something is wrong!')
+          );
+        }).catch((error) => console.log(error)),
+    });
   }
 
   rejectDocumentINVOICE(): void {
-    this.invoiceSer.reject(this.lc_id, {}).subscribe(
-      (res) => {
-        this.msg.success(res.message);
-        this.getDetailLC();
-      },
-      (e) => this.msg.error('Something is wrong!')
-    );
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to reject?',
+      nzCancelText: 'Cancel',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.invoiceSer.reject(this.lc_id, {}).subscribe(
+            (res) => {
+              this.msg.success(res.message);
+              this.getDetailLC();
+            },
+            (e) => this.msg.error('Something is wrong!')
+          );
+        }).catch((error) => console.log(error)),
+    });
   }
 
   acceptDocumentBOL(): void {
@@ -253,23 +267,37 @@ export class DetailLcComponent {
   }
 
   acceptDocumentBOE(): void {
-    this.bOESer.approve(this.lc_id, {}).subscribe(
-      (res) => {
-        this.msg.success(res.message);
-        this.getDetailLC();
-      },
-      (e) => this.msg.error('Something is wrong!')
-    );
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to approve?',
+      nzCancelText: 'Cancel',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.bOESer.approve(this.lc_id, {}).subscribe(
+            (res) => {
+              this.msg.success(res.message);
+              this.getDetailLC();
+            },
+            (e) => this.msg.error('Something is wrong!')
+          );
+        }).catch((error) => console.log(error)),
+    });
   }
 
   rejectDocumentBOE(): void {
-    this.bOESer.reject(this.lc_id, {}).subscribe(
-      (res) => {
-        this.msg.success(res.message);
-        this.getDetailLC();
-      },
-      (e) => this.msg.error('Something is wrong!')
-    );
+    this.confirmModal = this.modal.confirm({
+      nzTitle: 'Do you Want to approve?',
+      nzCancelText: 'Cancel',
+      nzOnOk: () =>
+        new Promise((resolve, reject) => {
+          this.bOESer.reject(this.lc_id, {}).subscribe(
+            (res) => {
+              this.msg.success(res.message);
+              this.getDetailLC();
+            },
+            (e) => this.msg.error('Something is wrong!')
+          );
+        }).catch((error) => console.log(error)),
+    });
   }
 
   getEventContract() {
